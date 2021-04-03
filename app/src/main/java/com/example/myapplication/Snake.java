@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import java.util.ArrayList;
 
 public class Snake {
+    private boolean moveL, moveR, moveU, moveD;
     private Bitmap bm, up, down, left, right,
             bodyVertical, bodyHorizontal, bodyBottomLeft, bodyBottomRight, bodyTopLeft, bodyTopRight,
             tailLeft, tailUp, tailDown, tailRight;
@@ -37,11 +38,87 @@ public class Snake {
             listPartSnake.add(new PartSnake(bodyHorizontal, listPartSnake.get(i-1).getX() - GameView.sizeOfMap, y));
         }
         listPartSnake.add(new PartSnake(tailRight, listPartSnake.get(length-2).getX() - GameView.sizeOfMap, listPartSnake.get(length-2).getY()));
+        setMoveR(true);
     }
 
     public void drawSnake(Canvas canvas) {
         for(int i = 0; i < length; ++i) {
             canvas.drawBitmap(listPartSnake.get(i).getBm(), listPartSnake.get(i).getX(), listPartSnake.get(i).getY(), null);
+        }
+    }
+
+    public void update() {
+        for(int i = length - 1; i > 0; i--) {
+            listPartSnake.get(i).setX(listPartSnake.get(i-1).getX());
+            listPartSnake.get(i).setY(listPartSnake.get(i-1).getY());
+        }
+
+        if(moveR) {
+            listPartSnake.get(0).setX(listPartSnake.get(0).getX() + GameView.sizeOfMap);
+            listPartSnake.get(0).setBm(right);
+        } else if(moveL) {
+            listPartSnake.get(0).setX(listPartSnake.get(0).getX() - GameView.sizeOfMap);
+            listPartSnake.get(0).setBm(left);
+        } else if(moveU) {
+            listPartSnake.get(0).setY(listPartSnake.get(0).getY() - GameView.sizeOfMap);
+            listPartSnake.get(0).setBm(up);
+        } else if(moveD) {
+            listPartSnake.get(0).setY(listPartSnake.get(0).getY() + GameView.sizeOfMap);
+            listPartSnake.get(0).setBm(down);
+        }
+
+        for(int i = 1; i < length - 1; ++i) {
+            if(listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i+1).getBody()) &&
+                listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i-1).getBody()) ||
+                listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i-1).getBody()) &&
+                listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i+1).getBody())) {
+                    listPartSnake.get(i).setBm(bodyBottomLeft);
+            } else if(listPartSnake.get(i).getRight().intersect(listPartSnake.get(i+1).getBody()) &&
+                    listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i-1).getBody()) ||
+                    listPartSnake.get(i).getRight().intersect(listPartSnake.get(i-1).getBody()) &&
+                            listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i+1).getBody())) {
+                listPartSnake.get(i).setBm(bodyBottomRight);
+            } else if(listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i+1).getBody()) &&
+                    listPartSnake.get(i).getTop().intersect(listPartSnake.get(i-1).getBody()) ||
+                    listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i-1).getBody()) &&
+                            listPartSnake.get(i).getTop().intersect(listPartSnake.get(i+1).getBody())) {
+                listPartSnake.get(i).setBm(bodyTopLeft);
+            } else if(listPartSnake.get(i).getRight().intersect(listPartSnake.get(i+1).getBody()) &&
+                    listPartSnake.get(i).getTop().intersect(listPartSnake.get(i-1).getBody()) ||
+                    listPartSnake.get(i).getRight().intersect(listPartSnake.get(i-1).getBody()) &&
+                            listPartSnake.get(i).getTop().intersect(listPartSnake.get(i+1).getBody())) {
+                listPartSnake.get(i).setBm(bodyTopRight);
+            } else if(listPartSnake.get(i).getTop().intersect(listPartSnake.get(i+1).getBody()) &&
+                    listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i-1).getBody()) ||
+                    listPartSnake.get(i).getTop().intersect(listPartSnake.get(i-1).getBody()) &&
+                            listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i+1).getBody())) {
+                listPartSnake.get(i).setBm(bodyVertical);
+            } else if(listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i+1).getBody()) &&
+                    listPartSnake.get(i).getRight().intersect(listPartSnake.get(i-1).getBody()) ||
+                    listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i-1).getBody()) &&
+                            listPartSnake.get(i).getRight().intersect(listPartSnake.get(i+1).getBody())) {
+                listPartSnake.get(i).setBm(bodyHorizontal);
+            } else {
+                if(moveR){
+                    listPartSnake.get(i).setBm(bodyHorizontal);
+                }else if(moveD){
+                    listPartSnake.get(i).setBm(bodyVertical);
+                }else if(moveU){
+                    listPartSnake.get(i).setBm(bodyVertical);
+                }else{
+                    listPartSnake.get(i).setBm(bodyHorizontal);
+                }
+            }
+        }
+
+        if(listPartSnake.get(length-1).getRight().intersect(listPartSnake.get(length-2).getBody())){
+            listPartSnake.get(length-1).setBm(tailRight);
+        }else if(listPartSnake.get(length-1).getLeft().intersect(listPartSnake.get(length-2).getBody())){
+            listPartSnake.get(length-1).setBm(tailLeft);
+        }else if(listPartSnake.get(length-1).getBottom().intersect(listPartSnake.get(length-2).getBody())){
+            listPartSnake.get(length-1).setBm(tailDown);
+        }else{
+            listPartSnake.get(length-1).setBm(tailUp);
         }
     }
 
@@ -195,5 +272,48 @@ public class Snake {
 
     public void setListPartSnake(ArrayList<PartSnake> listPartSnake) {
         this.listPartSnake = listPartSnake;
+    }
+
+    public boolean isMoveL() {
+        return moveL;
+    }
+
+    public void setMoveL(boolean moveL) {
+        stop();
+        this.moveL = moveL;
+    }
+
+    public boolean isMoveR() {
+        return moveR;
+    }
+
+    public void setMoveR(boolean moveR) {
+        stop();
+        this.moveR = moveR;
+    }
+
+    public boolean isMoveU() {
+        return moveU;
+    }
+
+    public void setMoveU(boolean moveU) {
+        stop();
+        this.moveU = moveU;
+    }
+
+    public boolean isMoveD() {
+        return moveD;
+    }
+
+    public void setMoveD(boolean moveD) {
+        stop();
+        this.moveD = moveD;
+    }
+
+    public void stop() {
+        this.moveU = false;
+        this.moveR = false;
+        this.moveD = false;
+        this.moveL = false;
     }
 }
