@@ -23,7 +23,7 @@ public class GameView extends View {
     private ArrayList<Grass> grassList = new ArrayList<>();
     private Snake snake;
     private boolean move = false;
-    private Food food;
+    private Food food1, food2, food3;
     private float mx, my;
     private Context context;
     public static int sizeOfMap = 75 * Constants.SCREEN_WIDTH/1080;
@@ -55,7 +55,9 @@ public class GameView extends View {
         }
 
         snake = new Snake(bmSnake, grassList.get(125).getX(), grassList.get(125).getY(), 4);
-        food = new Food(randomFoodImage(), grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
+        food1 = new Food(bmFood1, grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
+        food2 = new Food(bmFood2, grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
+        food3 = new Food(bmMouse, grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
         handler = new Handler();
 
         runnable = new Runnable() {
@@ -120,13 +122,27 @@ public class GameView extends View {
         }
         snake.update();
         snake.drawSnake(canvas);
-        food.draw(canvas);
+        food1.draw(canvas);
+        food2.draw(canvas);
+        food3.draw(canvas);
+        if(snake.getListPartSnake().get(0).getBody().intersect(food1.getRectangle())) {
+            randomFood();
+            food1.reset(grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
+            snake.addPart();
+        } else if(snake.getListPartSnake().get(0).getBody().intersect(food2.getRectangle())) {
+            randomFood();
+            food2.reset(grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
+            snake.addPart();
+        } else if(snake.getListPartSnake().get(0).getBody().intersect(food3.getRectangle())) {
+            randomFood();
+            food3.reset(grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
+            snake.addPart();
+        }
         handler.postDelayed(runnable, 100);
     }
 
     public int[] randomFood() {
         int xy[] = new int[2];
-        Bitmap foods[] = new Bitmap[3];
         Random x = new Random();
         xy[0] = x.nextInt(grassList.size() -1);
         xy[1] = x.nextInt(grassList.size() - 1);
