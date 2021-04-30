@@ -113,25 +113,25 @@ public class GameView extends View {
                         my = event.getY();
                         snake.setMoveL(true);
                         isPlaying = true;
-                        MainActivity.txt_swipe.setVisibility(INVISIBLE);
+                        SnakeMain.txt_swipe.setVisibility(INVISIBLE);
                     } else if(event.getX() - mx > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveL()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMoveR(true);
                         isPlaying = true;
-                        MainActivity.txt_swipe.setVisibility(INVISIBLE);
+                        SnakeMain.txt_swipe.setVisibility(INVISIBLE);
                     } else if(my - event.getY() > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveD()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMoveU(true);
                         isPlaying = true;
-                        MainActivity.txt_swipe.setVisibility(INVISIBLE);
+                        SnakeMain.txt_swipe.setVisibility(INVISIBLE);
                     } else if(event.getY() - my > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveU()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMoveD(true);
                         isPlaying = true;
-                        MainActivity.txt_swipe.setVisibility(INVISIBLE);
+                        SnakeMain.txt_swipe.setVisibility(INVISIBLE);
                     }
                 }
 
@@ -184,7 +184,7 @@ public class GameView extends View {
             food1.reset(grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
             snake.addPart();
             score++;
-            MainActivity.txt_score.setText(score+"");
+            SnakeMain.txt_score.setText(score+"");
         } else if(snake.getListPartSnake().get(0).getBody().intersect(food2.getRectangle())) {
             if(loadedSound){
                 int streamId = this.soundPool.play(this.soundEat, (float)0.5, (float)0.5, 1, 0, 1f);
@@ -193,7 +193,7 @@ public class GameView extends View {
             food2.reset(grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
             snake.addPart();
             score++;
-            MainActivity.txt_score.setText(score+"");
+            SnakeMain.txt_score.setText(score+"");
         } else if(snake.getListPartSnake().get(0).getBody().intersect(food3.getRectangle())) {
             if(loadedSound){
                 int streamId = this.soundPool.play(this.soundEat, (float)0.5, (float)0.5, 1, 0, 1f);
@@ -202,7 +202,7 @@ public class GameView extends View {
             food3.reset(grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
             snake.addPart();
             score++;
-            MainActivity.txt_score.setText(score+"");
+            SnakeMain.txt_score.setText(score+"");
         }
 
         if(score > bestScore){
@@ -211,7 +211,7 @@ public class GameView extends View {
             SharedPreferences.Editor editor = sp.edit();
             editor.putInt("bestscore", bestScore);
             editor.apply();
-            MainActivity.txt_best_score.setText(bestScore+"");
+            SnakeMain.txt_best_score.setText(bestScore+"");
         }
 
         handler.postDelayed(runnable, 100);
@@ -219,9 +219,9 @@ public class GameView extends View {
 
     private void gameOver() {
         isPlaying = false;
-        MainActivity.dialogScore.show();
-        MainActivity.txt_dialog_best_score.setText(bestScore+"");
-        MainActivity.txt_dialog_score.setText(score+"");
+        SnakeMain.dialogScore.show();
+        SnakeMain.txt_dialog_best_score.setText(bestScore+"");
+        SnakeMain.txt_dialog_score.setText(score+"");
         if(loadedSound){
             int streamId = this.soundPool.play(this.soundDie, (float)0.5, (float)0.5, 1, 0, 1f);
         }
