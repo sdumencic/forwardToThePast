@@ -6,13 +6,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import snake.Constants;
+import snake.GameView;
 
 public class SnakeMain extends AppCompatActivity {
     public static TextView txt_score, txt_best_score, txt_dialog_score, txt_dialog_best_score;
