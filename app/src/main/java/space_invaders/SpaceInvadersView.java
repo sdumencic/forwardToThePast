@@ -3,6 +3,8 @@ package space_invaders;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,6 +13,9 @@ import android.media.SoundPool;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.myapplication.R;
+
 import java.io.IOException;
 
 /**
@@ -224,6 +229,9 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
             // Draw the background color
             canvas.drawColor(Color.argb(255, 26, 128, 182));
+            Bitmap background = BitmapFactory.decodeResource(this.getResources(), R.drawable.space_invaders_background);
+            background = Bitmap.createScaledBitmap(background, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
+            canvas.drawBitmap(background, 0, 0, null);
 
             // Choose the brush color for drawing
             paint.setColor(Color.argb(255,  255, 255, 255));
