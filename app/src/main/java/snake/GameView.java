@@ -152,6 +152,13 @@ public class GameView extends View {
         return true;
     }
 
+    /**
+     *
+     * @param canvas
+     *
+     * Draws elements on the canvas.
+     */
+
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
@@ -162,12 +169,16 @@ public class GameView extends View {
 
         if(isPlaying){
             snake.update();
+
+            /* If the snake hits the wall - game over */
             if(snake.getListPartSnake().get(0).getX() < this.grassList.get(0).getX()
-                    ||snake.getListPartSnake().get(0).getY() < this.grassList.get(0).getY()
-                    ||snake.getListPartSnake().get(0).getY()+sizeOfMap>this.grassList.get(this.grassList.size()-1).getY() + sizeOfMap
-                    ||snake.getListPartSnake().get(0).getX()+sizeOfMap>this.grassList.get(this.grassList.size()-1).getX() + sizeOfMap){
+                    || snake.getListPartSnake().get(0).getY() < this.grassList.get(0).getY()
+                    || snake.getListPartSnake().get(0).getY() + sizeOfMap > this.grassList.get(this.grassList.size() - 1).getY() + sizeOfMap
+                    || snake.getListPartSnake().get(0).getX() + sizeOfMap > this.grassList.get(this.grassList.size() - 1).getX() + sizeOfMap){
                 gameOver();
             }
+
+            /* If the snake hits itself */
             for (int i = 1; i < snake.getListPartSnake().size(); i++){
                 if (snake.getListPartSnake().get(0).getBody().intersect(snake.getListPartSnake().get(i).getBody())){
                     gameOver();
@@ -179,6 +190,8 @@ public class GameView extends View {
         food1.draw(canvas);
         food2.draw(canvas);
         food3.draw(canvas);
+
+        /* If the snake eats, play sound, draw a new food, increase score*/
         if(snake.getListPartSnake().get(0).getBody().intersect(food1.getRectangle())) {
             if(loadedSound){
                 int streamId = this.soundPool.play(this.soundEat, (float)0.5, (float)0.5, 1, 0, 1f);
