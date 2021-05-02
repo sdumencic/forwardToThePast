@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;;
 import android.view.Display;
 
-import com.example.myapplication.space_invaders.SpaceInvadersView;
+import space_invaders.SpaceInvadersView;
 
 
 /**
