@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".BreakoutActivity"
     android:orientation="vertical"
-    android:background="#000000"
+    android:background="@drawable/breakout_background"
     android:gravity="center">
     <LinearLayout
         android:layout_width="wrap_content"
