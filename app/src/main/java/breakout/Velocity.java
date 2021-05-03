@@ -1,8 +1,8 @@
-package Breakout;
+package breakout;
 
-public class breakout_velocity {
+public class Velocity {
     private int x, y;
-    public breakout_velocity(int x, int y) {
+    public Velocity(int x, int y) {
         this.x = x;
         this.y = y;
     }

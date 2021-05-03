@@ -4,11 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
-import Breakout.breakout_gameView;
+import breakout.GameView;
 
 public class BreakoutActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
@@ -29,18 +30,17 @@ public class BreakoutActivity extends AppCompatActivity {
             ibAudio.setImageResource(R.drawable.breakout_sound_off);
         }
 
-
-
     }
 
     public void startGame(View view) {
-        breakout_gameView gameView = new breakout_gameView(this);
+        GameView gameView = new GameView(this);
         setContentView(gameView);
     }
 
     public void audioPref(View view) {
         if(audioState){
             audioState = false;
+            ibAudio.setBackgroundResource(0);
             ibAudio.setImageResource(R.drawable.breakout_sound_off);
         } else {
             audioState = true;
