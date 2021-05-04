@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E1F5FE"
+    android:background="@drawable/breakout_background"
     android:orientation="vertical">
 
     <LinearLayout
@@ -59,9 +59,9 @@
                     android:id="@+id/tvPoints"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Highest: "
+                    android:text="50"
                     android:textSize="50sp"
-                    android:textColor="@android:color/holo_green_dark"></TextView>
+                    android:textColor="@android:color/holo_red_light"></TextView>
             </TableRow>
             <TableRow
                 android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="50"
+                    android:text="Highest: "
                     android:textSize="24sp"
                     android:layout_gravity="center|right"></TextView>
                 <TextView
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:text="100"
                     android:textSize="50sp"
-                    android:textColor="@android:color/holo_orange_dark"></TextView>
+                    android:textColor="@android:color/white"></TextView>
             </TableRow>
         </TableLayout>
         <View

@@ -2,6 +2,7 @@ package breakout;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -94,14 +95,18 @@ public class GameView extends View {
         if (ballY > paddleY + paddle.getHeight()){
             ballX = 1 + random.nextInt(dWidth - ball.getWidth() - 1); //get random X for next life
             ballY = 0; //put the ball at the top wall
-            if(mpMiss != null & audioState) {
+            if(mpMiss != null && audioState) {
                 mpMiss.start();
             }
             breakoutvelocity.setX(xVelocity());
             breakoutvelocity.setY(40);
             life--;
             if (life == 0) {
-                //add game over
+                //game over
+                Intent intent = new Intent(context, GameOver.class);
+                intent.putExtra("points", points);
+                context.startActivity(intent);
+                ((Activity)context).finish();
             }
         }
         /*

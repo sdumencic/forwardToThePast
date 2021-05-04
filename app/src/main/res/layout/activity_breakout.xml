@@ -23,7 +23,7 @@
             android:id="@+id/ibAudio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/breakout_sound_on"
+            android:background="@android:color/transparent"
             android:onClick="audioPref" />
     </LinearLayout>
 </LinearLayout>
