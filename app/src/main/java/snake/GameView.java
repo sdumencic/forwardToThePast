@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package snake;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,6 +16,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+
+import com.example.myapplication.R;
+import com.example.myapplication.SnakeMain;
 
 import java.util.ArrayList;
 import java.util.Random;

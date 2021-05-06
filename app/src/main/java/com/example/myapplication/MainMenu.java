@@ -41,7 +41,7 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 openSpaceInvaders();
             }
-        });
+        });*/
 
         breakout = (CardView) findViewById(R.id.breakout);
         breakout.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +51,7 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-        pong = (CardView) findViewById(R.id.pong);
+        /*pong = (CardView) findViewById(R.id.pong);
         pong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,14 +81,14 @@ public class MainMenu extends AppCompatActivity {
     public void openSpaceInvaders() {
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
-    }
+    }*/
 
     public void openBreakout() {
-        Intent intent = new Intent(this, MainMenu.class);
+        Intent intent = new Intent(this, BreakoutActivity.class);
         startActivity(intent);
     }
 
-    public void openPong() {
+    /*public void openPong() {
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }*/
