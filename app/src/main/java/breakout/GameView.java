@@ -1,4 +1,4 @@
-package Breakout;
+package breakout;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,10 +19,10 @@ import com.example.myapplication.R;
 
 import java.util.Random;
 
-public class breakout_gameView extends View {
+public class GameView extends View {
     Context context;
     float ballX, ballY;
-    breakout_velocity breakoutvelocity = new breakout_velocity(25,32);
+    Velocity breakoutvelocity = new Velocity(25,40);
     Handler handler;
     final long UPDATE_MILLIS = 30; //delay used by handler to call the runnable
     Runnable runnable;
@@ -40,7 +40,7 @@ public class breakout_gameView extends View {
     SharedPreferences sharedPreferences;
     Boolean audioState;
 
-    public breakout_gameView(Context context) {
+    public GameView(Context context) {
         super(context);
         this.context = context;
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.breakout_ball);
@@ -74,9 +74,14 @@ public class breakout_gameView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawColor(Color.BLACK);
+
+        //draw the background
+        canvas.drawColor(Color.rgb(50,70,150));
+
+        //increase ball velocity
         ballX += breakoutvelocity.getX();
         ballY += breakoutvelocity.getY();
+
         //check if the ball hit the left or right wall
         if ((ballX >= dWidth - ball.getWidth()) || ballX <= 0) {
             breakoutvelocity.setX(breakoutvelocity.getX() * -1); //change direction
@@ -93,7 +98,7 @@ public class breakout_gameView extends View {
                 mpMiss.start();
             }
             breakoutvelocity.setX(xVelocity());
-            breakoutvelocity.setY(32);
+            breakoutvelocity.setY(40);
             life--;
             if (life == 0) {
                 //add game over
