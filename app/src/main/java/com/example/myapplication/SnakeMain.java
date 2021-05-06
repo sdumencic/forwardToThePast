@@ -21,6 +21,13 @@ public class SnakeMain extends AppCompatActivity {
     public static Dialog dialogScore;
     private GameView gameview;
 
+    /**
+     * Gets display metrics so that it can scale Bitmaps
+     * Shows dialog with score
+     *
+     * @param savedInstanceState
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +44,18 @@ public class SnakeMain extends AppCompatActivity {
         dialogScore();
     }
 
+    /**
+     * Shows score.
+     * Creates dialog.
+     */
+
     private void dialogScore() {
         int bestScore = 0;
         SharedPreferences sp = this.getSharedPreferences("gamesetting", Context.MODE_PRIVATE);
-        if(sp!=null){
+        if(sp != null){
             bestScore = sp.getInt("bestscore",0);
         }
+
         SnakeMain.txt_best_score.setText(bestScore+"");
         dialogScore = new Dialog(this);
         dialogScore.setContentView(R.layout.snake_dialog);
@@ -50,8 +63,8 @@ public class SnakeMain extends AppCompatActivity {
         txt_dialog_best_score = dialogScore.findViewById(R.id.txt_dialog_best_score);
         txt_dialog_best_score.setText(bestScore + "");
         dialogScore.setCanceledOnTouchOutside(false);
-        RelativeLayout rl_start = dialogScore.findViewById(R.id.rl_start);
-        rl_start.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout start = dialogScore.findViewById(R.id.start);
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 txt_swipe.setVisibility(View.VISIBLE);
@@ -59,6 +72,7 @@ public class SnakeMain extends AppCompatActivity {
                 dialogScore.dismiss();
             }
         });
+
         dialogScore.show();
     }
 }

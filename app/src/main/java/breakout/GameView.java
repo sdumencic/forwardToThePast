@@ -22,7 +22,7 @@ import java.util.Random;
 public class GameView extends View {
     Context context;
     float ballX, ballY;
-    Velocity breakoutvelocity = new Velocity(25,40);
+    breakout.Velocity breakoutvelocity = new breakout.Velocity(25,40);
     Handler handler;
     final long UPDATE_MILLIS = 30; //delay used by handler to call the runnable
     Runnable runnable;

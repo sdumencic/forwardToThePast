@@ -14,6 +14,12 @@ import android.widget.Button;
 public class MainMenu extends AppCompatActivity {
     private CardView snake, tetris, spaceInvaders, breakout, pong, exit;
 
+    /**
+     * Shows CardViews for each game. When a card is clicked, it opens the game
+     *
+     * @param savedInstanceState
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
