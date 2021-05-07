@@ -51,7 +51,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     private int screenY;
 
     //The player's ship and bullet
-    private PlayerShip playerShip;
+    private SpaceShip spaceShip;
     private Bullet bullet;
 
     // The invaders bullets
@@ -82,11 +82,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     // Lives
     private int lives = 3;
 
-    // How menacing (fast) should the sound be?
-    private long menaceInterval = 1000;
-    // Which menace sound should play next
-    private boolean uhOrOh;
-    // When did we last play a menacing sound
+
     private long lastMenaceTime = System.currentTimeMillis();
 
     /**
@@ -109,48 +105,23 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
         screenX = x;
         screenY = y;
 
-        // This SoundPool is deprecated!!!
-        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
-
-        try{
-            // Create objects of the 2 required classes
-            AssetManager assetManager = context.getAssets();
-            AssetFileDescriptor descriptor;
-
-            // Load our fx in memory ready for use
-            descriptor = assetManager.openFd("shoot.ogg");
-            shootID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("invaderexplode.ogg");
-            invaderExplodeID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("damageshelter.ogg");
-            damageShelterID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("playerexplode.ogg");
-            playerExplodeID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("damageshelter.ogg");
-            damageShelterID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("uh.ogg");
-            uhID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("oh.ogg");
-            ohID = soundPool.load(descriptor, 0);
-
-        }catch(IOException e){
-            // Print an error message to the console
-            Log.e("error", "failed to load sound files");
-        }
-
         prepareLevel();
     }
+
+
     /**
      * Here will be initialized all of the game objects.
      */
     private void prepareLevel(){
+
+        spaceShip = new SpaceShip(context, screenX, screenY);
+
+        //canvas.drawBitmap(spaceShip.getBitmap(), spaceShip.getX(), screenY - 50, paint);
+
     }
+
+
+
     /**
      * Run the game thread.
      */
@@ -177,26 +148,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                 fps = 1000 / timeThisFrame;
             }
 
-            // Play a sound based on the menace level
-            if(!paused) {
-                if ((startFrameTime - lastMenaceTime) > menaceInterval) {
-                    if (uhOrOh) {
-                        // Play Uh
-                        soundPool.play(uhID, 1, 1, 0, 0, 1);
-
-                    } else {
-                        // Play Oh
-                        soundPool.play(ohID, 1, 1, 0, 0, 1);
-                    }
-
-                    // Reset the last menace time
-                    lastMenaceTime = System.currentTimeMillis();
-                    // Alter value of uhOrOh
-                    uhOrOh = !uhOrOh;
-                }
-            }
-
-
+            
         }
 
 
@@ -222,13 +174,12 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
      * Draw() sets the screen graphics.
      */
     private void draw(){
-        // Make sure our drawing surface is valid or we crash
+
         if (ourHolder.getSurface().isValid()) {
             // Lock the canvas ready to draw
             canvas = ourHolder.lockCanvas();
 
-            // Draw the background color
-            canvas.drawColor(Color.argb(255, 26, 128, 182));
+            // Set the background picture
             Bitmap background = BitmapFactory.decodeResource(this.getResources(), R.drawable.space_invaders_background);
             background = Bitmap.createScaledBitmap(background, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, true);
             canvas.drawBitmap(background, 0, 0, null);
@@ -237,10 +188,12 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
             paint.setColor(Color.argb(255,  255, 255, 255));
 
             // Draw the score and remaining lives
-            // Change the brush color
             paint.setColor(Color.argb(255,  249, 129, 0));
             paint.setTextSize(80);
             canvas.drawText("Score: " + score + "   Lives: " + lives, 20,90, paint);
+
+            //Draw the spaceship
+            canvas.drawBitmap(spaceShip.getBitmap(), spaceShip.getX(), screenY - spaceShip.getHeight(), paint);
 
             // Draw everything to the screen
             ourHolder.unlockCanvasAndPost(canvas);

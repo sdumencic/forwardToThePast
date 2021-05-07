@@ -1,13 +1,11 @@
 package com.example.myapplication;
 
-import android.graphics.Point;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;;
 import android.util.DisplayMetrics;
-import android.view.Display;
-
+import androidx.appcompat.app.AppCompatActivity;
 import space_invaders.Constants;
 import space_invaders.SpaceInvadersView;
+
 
 
 /**
@@ -26,20 +24,13 @@ public class SpaceInvadersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get a Display object to access screen details
-        Display display = getWindowManager().getDefaultDisplay();
-
-        // Load the resolution into a Point object
-        Point size = new Point();
-        display.getSize(size);
-
         DisplayMetrics dm = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(dm);
         Constants.SCREEN_HEIGHT = dm.heightPixels;
         Constants.SCREEN_WIDTH = dm.widthPixels;
 
         // Initialize gameView and set it as the view
-        spaceInvadersView = new SpaceInvadersView(this, size.x, size.y);
+        spaceInvadersView = new SpaceInvadersView(this, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         setContentView(spaceInvadersView);
     }
 
