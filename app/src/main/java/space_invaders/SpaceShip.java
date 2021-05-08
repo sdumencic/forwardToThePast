@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
+
 import com.example.myapplication.R;
 
 public class SpaceShip {
@@ -16,7 +17,7 @@ public class SpaceShip {
     private float length;
     private float height;
 
-   //Dimensions of rectangle in which the spaceship will be drawn
+    //Dimensions of rectangle in which the spaceship will be drawn
     private float x;
     private float y;
 
@@ -31,12 +32,12 @@ public class SpaceShip {
     private int shipMoving = STOPPED;
 
 
-    public SpaceShip(Context context, int screenX, int screenY){
+    public SpaceShip(Context context, int screenX, int screenY) {
 
         //Initializes blank rectangle for spaceship object and scale dimensions
         rect = new RectF();
-        length = screenX/3;
-        height = screenY/5;
+        length = screenX / 3;
+        height = screenY / 5;
 
 
         // Start ship rectangle in the center of the screen
@@ -56,37 +57,37 @@ public class SpaceShip {
         shipSpeed = 200;
     }
 
-    public RectF getRect(){
+    public RectF getRect() {
         return rect;
     }
 
-    public Bitmap getBitmap(){
+    public Bitmap getBitmap() {
         return bitmap;
     }
 
-    public float getX(){
+    public float getX() {
         return x;
     }
 
-    public float getHeight(){
+    public float getHeight() {
         return height;
     }
 
-    public float getLength(){
+    public float getLength() {
         return length;
     }
 
-    public void setMovementState(int state){
+    public void setMovementState(int state) {
         shipMoving = state;
     }
 
 
-    public void update(long fps){
-        if(shipMoving == LEFT){
+    public void update(long fps) {
+        if (shipMoving == LEFT) {
             x = x - shipSpeed / fps;
         }
 
-        if(shipMoving == RIGHT){
+        if (shipMoving == RIGHT) {
             x = x + shipSpeed / fps;
         }
 

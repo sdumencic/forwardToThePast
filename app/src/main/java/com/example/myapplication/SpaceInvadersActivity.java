@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
+
 import androidx.appcompat.app.AppCompatActivity;
 import space_invaders.Constants;
 import space_invaders.SpaceInvadersView;
@@ -50,5 +52,25 @@ public class SpaceInvadersActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         spaceInvadersView.pause();
+    }
+
+
+    //This method detects screen touches
+    @Override
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+
+            // Player has touched the screen
+            case MotionEvent.ACTION_DOWN:
+
+                break;
+
+            // Player has removed finger from screen
+            case MotionEvent.ACTION_UP:
+
+                break;
+        }
+        return true;
     }
 }

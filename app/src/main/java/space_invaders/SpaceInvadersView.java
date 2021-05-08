@@ -8,9 +8,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -27,63 +29,45 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
     private Thread gameThread = null;
 
-    // SurfaceHolder will lock the surface before we draw the graphics.
-    private SurfaceHolder ourHolder;
+    private SurfaceHolder screenHolder;
 
-    // A boolean which we will set and unset
-    // when the game is running- or not.
-    private volatile boolean playing;
+    private volatile boolean gameOn;
 
-    // Game is paused at the start.
     private boolean paused = true;
 
     private Canvas canvas;
     private Paint paint;
 
-    // This variable tracks the game frame rate.
     private long fps;
 
-    // This is used to help calculate the fps.
-    private long timeThisFrame;
+    private long frame;
 
-    // The size of the screen in pixels
+    // Screen size in pixels
     private int screenX;
     private int screenY;
 
-    //The player's ship and bullet
     private SpaceShip spaceShip;
-    private Bullet bullet;
+    private Bullet laser;
 
-    // The invaders bullets
+
     private Bullet[] invadersBullets = new Bullet[200];
     private int nextBullet;
     private int maxInvaderBullets = 10;
 
-    // Up to 60 invaders
+
+    // Invaders army set as array
     Invader[] invaders = new Invader[60];
-    int numInvaders = 0;
+    int killed = 0;
+
 
     // The player's shelters are built from bricks
-    private DefenceBrick[] bricks = new DefenceBrick[400];
+    private DefenceBrick[] defence = new DefenceBrick[400];
     private int numBricks;
 
-    // For sound FX
-    private SoundPool soundPool;
-    private int playerExplodeID = -1;
-    private int invaderExplodeID = -1;
-    private int shootID = -1;
-    private int damageShelterID = -1;
-    private int uhID = -1;
-    private int ohID = -1;
 
-    // The score
     int score = 0;
-
-    // Lives
     private int lives = 3;
 
-
-    private long lastMenaceTime = System.currentTimeMillis();
 
     /**
      * When we initialize (call new()) on gameView
@@ -91,15 +75,11 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
      */
     public SpaceInvadersView(Context context, int x, int y) {
 
-        // The next line of code asks the
-        // SurfaceView class to set up our object.
         super(context);
 
-        // Make a globally available copy of the context so we can use it in another method
         this.context = context;
 
-        // Initialize ourHolder and paint objects
-        ourHolder = getHolder();
+        screenHolder = getHolder();
         paint = new Paint();
 
         screenX = x;
@@ -112,14 +92,36 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     /**
      * Here will be initialized all of the game objects.
      */
-    private void prepareLevel(){
+    private void prepareLevel() {
 
+        //The spaceship instances and methods
         spaceShip = new SpaceShip(context, screenX, screenY);
+        laser = new Bullet(context, screenY);
 
-        //canvas.drawBitmap(spaceShip.getBitmap(), spaceShip.getX(), screenY - 50, paint);
 
+        for (int i = 0; i < invadersBullets.length; i++) {
+            invadersBullets[i] = new Bullet(context, screenY);
+        }
+
+        killed = 0;
+        for (int column = 0; column < 6; column++) {
+            for (int row = 0; row < 5; row++) {
+                invaders[killed] = new Invader(context, row, column, screenX, screenY);
+                killed++;
+            }
+        }
+
+
+        numBricks = 0;
+        for (int shelterNumber = 0; shelterNumber < 4; shelterNumber++) {
+            for (int column = 0; column < 10; column++) {
+                for (int row = 0; row < 5; row++) {
+                    defence[numBricks] = new DefenceBrick(row, column, shelterNumber, screenX, screenY);
+                    numBricks++;
+                }
+            }
+        }
     }
-
 
 
     /**
@@ -127,28 +129,22 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
      */
     @Override
     public void run() {
-        while (playing) {
+        while (gameOn) {
 
-            // Capture the current time in milliseconds in startFrameTime
             long startFrameTime = System.currentTimeMillis();
 
-            // Update the frame
             if (!paused) {
                 update();
             }
 
-            // Draw the frame
             draw();
 
-            // Calculate the fps this frame
-            // We can then use the result to
-            // time animations and more.
-            timeThisFrame = System.currentTimeMillis() - startFrameTime;
-            if (timeThisFrame >= 1) {
-                fps = 1000 / timeThisFrame;
+            frame = System.currentTimeMillis() - startFrameTime;
+            if (frame >= 1) {
+                fps = 1000 / frame;
             }
 
-            
+
         }
 
 
@@ -157,27 +153,157 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     /**
      * Update() updates game state after resume.
      */
-    private void update(){
-        // Did an invader bump into the side of the screen
+    private void update() {
         boolean bumped = false;
 
-        // Has the player lost
         boolean lost = false;
 
-        if(lost) {
+        spaceShip.update(fps);
+
+
+        for (int i = 0; i < killed; i++) {
+
+            if (invaders[i].getVisibility()) {
+                invaders[i].update(fps);
+
+                if (invaders[i].shootTheTarget(spaceShip.getX(),
+                        spaceShip.getLength())) {
+
+                    if (invadersBullets[nextBullet].shoot(invaders[i].getX()
+                                    + invaders[i].getLength() / 2,
+                            invaders[i].getY(), laser.DOWN)) {
+
+                        nextBullet++;
+
+                        if (nextBullet == maxInvaderBullets) {
+                            nextBullet = 0;
+                        }
+                    }
+                }
+
+                if (invaders[i].getX() > screenX - invaders[i].getLength()
+                        || invaders[i].getX() < 0) {
+
+                    bumped = true;
+
+                }
+            }
+
+        }
+
+
+        //Update Spaceship laser
+        if (laser.getStatus()) {
+            laser.update(fps);
+        }
+
+        for (int i = 0; i < invadersBullets.length; i++) {
+            if (invadersBullets[i].getStatus()) {
+                invadersBullets[i].update(fps);
+            }
+        }
+
+
+        if (bumped) {
+
+            for (int i = 0; i < killed; i++) {
+                invaders[i].Swap();
+                if (invaders[i].getY() > screenY - screenY / 10) {
+                    lost = true;
+                }
+            }
+
+        }
+
+
+        if (lost) {
             prepareLevel();
         }
+
+        if (laser.getImpactPointY() < 0) {
+            laser.setInactive();
+        }
+
+        for (int i = 0; i < invadersBullets.length; i++) {
+            if (invadersBullets[i].getImpactPointY() > screenY) {
+                invadersBullets[i].setInactive();
+            }
+        }
+
+
+        if (laser.getStatus()) {
+            for (int i = 0; i < killed; i++) {
+                if (invaders[i].getVisibility()) {
+                    if (RectF.intersects(laser.getRect(), invaders[i].getRect())) {
+                        invaders[i].setInvisible();
+                        laser.setInactive();
+                        score = score + 10;
+
+                        if (score == killed * 10) {
+                            paused = true;
+                            score = 0;
+                            lives = 3;
+                            prepareLevel();
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < invadersBullets.length; i++) {
+            if (invadersBullets[i].getStatus()) {
+                for (int j = 0; j < numBricks; j++) {
+                    if (defence[j].getVisibility()) {
+                        if (RectF.intersects(invadersBullets[i].getRect(), defence[j].getRect())) {
+                            invadersBullets[i].setInactive();
+                            defence[j].setInvisible();
+                        }
+                    }
+                }
+            }
+
+        }
+
+        if (laser.getStatus()) {
+            for (int i = 0; i < numBricks; i++) {
+                if (defence[i].getVisibility()) {
+                    if (RectF.intersects(laser.getRect(), defence[i].getRect())) {
+                        // A collision has occurred
+                        laser.setInactive();
+                        defence[i].setInvisible();
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < invadersBullets.length; i++) {
+            if (invadersBullets[i].getStatus()) {
+                if (RectF.intersects(spaceShip.getRect(), invadersBullets[i].getRect())) {
+                    invadersBullets[i].setInactive();
+                    lives--;
+
+                    if (lives == 0) {
+                        paused = true;
+                        lives = 3;
+                        score = 0;
+                        prepareLevel();
+
+                    }
+                }
+            }
+        }
+
     }
 
 
     /**
      * Draw() sets the screen graphics.
      */
-    private void draw(){
+    private void draw() {
 
-        if (ourHolder.getSurface().isValid()) {
+        if (screenHolder.getSurface().isValid()) {
             // Lock the canvas ready to draw
-            canvas = ourHolder.lockCanvas();
+            canvas = screenHolder.lockCanvas();
 
             // Set the background picture
             Bitmap background = BitmapFactory.decodeResource(this.getResources(), R.drawable.space_invaders_background);
@@ -185,19 +311,93 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
             canvas.drawBitmap(background, 0, 0, null);
 
             // Choose the brush color for drawing
-            paint.setColor(Color.argb(255,  255, 255, 255));
+            paint.setColor(Color.argb(255, 255, 255, 255));
 
-            // Draw the score and remaining lives
-            paint.setColor(Color.argb(255,  249, 129, 0));
-            paint.setTextSize(80);
-            canvas.drawText("Score: " + score + "   Lives: " + lives, 20,90, paint);
 
             //Draw the spaceship
             canvas.drawBitmap(spaceShip.getBitmap(), spaceShip.getX(), screenY - spaceShip.getHeight(), paint);
 
-            // Draw everything to the screen
-            ourHolder.unlockCanvasAndPost(canvas);
+
+            // Draw the army of invaders
+            for (int i = 0; i < killed; i++) {
+                if (invaders[i].getVisibility()) {
+                    canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getX(), invaders[i].getY(), paint);
+                }
+            }
+
+
+            // Bricks graphics
+            for (int i = 0; i < numBricks; i++) {
+                if (defence[i].getVisibility()) {
+                    canvas.drawRect(defence[i].getRect(), paint);
+                }
+            }
+
+
+            if (laser.getStatus()) {
+                canvas.drawBitmap(laser.getBitmap(), laser.getWidth(), laser.getHeight(), paint);
+            }
+
+            for (int i = 0; i < invadersBullets.length; i++) {
+                if (invadersBullets[i].getStatus()) {
+                    canvas.drawRect(invadersBullets[i].getRect(), paint);
+                }
+            }
+
+
+            paint.setColor(Color.argb(255, 249, 129, 0));
+            paint.setTextSize(80);
+            canvas.drawText("Score: " + score + "   Lives: " + lives, 20, 90, paint);
+
+            screenHolder.unlockCanvasAndPost(canvas);
         }
+    }
+
+
+    // Overridden method from java SurfaceView
+    @Override
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+
+            // Player has touched the screen
+            case MotionEvent.ACTION_DOWN:
+
+                paused = false;
+
+                // Detects motions in the lower part of the screen where the spaceship is
+                // LEFT and RIGHT controls
+                if (motionEvent.getY() > Constants.SCREEN_HEIGHT - Constants.SCREEN_HEIGHT / 8) {
+                    if (motionEvent.getX() > Constants.SCREEN_WIDTH / 2) {
+                        spaceShip.setMovementState(spaceShip.RIGHT);
+                    } else {
+                        spaceShip.setMovementState(spaceShip.LEFT);
+                    }
+
+                }
+
+                //Fix!
+                // Spaceship bullet touch control
+                if (motionEvent.getY() < Constants.SCREEN_HEIGHT - Constants.SCREEN_HEIGHT / 8) {
+                    // Calculate shooting start coordinates and add sound
+                    if (laser.shoot(spaceShip.getX() +
+                            spaceShip.getLength() / 2, Constants.SCREEN_HEIGHT - spaceShip.getHeight(), laser.UP)) {
+                    }
+                }
+                break;
+
+            // Player has removed finger from screen
+            case MotionEvent.ACTION_UP:
+
+                if (motionEvent.getY() > screenY - screenY / 10) {
+                    spaceShip.setMovementState(spaceShip.STOPPED);
+                }
+
+                break;
+
+        }
+
+        return true;
     }
 
 
@@ -206,7 +406,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
      * shutdown our thread.
      */
     public void pause() {
-        playing = false;
+        gameOn = false;
         try {
             gameThread.join();
         } catch (InterruptedException e) {
@@ -216,10 +416,10 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     }
 
     /**
-     *If user resums the game, we call resume method.
+     * If user resums the game, we call resume method.
      */
     public void resume() {
-        playing = true;
+        gameOn = true;
         gameThread = new Thread(this);
         gameThread.start();
     }
