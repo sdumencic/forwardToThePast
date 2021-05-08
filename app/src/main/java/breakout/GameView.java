@@ -10,6 +10,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.view.Display;
@@ -18,12 +20,13 @@ import android.view.View;
 
 import com.example.myapplication.R;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameView extends View {
     Context context;
     float ballX, ballY;
-    Velocity breakoutvelocity = new Velocity(25,40);
+    Velocity breakoutvelocity = new Velocity(25,-30);
     Handler handler;
     final long UPDATE_MILLIS = 30; //delay used by handler to call the runnable
     Runnable runnable;
@@ -40,12 +43,21 @@ public class GameView extends View {
     Random random;
     SharedPreferences sharedPreferences;
     Boolean audioState;
+    Brick[] bricks = new Brick[100];
+    int numBricks = 0;
+    int brickWidth, brickHeight;
+    ArrayList<Bitmap> brickTypes = new ArrayList<Bitmap>();
+    Bitmap brick1, brick2, brick3;
 
     public GameView(Context context) {
         super(context);
         this.context = context;
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.breakout_ball);
         paddle = BitmapFactory.decodeResource(getResources(), R.drawable.breakout_paddle);
+        brick1 = BitmapFactory.decodeResource(getResources(), R.drawable.breakout_brick1);
+        brick2 = BitmapFactory.decodeResource(getResources(), R.drawable.breakout_brick2);
+        brick3 = BitmapFactory.decodeResource(getResources(), R.drawable.breakout_brick3);
+
         handler = new Handler();
         runnable = new Runnable() {
             @Override
@@ -55,7 +67,7 @@ public class GameView extends View {
         };
         mpHit = MediaPlayer.create(context, R.raw.breakout_ball_hit);
         mpMiss = MediaPlayer.create(context, R.raw.breakout_ball_miss);
-        textPaint.setColor(Color.RED);
+        textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(TEXT_SIZE);
         textPaint.setTextAlign(Paint.Align.LEFT);
         healthPaint.setColor(Color.GREEN);
@@ -66,8 +78,25 @@ public class GameView extends View {
         dHeight = size.y;
         random = new Random();
         ballX = random.nextInt(dWidth);
-        paddleY = (dHeight * 4) / 5;
+        ballY = dHeight * 3 / 4 ;
+        paddleY = (dHeight * 17) / 20;
         paddleX = dWidth / 2 - paddle.getWidth() / 2; //positioning the pedal in the center
+        brickWidth = dWidth / 6;
+        brickHeight = dHeight / 30;
+        brick1 = Bitmap.createScaledBitmap(brick1, brickWidth-5, brickHeight-5, true);
+        brick2 = Bitmap.createScaledBitmap(brick2, brickWidth-5, brickHeight-5, true);
+        brick3 = Bitmap.createScaledBitmap(brick3, brickWidth-5, brickHeight-5, true);
+        brickTypes.add(brick1);
+        brickTypes.add(brick2);
+        brickTypes.add(brick3);
+        numBricks = 0;
+
+        for(int column = 0; column < 6; column ++ ){
+            for(int row = 0; row < 9; row ++ ){
+                bricks[numBricks] = new Brick(brickTypes.get(row%3), row, column, brickWidth, brickHeight);
+                numBricks ++;
+            }
+        }
         sharedPreferences = context.getSharedPreferences("my_pref", 0);
         audioState = sharedPreferences.getBoolean("audioState", true);
     }
@@ -83,23 +112,59 @@ public class GameView extends View {
         ballX += breakoutvelocity.getX();
         ballY += breakoutvelocity.getY();
 
+        //check if the ball hit a brick   /////////////////////////////////////////////////////////////////////
+        for(int i = 0; i < numBricks; i++){
+
+            if (bricks[i].getVisibility()){
+                RectF ballRect = new RectF(ballX, ballY, ballX + ball.getWidth(), ballY + ball.getHeight());
+                //if the ball hits a brick
+                if(RectF.intersects(bricks[i].getRect(),ballRect)) {
+                    bricks[i].setInvisible();
+
+                    int ballCenterY = (int) (ballY - ball.getHeight() / 2);
+
+                    if (ballCenterY < bricks[i].getY() - brickHeight //if the center of the ball is above the top of the brick - the ball hit the brick from the top
+                    || ballCenterY > bricks[i].getY()) { //if the center of the ball is below the bottom of the brick - the ball hit the brick from the bottom
+                        breakoutvelocity.setY(breakoutvelocity.getY() * -1);
+                        points += 10;
+                    } else { //the ball hit the brick from the side
+                        breakoutvelocity.setX(breakoutvelocity.getX() * -1);
+                        points += 10;
+                    }
+
+                    boolean gameOver = true; //all the bricks have been hit until proven otherwise
+                    for (int j = 0; j < numBricks; j++) {
+                        if (bricks[j].getVisibility()) {
+                            gameOver = false;
+                        }
+                    }
+                    if (gameOver) {
+                        Intent intent = new Intent(context, GameOver.class);
+                        intent.putExtra("points", points);
+                        context.startActivity(intent);
+                        ((Activity)context).finish();
+                    }
+                }
+            }
+        }
+
         //check if the ball hit the left or right wall
         if ((ballX >= dWidth - ball.getWidth()) || ballX <= 0) {
-            breakoutvelocity.setX(breakoutvelocity.getX() * -1); //change direction
+            breakoutvelocity.setX(breakoutvelocity.getX() * -1); //change direction left/right
         }
         //check if the ball hit the top wall
         if (ballY <= 0) {
-            breakoutvelocity.setY(breakoutvelocity.getY() * -1);
+            breakoutvelocity.setY(breakoutvelocity.getY() * -1); //change direction up/down
         }
         //check if the ball was missed
         if (ballY > paddleY + paddle.getHeight()){
             ballX = 1 + random.nextInt(dWidth - ball.getWidth() - 1); //get random X for next life
-            ballY = 0; //put the ball at the top wall
+            ballY = dHeight * 3 / 4;
             if(mpMiss != null && audioState) {
                 mpMiss.start();
             }
             breakoutvelocity.setX(xVelocity());
-            breakoutvelocity.setY(40);
+            breakoutvelocity.setY(-30);
             life--;
             if (life == 0) {
                 //game over
@@ -123,20 +188,27 @@ public class GameView extends View {
             if(mpHit != null && audioState) {
                 mpHit.start();
             }
-            breakoutvelocity.setX(breakoutvelocity.getX() + 5); //increase speed
-            breakoutvelocity.setY(breakoutvelocity.getY() * -1); //change direction
-            points++;
+            breakoutvelocity.setX(breakoutvelocity.getX() + 1); //increase speed
+            breakoutvelocity.setY(breakoutvelocity.getY() * -1); //change direction up/down
+            points--;
         }
         canvas.drawBitmap(ball, ballX, ballY, null);
         canvas.drawBitmap(paddle, paddleX, paddleY, null);
-        canvas.drawText(""+points, 20, TEXT_SIZE, textPaint);
+
+        // Draw the bricks if visible
+        for(int i = 0; i < numBricks; i++){
+            if(bricks[i].getVisibility()) {
+                canvas.drawBitmap(bricks[i].getColor(), bricks[i].getX(), bricks[i].getY(), null);
+            }
+        }
+        canvas.drawText(""+points, 20, dHeight*19/20, textPaint);
         if (life == 2) {
             healthPaint.setColor(Color.YELLOW);
         } else if (life == 1) {
             healthPaint.setColor(Color.RED);
         }
         //draw the life rectangle => 3 = green, 2 = yellow, 1 = red
-        canvas.drawRect(dWidth-200, 30, dWidth - 200 + 60 * life, 60, healthPaint);
+        canvas.drawRect(dWidth-200, dHeight*9/10, dWidth - 200 + 60 * life, dHeight*19/20, healthPaint);
         handler.postDelayed(runnable, UPDATE_MILLIS);
     }
 
