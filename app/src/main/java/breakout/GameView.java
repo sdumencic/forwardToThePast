@@ -10,7 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -26,7 +25,7 @@ import java.util.Random;
 public class GameView extends View {
     Context context;
     float ballX, ballY;
-    Velocity breakoutvelocity = new Velocity(25,-30);
+    Velocity breakoutvelocity = new Velocity(25,-10);
     Handler handler;
     final long UPDATE_MILLIS = 30; //delay used by handler to call the runnable
     Runnable runnable;
@@ -38,8 +37,8 @@ public class GameView extends View {
     int points = 0;
     int life = 3;
     Bitmap ball, paddle;
-    int dWidth, dHeight;
-    MediaPlayer mpHit, mpMiss;
+    int dWidth, dHeight; //width and height of screen
+    MediaPlayer mpHit, mpMiss, mpBrickHit;
     Random random;
     SharedPreferences sharedPreferences;
     Boolean audioState;
@@ -48,6 +47,12 @@ public class GameView extends View {
     int brickWidth, brickHeight;
     ArrayList<Bitmap> brickTypes = new ArrayList<Bitmap>();
     Bitmap brick1, brick2, brick3;
+
+    /*remember which side the previously hit brick got hit from -
+    1 is hit from top, 2 is hit from right, 3 is hit from bottom, 4 is hit from left
+
+    Solves the problem of double-direction change on the hit of two bricks at the same time */
+    int HitFromSide = 0;
 
     public GameView(Context context) {
         super(context);
@@ -67,6 +72,7 @@ public class GameView extends View {
         };
         mpHit = MediaPlayer.create(context, R.raw.breakout_ball_hit);
         mpMiss = MediaPlayer.create(context, R.raw.breakout_ball_miss);
+        mpBrickHit = MediaPlayer.create(context, R.raw.breakout_brick_hit);
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(TEXT_SIZE);
         textPaint.setTextAlign(Paint.Align.LEFT);
@@ -82,7 +88,7 @@ public class GameView extends View {
         paddleY = (dHeight * 17) / 20;
         paddleX = dWidth / 2 - paddle.getWidth() / 2; //positioning the pedal in the center
         brickWidth = dWidth / 6;
-        brickHeight = dHeight / 30;
+        brickHeight = dHeight / 25;
         brick1 = Bitmap.createScaledBitmap(brick1, brickWidth-5, brickHeight-5, true);
         brick2 = Bitmap.createScaledBitmap(brick2, brickWidth-5, brickHeight-5, true);
         brick3 = Bitmap.createScaledBitmap(brick3, brickWidth-5, brickHeight-5, true);
@@ -92,8 +98,8 @@ public class GameView extends View {
         numBricks = 0;
 
         for(int column = 0; column < 6; column ++ ){
-            for(int row = 0; row < 9; row ++ ){
-                bricks[numBricks] = new Brick(brickTypes.get(row%3), row, column, brickWidth, brickHeight);
+            for(int row = 0; row < 6; row ++ ){
+                bricks[numBricks] = new Brick(brickTypes.get(row/2), row, column, brickWidth, brickHeight);
                 numBricks ++;
             }
         }
@@ -119,17 +125,115 @@ public class GameView extends View {
                 RectF ballRect = new RectF(ballX, ballY, ballX + ball.getWidth(), ballY + ball.getHeight());
                 //if the ball hits a brick
                 if(RectF.intersects(bricks[i].getRect(),ballRect)) {
+                    if(mpBrickHit != null && audioState) {
+                        mpBrickHit.start();
+                    }
                     bricks[i].setInvisible();
+                    points += 10;
 
-                    int ballCenterY = (int) (ballY - ball.getHeight() / 2);
+                    int ballCenterY = (int) (ballY + ball.getHeight() / 2);
+                    int ballCenterX = (int) (ballX + ball.getWidth() / 2);
+                    int top = 0, right = 0, bottom = 0, left = 0;
 
-                    if (ballCenterY < bricks[i].getY() - brickHeight //if the center of the ball is above the top of the brick - the ball hit the brick from the top
-                    || ballCenterY > bricks[i].getY()) { //if the center of the ball is below the bottom of the brick - the ball hit the brick from the bottom
-                        breakoutvelocity.setY(breakoutvelocity.getY() * -1);
-                        points += 10;
-                    } else { //the ball hit the brick from the side
-                        breakoutvelocity.setX(breakoutvelocity.getX() * -1);
-                        points += 10;
+                    //find center of the ball in relation to the brick
+                    //the Y axis is reversed - the bottom of the brick is actually the upper side of the brick on our screen
+                    if (ballCenterY <= bricks[i].getTop()) top = 1;
+                    else if (ballCenterY >= bricks[i].getBottom()) bottom = 1;
+                    if (ballCenterX <= bricks[i].getLeft()) left = 1;
+                    else if (ballCenterX >= bricks[i].getRight()) right = 1;
+
+                    //solve bouncing off the brick for all cases
+                    /*
+                    Case 1) The center of the ball is above the brick.
+                    This can mean that:
+                    a) The center of the ball is directly above the brick
+                    b) The center of the ball is above the brick, but to the left of the left edge of the brick
+                    c) The center of the ball is above the brick, but to the right of the right edge of the brick
+
+                    Case 2) The center of the ball is below the brick.
+                    This can mean that:
+                    a) The center of the ball is directly below the brick
+                    b) The center of the ball is below the brick, but to the left of the left edge of the brick
+                    c) The center of the ball is below the brick, but to the right of the right edge of the brick
+
+                    Case 3) The center of the ball is:
+                    a) directly to the left of the left edge of the brick
+                    b) directly to the right of the right edge of the brick
+                    */
+                    if (top == 1) { //Case 1
+                        if (right == 0 && left == 0) { //1.a)
+                            if (HitFromSide != 1) {
+                                breakoutvelocity.setY(breakoutvelocity.getY() * -1);
+                                HitFromSide = 1;
+                            }
+                        } else if (left == 1) { //1.b)
+                            if (bricks[i].getTop() - ballCenterY >= bricks[i].getLeft() - ballCenterX) { //it's more top than left
+                                if (HitFromSide != 1) {
+                                    breakoutvelocity.setY(breakoutvelocity.getY() * -1);
+                                    HitFromSide = 1;
+                                }
+                            } else { //it's more left than top
+                                if (HitFromSide != 4) {
+                                    breakoutvelocity.setX(breakoutvelocity.getX() * -1);
+                                    HitFromSide = 4;
+                                }
+                            }
+                        } else { //1.c)
+                            if (bricks[i].getTop() - ballCenterY >= ballCenterX - bricks[i].getRight()) { //it's more top than right
+                                if (HitFromSide != 1) {
+                                    breakoutvelocity.setY(breakoutvelocity.getY() * -1);
+                                    HitFromSide = 1;
+                                }
+                            } else { //it's more right than top
+                                if (HitFromSide != 2) {
+                                    breakoutvelocity.setX(breakoutvelocity.getX() * -1);
+                                    HitFromSide = 2;
+                                }
+                            }
+                        }
+                    } else if (bottom == 1) { //Case 2
+                        if (right == 0 && left == 0) { //2.a)
+                            if (HitFromSide != 3) {
+                                breakoutvelocity.setY(breakoutvelocity.getY() * -1);
+                                HitFromSide = 3;
+                            }
+                        } else if (left == 1) { //2.b)
+                            if (ballCenterY - bricks[i].getBottom() >= bricks[i].getLeft() - ballCenterX) { //it's more bottom than left
+                                if (HitFromSide != 3) {
+                                    breakoutvelocity.setY(breakoutvelocity.getY() * -1);
+                                    HitFromSide = 3;
+                                }
+                            } else { //it's more left than bottom
+                                if (HitFromSide != 4) {
+                                    breakoutvelocity.setX(breakoutvelocity.getX() * -1);
+                                    HitFromSide = 4;
+                                }
+                            }
+                        } else { //2.c)
+                            if (ballCenterY - bricks[i].getBottom() >= ballCenterX - bricks[i].getRight()) { //it's more bottom than right
+                                if (HitFromSide != 3) {
+                                    breakoutvelocity.setY(breakoutvelocity.getY() * -1);
+                                    HitFromSide = 3;
+                                }
+                            } else { //it's more right than top
+                                if (HitFromSide != 2) {
+                                    breakoutvelocity.setX(breakoutvelocity.getX() * -1);
+                                    HitFromSide = 2;
+                                }
+                            }
+                        }
+                    } else { //Case 3
+                        if (left == 1) {
+                            if (HitFromSide != 4) {
+                                breakoutvelocity.setX(breakoutvelocity.getX() * -1);
+                                HitFromSide = 4;
+                            }
+                        } else if (right == 1) {
+                            if (HitFromSide != 2) {
+                                breakoutvelocity.setX(breakoutvelocity.getX() * -1);
+                                HitFromSide = 2;
+                            }
+                        }
                     }
 
                     boolean gameOver = true; //all the bricks have been hit until proven otherwise
@@ -142,7 +246,7 @@ public class GameView extends View {
                         Intent intent = new Intent(context, GameOver.class);
                         intent.putExtra("points", points);
                         context.startActivity(intent);
-                        ((Activity)context).finish();
+                        ((Activity) context).finish();
                     }
                 }
             }
@@ -151,10 +255,18 @@ public class GameView extends View {
         //check if the ball hit the left or right wall
         if ((ballX >= dWidth - ball.getWidth()) || ballX <= 0) {
             breakoutvelocity.setX(breakoutvelocity.getX() * -1); //change direction left/right
+            HitFromSide = 0;
+            if(mpHit != null && audioState) {
+                mpHit.start();
+            }
         }
         //check if the ball hit the top wall
         if (ballY <= 0) {
             breakoutvelocity.setY(breakoutvelocity.getY() * -1); //change direction up/down
+            HitFromSide = 0;
+            if(mpHit != null && audioState) {
+                mpHit.start();
+            }
         }
         //check if the ball was missed
         if (ballY > paddleY + paddle.getHeight()){
@@ -164,7 +276,7 @@ public class GameView extends View {
                 mpMiss.start();
             }
             breakoutvelocity.setX(xVelocity());
-            breakoutvelocity.setY(-30);
+            breakoutvelocity.setY(-10);
             life--;
             if (life == 0) {
                 //game over
@@ -190,7 +302,7 @@ public class GameView extends View {
             }
             breakoutvelocity.setX(breakoutvelocity.getX() + 1); //increase speed
             breakoutvelocity.setY(breakoutvelocity.getY() * -1); //change direction up/down
-            points--;
+            HitFromSide = 0;
         }
         canvas.drawBitmap(ball, ballX, ballY, null);
         canvas.drawBitmap(paddle, paddleX, paddleY, null);
@@ -198,7 +310,7 @@ public class GameView extends View {
         // Draw the bricks if visible
         for(int i = 0; i < numBricks; i++){
             if(bricks[i].getVisibility()) {
-                canvas.drawBitmap(bricks[i].getColor(), bricks[i].getX(), bricks[i].getY(), null);
+                canvas.drawBitmap(bricks[i].getColor(), bricks[i].getLeft(), bricks[i].getTop(), null);
             }
         }
         canvas.drawText(""+points, 20, dHeight*19/20, textPaint);
@@ -239,7 +351,7 @@ public class GameView extends View {
     }
 
     private int xVelocity() {
-        int[] values = {-35, -30, -25, 25, 30, 35};
+        int[] values = {-25, -20, -15, 15, 20, 25};
         int index = random.nextInt(6);
         return values[index];
     }

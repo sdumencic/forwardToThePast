@@ -7,21 +7,19 @@ public class Brick {
     private Bitmap color;
     private RectF rect;
     private boolean isVisible;
-    private int x, y;
+    private int left, top, right, bottom;
 
     Brick(Bitmap color, int row, int column, int width, int height){
 
         int padding = 4;
         this.color = color;
-        this.x = column * width + padding;
-        this.y = row * height + padding;
+        this.left = column * width + padding;
+        this.top = row * height + padding;
+        this.right = column * width + width - padding;
+        this.bottom = row * height + height - padding;
         isVisible = true;
 
-
-        rect = new RectF(column * width + padding,
-                row * height + padding,
-                column * width + width - padding,
-                row * height + height - padding);
+        rect = new RectF(this.left, this.top, this.right, this.bottom);
     }
 
     RectF getRect(){
@@ -38,7 +36,11 @@ public class Brick {
 
     public Bitmap getColor() {return color;}
 
-    public int getX() {return x;}
+    public int getLeft() {return left;}
 
-    public int getY() {return y;}
+    public int getTop() {return top;}
+
+    public int getBottom() {return bottom;}
+
+    public int getRight() {return right;}
 }
