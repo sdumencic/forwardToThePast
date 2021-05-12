@@ -25,7 +25,7 @@ import java.util.Random;
 public class GameView extends View {
     Context context;
     float ballX, ballY;
-    Velocity breakoutvelocity = new Velocity(25,-10);
+    Velocity breakoutvelocity = new Velocity(25, -10);
     Handler handler;
     final long UPDATE_MILLIS = 30; //delay used by handler to call the runnable
     Runnable runnable;
@@ -84,23 +84,23 @@ public class GameView extends View {
         dHeight = size.y;
         random = new Random();
         ballX = random.nextInt(dWidth);
-        ballY = dHeight * 3 / 4 ;
+        ballY = dHeight * 3 / 4;
         paddleY = (dHeight * 17) / 20;
         paddleX = dWidth / 2 - paddle.getWidth() / 2; //positioning the pedal in the center
         brickWidth = dWidth / 6;
         brickHeight = dHeight / 25;
-        brick1 = Bitmap.createScaledBitmap(brick1, brickWidth-5, brickHeight-5, true);
-        brick2 = Bitmap.createScaledBitmap(brick2, brickWidth-5, brickHeight-5, true);
-        brick3 = Bitmap.createScaledBitmap(brick3, brickWidth-5, brickHeight-5, true);
+        brick1 = Bitmap.createScaledBitmap(brick1, brickWidth - 5, brickHeight - 5, true);
+        brick2 = Bitmap.createScaledBitmap(brick2, brickWidth - 5, brickHeight - 5, true);
+        brick3 = Bitmap.createScaledBitmap(brick3, brickWidth - 5, brickHeight - 5, true);
         brickTypes.add(brick1);
         brickTypes.add(brick2);
         brickTypes.add(brick3);
         numBricks = 0;
 
-        for(int column = 0; column < 6; column ++ ){
-            for(int row = 0; row < 6; row ++ ){
-                bricks[numBricks] = new Brick(brickTypes.get(row/2), row, column, brickWidth, brickHeight);
-                numBricks ++;
+        for (int column = 0; column < 6; column++) {
+            for (int row = 0; row < 6; row++) {
+                bricks[numBricks] = new Brick(brickTypes.get(row / 2), row, column, brickWidth, brickHeight);
+                numBricks++;
             }
         }
         sharedPreferences = context.getSharedPreferences("my_pref", 0);
@@ -112,20 +112,20 @@ public class GameView extends View {
         super.onDraw(canvas);
 
         //draw the background
-        canvas.drawColor(Color.rgb(50,70,150));
+        canvas.drawColor(Color.rgb(50, 70, 150));
 
         //increase ball velocity
         ballX += breakoutvelocity.getX();
         ballY += breakoutvelocity.getY();
 
         //check if the ball hit a brick   /////////////////////////////////////////////////////////////////////
-        for(int i = 0; i < numBricks; i++){
+        for (int i = 0; i < numBricks; i++) {
 
-            if (bricks[i].getVisibility()){
+            if (bricks[i].getVisibility()) {
                 RectF ballRect = new RectF(ballX, ballY, ballX + ball.getWidth(), ballY + ball.getHeight());
                 //if the ball hits a brick
-                if(RectF.intersects(bricks[i].getRect(),ballRect)) {
-                    if(mpBrickHit != null && audioState) {
+                if (RectF.intersects(bricks[i].getRect(), ballRect)) {
+                    if (mpBrickHit != null && audioState) {
                         mpBrickHit.start();
                     }
                     bricks[i].setInvisible();
@@ -256,7 +256,7 @@ public class GameView extends View {
         if ((ballX >= dWidth - ball.getWidth()) || ballX <= 0) {
             breakoutvelocity.setX(breakoutvelocity.getX() * -1); //change direction left/right
             HitFromSide = 0;
-            if(mpHit != null && audioState) {
+            if (mpHit != null && audioState) {
                 mpHit.start();
             }
         }
@@ -264,15 +264,15 @@ public class GameView extends View {
         if (ballY <= 0) {
             breakoutvelocity.setY(breakoutvelocity.getY() * -1); //change direction up/down
             HitFromSide = 0;
-            if(mpHit != null && audioState) {
+            if (mpHit != null && audioState) {
                 mpHit.start();
             }
         }
         //check if the ball was missed
-        if (ballY > paddleY + paddle.getHeight()){
+        if (ballY > paddleY + paddle.getHeight()) {
             ballX = 1 + random.nextInt(dWidth - ball.getWidth() - 1); //get random X for next life
             ballY = dHeight * 3 / 4;
-            if(mpMiss != null && audioState) {
+            if (mpMiss != null && audioState) {
                 mpMiss.start();
             }
             breakoutvelocity.setX(xVelocity());
@@ -283,7 +283,7 @@ public class GameView extends View {
                 Intent intent = new Intent(context, GameOver.class);
                 intent.putExtra("points", points);
                 context.startActivity(intent);
-                ((Activity)context).finish();
+                ((Activity) context).finish();
             }
         }
         /*
@@ -294,10 +294,10 @@ public class GameView extends View {
             4) The ball is not below the paddle
         */
         if (((ballX + ball.getWidth()) >= paddleX)
-        && (ballX <= paddleX + paddle.getWidth())
-        && (ballY + ball.getHeight() >= paddleY)
-        && (ballY + ball.getHeight() <= paddleY + paddle.getHeight())) {
-            if(mpHit != null && audioState) {
+                && (ballX <= paddleX + paddle.getWidth())
+                && (ballY + ball.getHeight() >= paddleY)
+                && (ballY + ball.getHeight() <= paddleY + paddle.getHeight())) {
+            if (mpHit != null && audioState) {
                 mpHit.start();
             }
             breakoutvelocity.setX(breakoutvelocity.getX() + 1); //increase speed
@@ -308,19 +308,19 @@ public class GameView extends View {
         canvas.drawBitmap(paddle, paddleX, paddleY, null);
 
         // Draw the bricks if visible
-        for(int i = 0; i < numBricks; i++){
-            if(bricks[i].getVisibility()) {
+        for (int i = 0; i < numBricks; i++) {
+            if (bricks[i].getVisibility()) {
                 canvas.drawBitmap(bricks[i].getColor(), bricks[i].getLeft(), bricks[i].getTop(), null);
             }
         }
-        canvas.drawText(""+points, 20, dHeight*19/20, textPaint);
+        canvas.drawText("" + points, 20, dHeight * 19 / 20, textPaint);
         if (life == 2) {
             healthPaint.setColor(Color.YELLOW);
         } else if (life == 1) {
             healthPaint.setColor(Color.RED);
         }
         //draw the life rectangle => 3 = green, 2 = yellow, 1 = red
-        canvas.drawRect(dWidth-200, dHeight*9/10, dWidth - 200 + 60 * life, dHeight*19/20, healthPaint);
+        canvas.drawRect(dWidth - 200, dHeight * 9 / 10, dWidth - 200 + 60 * life, dHeight * 19 / 20, healthPaint);
         handler.postDelayed(runnable, UPDATE_MILLIS);
     }
 

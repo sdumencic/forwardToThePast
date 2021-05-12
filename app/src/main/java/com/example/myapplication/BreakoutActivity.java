@@ -24,7 +24,7 @@ public class BreakoutActivity extends AppCompatActivity {
         ibAudio = findViewById(R.id.ibAudio);
         sharedPreferences = getSharedPreferences("my_pref", 0);
         audioState = sharedPreferences.getBoolean("audioState", true);
-        if(audioState) {
+        if (audioState) {
             ibAudio.setImageResource(R.drawable.breakout_sound_on);
         } else {
             ibAudio.setImageResource(R.drawable.breakout_sound_off);
@@ -38,7 +38,7 @@ public class BreakoutActivity extends AppCompatActivity {
     }
 
     public void audioPref(View view) {
-        if(audioState){
+        if (audioState) {
             audioState = false;
             ibAudio.setBackgroundResource(0);
             ibAudio.setImageResource(R.drawable.breakout_sound_off);
@@ -47,7 +47,7 @@ public class BreakoutActivity extends AppCompatActivity {
             ibAudio.setImageResource(R.drawable.breakout_sound_on);
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("audioState",audioState);
+        editor.putBoolean("audioState", audioState);
         editor.commit();
     }
 }

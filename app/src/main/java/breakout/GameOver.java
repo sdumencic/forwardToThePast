@@ -28,8 +28,8 @@ public class GameOver extends AppCompatActivity {
         tvHighest = findViewById(R.id.tvHighest);
         ivNewHighest = findViewById(R.id.ivNewHighest);
         int points = getIntent().getExtras().getInt("points");
-        tvPoints.setText(""+points);
-        sharedPreferences = getSharedPreferences("my_pref",0);
+        tvPoints.setText("" + points);
+        sharedPreferences = getSharedPreferences("my_pref", 0);
         int highest = sharedPreferences.getInt("highest", 0);
         if (points > highest) {
             ivNewHighest.setVisibility(View.VISIBLE);
@@ -38,7 +38,7 @@ public class GameOver extends AppCompatActivity {
             editor.putInt("highest", highest);
             editor.commit();
         }
-        tvHighest.setText(""+highest);
+        tvHighest.setText("" + highest);
     }
 
     public void restart(View view) {

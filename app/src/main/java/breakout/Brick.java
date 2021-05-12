@@ -9,7 +9,7 @@ public class Brick {
     private boolean isVisible;
     private int left, top, right, bottom;
 
-    Brick(Bitmap color, int row, int column, int width, int height){
+    Brick(Bitmap color, int row, int column, int width, int height) {
 
         int padding = 4;
         this.color = color;
@@ -22,25 +22,35 @@ public class Brick {
         rect = new RectF(this.left, this.top, this.right, this.bottom);
     }
 
-    RectF getRect(){
+    RectF getRect() {
         return this.rect;
     }
 
-    void setInvisible(){
+    void setInvisible() {
         isVisible = false;
     }
 
-    boolean getVisibility(){
+    boolean getVisibility() {
         return isVisible;
     }
 
-    public Bitmap getColor() {return color;}
+    public Bitmap getColor() {
+        return color;
+    }
 
-    public int getLeft() {return left;}
+    public int getLeft() {
+        return left;
+    }
 
-    public int getTop() {return top;}
+    public int getTop() {
+        return top;
+    }
 
-    public int getBottom() {return bottom;}
+    public int getBottom() {
+        return bottom;
+    }
 
-    public int getRight() {return right;}
+    public int getRight() {
+        return right;
+    }
 }
