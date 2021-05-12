@@ -83,7 +83,9 @@ public class GameView extends View {
         dWidth = size.x;
         dHeight = size.y;
         random = new Random();
-        ballX = random.nextInt(dWidth);
+
+        //fixes the bug of the ball spawning on the left or right wall (making the ball stuck) by having it spawn somewhere in the center of the screen
+        ballX = random.nextInt(dWidth / 2) + dWidth / 4;
         ballY = dHeight * 3 / 4;
         paddleY = (dHeight * 17) / 20;
         paddleX = dWidth / 2 - paddle.getWidth() / 2; //positioning the pedal in the center
@@ -270,7 +272,8 @@ public class GameView extends View {
         }
         //check if the ball was missed
         if (ballY > paddleY + paddle.getHeight()) {
-            ballX = 1 + random.nextInt(dWidth - ball.getWidth() - 1); //get random X for next life
+            //fixes the bug of the ball spawning on the left or right wall (making the ball stuck) by having it spawn somewhere in the center of the screen
+            ballX = random.nextInt(dWidth / 2) + dWidth / 4;
             ballY = dHeight * 3 / 4;
             if (mpMiss != null && audioState) {
                 mpMiss.start();
@@ -300,8 +303,10 @@ public class GameView extends View {
             if (mpHit != null && audioState) {
                 mpHit.start();
             }
-            breakoutvelocity.setX(breakoutvelocity.getX() + 1); //increase speed
-            breakoutvelocity.setY(breakoutvelocity.getY() * -1); //change direction up/down
+
+            if (breakoutvelocity.getY() > 0) { // only change direction from down to up - fixes ball getting stuck in paddle
+                breakoutvelocity.setY(breakoutvelocity.getY() * -1); //change direction up/down
+            }
             HitFromSide = 0;
         }
         canvas.drawBitmap(ball, ballX, ballY, null);
