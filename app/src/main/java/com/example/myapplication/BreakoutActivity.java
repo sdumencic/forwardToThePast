@@ -3,17 +3,20 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import breakout.GameView;
 
 public class BreakoutActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     Boolean audioState;
+    public static ImageView close;
     ImageButton ibAudio;
 
     @Override
@@ -24,12 +27,24 @@ public class BreakoutActivity extends AppCompatActivity {
         ibAudio = findViewById(R.id.ibAudio);
         sharedPreferences = getSharedPreferences("my_pref", 0);
         audioState = sharedPreferences.getBoolean("audioState", true);
+        close = findViewById(R.id.close);
         if (audioState) {
             ibAudio.setImageResource(R.drawable.breakout_sound_on);
         } else {
             ibAudio.setImageResource(R.drawable.breakout_sound_off);
         }
 
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeGame();
+            }
+        });
+
+    }
+
+    private void closeGame() {
+        this.finish();
     }
 
     public void startGame(View view) {
