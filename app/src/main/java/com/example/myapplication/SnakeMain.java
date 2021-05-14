@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ public class SnakeMain extends AppCompatActivity {
     public static TextView txt_score, txt_best_score, txt_dialog_score, txt_dialog_best_score;
     public static Button txt_swipe;
     public static Dialog dialogScore;
+    public static ImageView close;
     private GameView gameview;
 
     /**
@@ -38,10 +40,18 @@ public class SnakeMain extends AppCompatActivity {
         Constants.SCREEN_WIDTH = dm.widthPixels;
         setContentView(R.layout.activity_snake);
         txt_swipe = findViewById(R.id.txt_swipe);
+        close = findViewById(R.id.close);
         gameview = findViewById(R.id.gameview);
         txt_score = findViewById(R.id.txt_score);
         txt_best_score = findViewById(R.id.txt_highscore);
         dialogScore();
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeGame();
+            }
+        });
     }
 
     /**
@@ -74,5 +84,9 @@ public class SnakeMain extends AppCompatActivity {
         });
 
         dialogScore.show();
+    }
+
+    public void closeGame() {
+        this.finish();
     }
 }
