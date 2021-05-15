@@ -80,4 +80,7 @@ public class SpaceInvadersActivity extends AppCompatActivity {
     public void startSpaceInvaders(View view) {
         setContentView(spaceInvadersView);
     }
+    public void closeSpaceInvaders(View view) {
+        this.finish();
+    }
 }

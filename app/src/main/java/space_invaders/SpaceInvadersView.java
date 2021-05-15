@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -176,6 +177,8 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                                     + invaders[i].getLength() / 2,
                             invaders[i].getY(), laser.DOWN)) {
 
+                        MediaPlayer invaderShootSound = MediaPlayer.create(context, R.raw.space_invaders_enemy);
+                        invaderShootSound.start();
                         nextBullet++;
 
                         if (nextBullet == maxInvaderBullets) {
@@ -422,6 +425,8 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                     // Calculate shooting start coordinates and add sound
                     if (laser.shoot(spaceShip.getX() +
                             spaceShip.getLength() / 2 - Constants.SCREEN_WIDTH / 60, Constants.SCREEN_HEIGHT - spaceShip.getHeight(), laser.UP)) {
+                        MediaPlayer laserSound = MediaPlayer.create(context, R.raw.space_invaders_shoot);
+                        laserSound.start();
                     }
                 }
                 break;

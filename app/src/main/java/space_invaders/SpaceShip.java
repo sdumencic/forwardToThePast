@@ -55,7 +55,7 @@ public class SpaceShip {
                 (int) (height),
                 false);
 
-        shipSpeed = 200;
+        shipSpeed = 300;
     }
 
     public RectF getRect() {
@@ -86,17 +86,22 @@ public class SpaceShip {
     public void update(long fps) {
         if (shipMoving == LEFT) {
             x = x - shipSpeed / fps;
+            if (x < 0) {
+                x = 0;
+            }
         }
 
         if (shipMoving == RIGHT) {
             x = x + shipSpeed / fps;
+            if (x > Constants.SCREEN_WIDTH - length) {
+                x = Constants.SCREEN_WIDTH - length;
+            }
         }
 
         rect.top = y;
         rect.bottom = y + height;
         rect.left = x;
         rect.right = x + length;
-
     }
 
 }
