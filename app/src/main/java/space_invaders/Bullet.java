@@ -28,7 +28,9 @@ public class Bullet {
 
     //height is relative to the screen resolution
     private int width = 1;
+    private int laser_width = Constants.SCREEN_WIDTH/30;
     private int height;
+    private int laser_height;
 
 
 
@@ -36,6 +38,7 @@ public class Bullet {
 
     public Bullet(Context context, int screenY) {
         height = screenY / 20;
+        laser_height = screenY / 15;
         isActive = false;
 
         rect = new RectF();
@@ -44,8 +47,8 @@ public class Bullet {
 
         // Synchronize the bitmap with the screen resolution
         bitmap = Bitmap.createScaledBitmap(bitmap,
-                (int) (width),
-                (int) (height),
+                (int) (laser_width),
+                (int) (laser_height),
                 false);
 
     }
@@ -65,7 +68,6 @@ public class Bullet {
     public float getHeight () {
         return y;
     }
-
 
     public boolean getStatus() {
         return isActive;

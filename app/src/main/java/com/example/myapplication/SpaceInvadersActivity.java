@@ -1,8 +1,11 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import space_invaders.Constants;
@@ -33,11 +36,11 @@ public class SpaceInvadersActivity extends AppCompatActivity {
 
         // Initialize gameView and set it as the view
         spaceInvadersView = new SpaceInvadersView(this, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        setContentView(spaceInvadersView);
+        setContentView(R.layout.space_invaders_start_game);
     }
 
     /**
-     * This method executes when the player starts the game.
+     * This method executes when player starts the game.
      */
     @Override
     protected void onResume() {
@@ -72,5 +75,9 @@ public class SpaceInvadersActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    public void startSpaceInvaders(View view) {
+        setContentView(spaceInvadersView);
     }
 }

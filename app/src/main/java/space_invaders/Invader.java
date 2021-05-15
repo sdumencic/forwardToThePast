@@ -40,16 +40,16 @@ public class Invader {
 
         rect = new RectF();
 
-        length = screenX / 20;
+        length = screenX / 12;
         height = screenY / 20;
 
         isVisible = true;
 
-        int padding = screenX / 20;
+        int padding = screenX / 18;
 
         // Calculate rectangle dimensions
-        x = column * (length + padding/4);
-        y = row * (length + padding);
+        x = column * (length + padding);
+        y = row * (length + padding) + 100;
 
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.space_invaders_enemy);
 

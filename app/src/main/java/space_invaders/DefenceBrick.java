@@ -10,13 +10,12 @@ public class DefenceBrick {
 
     public DefenceBrick(int row, int column, int shelterNumber, int screenX, int screenY){
 
-        int width = screenX / 90;
-        int height = screenY / 40;
+        int width = screenX / 70;
+        int height = screenY / 50;
+
 
         isVisible = true;
 
-        // Sometimes a bullet slips through this padding.
-        // Set padding to zero if this annoys you
         int brickPadding = 1;
 
         int shelterPadding = screenX / 9;

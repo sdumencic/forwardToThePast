@@ -1,24 +1,24 @@
 package space_invaders;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.media.AudioManager;
-import android.media.SoundPool;
+import android.graphics.drawable.Drawable;
+
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.myapplication.R;
 
-import java.io.IOException;
 
 /**
  * SpaceInvadersView class represents the view of the game.
@@ -45,6 +45,10 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     // Screen size in pixels
     private int screenX;
     private int screenY;
+
+    // Can be moved to update() method!!!
+    // Set here because of space invaders activity
+    public boolean lost;
 
     private SpaceShip spaceShip;
     private Bullet laser;
@@ -93,7 +97,6 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
      * Here will be initialized all of the game objects.
      */
     private void prepareLevel() {
-
         //The spaceship instances and methods
         spaceShip = new SpaceShip(context, screenX, screenY);
         laser = new Bullet(context, screenY);
@@ -115,7 +118,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
         numBricks = 0;
         for (int shelterNumber = 0; shelterNumber < 4; shelterNumber++) {
             for (int column = 0; column < 10; column++) {
-                for (int row = 0; row < 5; row++) {
+                for (int row = 0; row < 4; row++) {
                     defence[numBricks] = new DefenceBrick(row, column, shelterNumber, screenX, screenY);
                     numBricks++;
                 }
@@ -156,7 +159,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     private void update() {
         boolean bumped = false;
 
-        boolean lost = false;
+        lost = false;
 
         spaceShip.update(fps);
 
@@ -208,7 +211,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
             for (int i = 0; i < killed; i++) {
                 invaders[i].Swap();
-                if (invaders[i].getY() > screenY - screenY / 10) {
+                if (invaders[i].getY() > screenY - screenY / 8) {
                     lost = true;
                 }
             }
@@ -236,7 +239,11 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                 if (invaders[i].getVisibility()) {
                     if (RectF.intersects(laser.getRect(), invaders[i].getRect())) {
                         invaders[i].setInvisible();
+
+                        // Shoot and pause
                         laser.setInactive();
+
+
                         score = score + 10;
 
                         if (score == killed * 10) {
@@ -293,6 +300,20 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
             }
         }
 
+
+        for (int i = 0; i < killed; i++) {
+            for (int j = 0; j < numBricks; j++) {
+                if (invaders[i].getVisibility() && defence[i].getVisibility()) {
+                    if (RectF.intersects(defence[j].getRect(), invaders[i].getRect())) {
+                        invadersBullets[i].setInactive();
+                        paused = true;
+                        lives = 3;
+                        score = 0;
+                        prepareLevel();
+                    }
+                }
+            }
+        }
     }
 
 
@@ -327,6 +348,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
 
             // Bricks graphics
+            paint.setColor(Color.argb(255, 103, 207, 252));
             for (int i = 0; i < numBricks; i++) {
                 if (defence[i].getVisibility()) {
                     canvas.drawRect(defence[i].getRect(), paint);
@@ -340,14 +362,32 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
             for (int i = 0; i < invadersBullets.length; i++) {
                 if (invadersBullets[i].getStatus()) {
+                    paint.setColor(Color.argb(255, 255, 153, 51));
                     canvas.drawRect(invadersBullets[i].getRect(), paint);
                 }
             }
 
+            paint.setColor(Color.argb(130, 0, 51, 102));
+            canvas.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT/20, paint);
 
-            paint.setColor(Color.argb(255, 249, 129, 0));
-            paint.setTextSize(80);
-            canvas.drawText("Score: " + score + "   Lives: " + lives, 20, 90, paint);
+
+            Drawable remaining_lives = ContextCompat.getDrawable(context, R.drawable.space_invaders_lives);
+            remaining_lives.setBounds(Constants.SCREEN_WIDTH-180, 10, Constants.SCREEN_WIDTH-100, Constants.SCREEN_HEIGHT/20-10);
+            remaining_lives.draw(canvas);
+            paint.setColor(Color.argb(255, 255, 255, 255));
+            paint.setTextSize(40);
+            canvas.drawText(String.valueOf(lives), Constants.SCREEN_WIDTH-90, Constants.SCREEN_HEIGHT/30, paint);
+
+            Drawable coins = ContextCompat.getDrawable(context, R.drawable.space_invaders_killed);
+            coins.setBounds(Constants.SCREEN_WIDTH-375, 10, Constants.SCREEN_WIDTH-300, Constants.SCREEN_HEIGHT/20-10);
+            coins.draw(canvas);
+            paint.setColor(Color.argb(255, 255, 255, 255));
+            paint.setTextSize(40);
+            canvas.drawText(String.valueOf(score), Constants.SCREEN_WIDTH-290, Constants.SCREEN_HEIGHT/30, paint);
+
+
+
+
 
             screenHolder.unlockCanvasAndPost(canvas);
         }
@@ -381,7 +421,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                 if (motionEvent.getY() < Constants.SCREEN_HEIGHT - Constants.SCREEN_HEIGHT / 8) {
                     // Calculate shooting start coordinates and add sound
                     if (laser.shoot(spaceShip.getX() +
-                            spaceShip.getLength() / 2, Constants.SCREEN_HEIGHT - spaceShip.getHeight(), laser.UP)) {
+                            spaceShip.getLength() / 2 - Constants.SCREEN_WIDTH / 60, Constants.SCREEN_HEIGHT - spaceShip.getHeight(), laser.UP)) {
                     }
                 }
                 break;
