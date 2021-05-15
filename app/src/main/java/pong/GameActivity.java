@@ -1,13 +1,15 @@
-package com.example.myapplication;
+package pong;
 
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
     private GameView gameView;
+    public static ImageView close;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -20,7 +22,11 @@ public class GameActivity extends AppCompatActivity {
         gameView = new GameView(this, point.x, point.y);
 
         setContentView(gameView);
+
+
     }
+
+
 
     @Override
     protected void onPause() {
@@ -33,4 +39,5 @@ public class GameActivity extends AppCompatActivity {
         super.onResume();
         gameView.resume();
     }
+
 }

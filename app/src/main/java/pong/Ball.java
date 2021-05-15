@@ -1,14 +1,16 @@
-package com.example.myapplication;
+package pong;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import static com.example.myapplication.GameView.screenRatioX;
-import static com.example.myapplication.GameView.screenRatioY;
+import com.example.myapplication.R;
+
+import static pong.GameView.screenRatioX;
+import static pong.GameView.screenRatioY;
 
 public class Ball {
-    int x,y, width, height, speedX = 0, speedY = 10;
+    int x,y, width, height, speedX = 0, speedY = -10;
     Bitmap ball;
 
     Ball (int screenY, int screenX, Resources res){
@@ -25,8 +27,8 @@ public class Ball {
         width *= (int) screenRatioX;
         height *= (int) screenRatioX;
 
-        height /= 10;
-        width /= 10;
+        height /= 15;
+        width /= 15;
 
         screenRatioX/=10;
         screenRatioY/=10;

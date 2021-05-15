@@ -1,8 +1,10 @@
-package com.example.myapplication;
+package pong;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.example.myapplication.R;
 
 public class Background {
     int x = 0,y = 0;

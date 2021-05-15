@@ -4,13 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".MainActivity">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,7 +14,7 @@
         android:text="Start"
         android:id="@+id/play"
         android:layout_centerInParent="true"
-        android:textColor="@color/black"/>
+        android:textColor="@color/white"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,14 +34,4 @@
         android:id="@+id/score2"
         android:textColor="@color/black"
         android:layout_centerVertical="true"/>
-
-    <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_margin="16dp"
-        android:id="@+id/volumeCtrl"
-        android:src="@drawable/ic_baseline_volume_off_24"
-        />
-
-
 </RelativeLayout>

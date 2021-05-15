@@ -1,17 +1,19 @@
-package com.example.myapplication;
+package pong;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import static com.example.myapplication.GameView.screenRatioX;
-import static com.example.myapplication.GameView.screenRatioY;
+import com.example.myapplication.R;
+
+import static pong.GameView.screenRatioX;
+import static pong.GameView.screenRatioY;
 
 public class Paddle {
-    int x,y, width, height, speed = 0, score = 0;
+    int x,y, width, height, score = 0;
     Bitmap paddle;
 
-    Paddle (int screenY, Resources res/*, int x, int y*/){
+    Paddle (int screenY, Resources res, int x, int y){
         paddle = BitmapFactory.decodeResource(res, R.drawable.paddle);
 
         width = paddle.getWidth();
@@ -35,8 +37,11 @@ public class Paddle {
 
 
         paddle = Bitmap.createScaledBitmap(paddle, width, height, false);
-        y = screenY - 15;
-        x = 64 * (int) screenRatioX;
+        this.x = x;
+        this.y = y;
+
+        /*y = screenY - 15;
+        x = 64 * (int) screenRatioX;*/
     }
 
 
