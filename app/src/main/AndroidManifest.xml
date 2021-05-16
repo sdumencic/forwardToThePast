@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".SnakeMain"></activity>
         <activity android:name=".BreakoutActivity"></activity>
+        <activity android:name="breakout.GameOver"></activity>
     </application>
 
 </manifest>

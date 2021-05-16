@@ -2,6 +2,7 @@ package breakout;
 
 public class Velocity {
     private int x, y;
+
     public Velocity(int x, int y) {
         this.x = x;
         this.y = y;
