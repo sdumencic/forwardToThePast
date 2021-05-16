@@ -1,4 +1,4 @@
-package tetris;
+package com.example.myapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,7 +6,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
-import com.example.myapplication.R;
+import tetris.TetrisGame;
+
+import tetris.Maps;
 
 public class StartScreen extends AppCompatActivity {
 
@@ -16,7 +18,7 @@ public class StartScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_screen);
+        setContentView(R.layout.tetris_start_screen);
         readPreferences();
         mPref = getSharedPreferences("setup", MODE_PRIVATE);
     }
@@ -40,7 +42,7 @@ public class StartScreen extends AppCompatActivity {
     }
 
     public void onStart(View v){
-        Intent intent = new Intent(this, tetris.TetrisGame.class);
+        Intent intent = new Intent(this, TetrisGame.class);
         startActivity(intent);
     }
 

@@ -23,17 +23,18 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
 
-public class TetrisGame extends AppCompatActivity implements Rotation.eventListen  {
+public class TetrisGame extends AppCompatActivity implements Rotation.eventListen {
 
     TextView TV, TV2, TV3, TV4, TV5;
     ImageView IV, IV2, IV3, IV4;
-    Button button, DASright, DASleft;
+    ImageButton button, DASright, DASleft;
     Point pc1 = new Point(); Point pc2 = new Point(); Point pc3 = new Point(); Point pc4 = new Point(); Point ptTouch = new Point(0, 0);
     MainView mainView;
 
@@ -53,27 +54,27 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     String sprintTimeString = "";
     public static String sprintHighscore = "";
 
-    Boolean lockInAir = false;
-    Boolean canRotate = true;
-    Boolean notLose = true;
-    Boolean dontWorryAboutIt = true;
-    Boolean rotate180 = false;
-    Boolean rotationRight = false;
-    Boolean canLock = false;
-    Boolean ableToHardDrop = true;
-    Boolean swipeSoftDrop = false;
-    Boolean paused = false;
-    Boolean softDrop = false, DASR = false, DASL = false;
-    Boolean canMotionEventRotate = true;
-    Boolean TSpin = false;
-    Boolean B2B = false;
-    Boolean ARRRun = false;
+    public Boolean lockInAir = false;
+    public Boolean canRotate = true;
+    public Boolean notLose = true;
+    public Boolean dontWorryAboutIt = true;
+    public Boolean rotate180 = false;
+    public Boolean rotationRight = false;
+    public Boolean canLock = false;
+    public Boolean ableToHardDrop = true;
+    public Boolean swipeSoftDrop = false;
+    public Boolean paused = false;
+    public Boolean softDrop = false, DASR = false, DASL = false;
+    public Boolean canMotionEventRotate = true;
+    public Boolean TSpin = false;
+    public Boolean B2B = false;
+    public Boolean ARRRun = false;
     public static Boolean showPointsLog = true;
     public static int DAS = 100;
     public static int ARR = 50;
     public static int softDropSpeed = 10;
-    int random = 8, random2 = 8, random3 = 8, random4 = 8;
-    int rotationEffortTries = 0;
+    public int random = 8, random2 = 8, random3 = 8, random4 = 8;
+    public int rotationEffortTries = 0;
     int lines = 0; int linesNeeded = 10;
     int level = 0;
     int linesClearedAtOnce = 0;
@@ -108,11 +109,11 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.TetrisGame);
+        setContentView(R.layout.activity_tetris);
 
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.TetrisGame);
+        setContentView(R.layout.activity_tetris);
 
         mainView = new MainView(this);
         FrameLayout frame = (FrameLayout)findViewById(R.id.mainLayout);
@@ -137,6 +138,9 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         tetrisPieceImage[0] = BitmapFactory.decodeResource(getResources(), R.drawable.tetris_purple);
         //grayPiece
         tetrisPieceImage[7] = BitmapFactory.decodeResource(getResources(), R.drawable.tetrisgray);
+        //solid piece
+        tetrisPieceImage[9] = BitmapFactory.decodeResource(getResources(), R.drawable.tetrisgray);
+        tetrisGhost = BitmapFactory.decodeResource(getResources(), R.drawable.tetrisghost);
 
         TV = (TextView)findViewById(R.id.TV);
         TV2 = (TextView)findViewById(R.id.TV2);
@@ -147,9 +151,9 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         IV2 = (ImageView)findViewById(R.id.IV2);
         IV3 = (ImageView)findViewById(R.id.IV3);
         IV4 = (ImageView)findViewById(R.id.IV4);
-        button = (Button)findViewById(R.id.ButtonSoftDrop);
-        DASright = (Button)findViewById(R.id.ButtonRight);
-        DASleft = (Button)findViewById(R.id.ButtonLeft);
+        button = (ImageButton)findViewById(R.id.ButtonSoftDrop);
+        DASright = (ImageButton)findViewById(R.id.ButtonRight);
+        DASleft = (ImageButton)findViewById(R.id.ButtonLeft);
 
         if(showPointsLog){
             TV5.setVisibility(View.VISIBLE);

@@ -4,10 +4,10 @@ import android.graphics.Point;
 
 public class Rotation {
 
-    static Point point1 = new Point(0, 0);
-    static Point point2 = new Point(0, 0);
-    static Point point3 = new Point(0, 0);
-    static Point point4 = new Point(0, 0);
+    public static Point point1 = new Point(0, 0);
+    public static Point point2 = new Point(0, 0);
+    public static Point point3 = new Point(0, 0);
+    public static Point point4 = new Point(0, 0);
     public static Point pp1 = new Point();
     public static Point pp2 = new Point();
     public static Point pp3 = new Point();
@@ -16,7 +16,7 @@ public class Rotation {
     public static Point ppp2 = new Point();
     public static Point ppp3 = new Point();
     public static Point ppp4 = new Point();
-    int pointTemp = 0;
+    public int pointTemp = 0;
     public static int rotateAmount = 0;
     TetrisGame parent;
 

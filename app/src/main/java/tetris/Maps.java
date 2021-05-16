@@ -4,13 +4,10 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
-import android.widget.Toast;
-
-import com.example.myapplication.R;
 
 public class Maps extends AppCompatActivity {
 
-    Marathon parent;
+    TetrisGame parent;
     RadioButton[] RB = new RadioButton[7];
 
     @Override
