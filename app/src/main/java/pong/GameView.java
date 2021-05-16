@@ -127,31 +127,31 @@ public class GameView extends SurfaceView implements Runnable{
             }
         }
 
-        if(ball.y < paddleUp.y + paddleUp.height && ball.x + ball.width > paddleUp.x && ball.x < paddleUp.x + paddleUp.width && ball.y < screenY - ball.height){
+        if(ball.y + ball.height/2< paddleUp.y + paddleUp.height && ball.x + ball.width > paddleUp.x && ball.x < paddleUp.x + paddleUp.width && ball.y < screenY - ball.height){
 
             //ako udari u paddle
             float Vkut = (ball.x + ball.width/2) - paddleUp.x;
             float kut = Vkut / paddleUp.width;
             System.out.println(Vkut+" "+kut);
             if(kut<0.2){
-                ball.speedX= -10;
-                ball.speedY= 10;
+                ball.speedX= -15;
+                ball.speedY= 15;
             }
             else if(kut<0.4 && kut>=0.2){
-                ball.speedX=10;
-                ball.speedY=10;
+                ball.speedX=-10;
+                ball.speedY=20;
             }
             else if(kut<0.6  && kut>=0.4){
-                ball.speedX=10;
-                ball.speedY=10;
+                ball.speedX=4;
+                ball.speedY=26;
             }
             else if(kut<0.8  && kut>=0.6){
                 ball.speedX=10;
-                ball.speedY=10;
+                ball.speedY=20;
             }
             else if(kut>0.8){
-                ball.speedX=10;
-                ball.speedY=10;
+                ball.speedX=15;
+                ball.speedY=15;
             }
         }
         if(ball.y < -ball.height || ball.y > screenY - ball.height){

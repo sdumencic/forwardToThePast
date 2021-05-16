@@ -10,7 +10,7 @@ import static pong.GameView.screenRatioX;
 import static pong.GameView.screenRatioY;
 
 public class Ball {
-    int x,y, width, height, speedX = 0, speedY = -10;
+    int x,y, width, height, speedX = 0, speedY = -15;
     Bitmap ball;
 
     Ball (int screenY, int screenX, Resources res){
