@@ -1,15 +1,11 @@
 package com.example.myapplication;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 public class MainMenu extends AppCompatActivity {
     private CardView snake, tetris, spaceInvaders, breakout, pong, exit;
@@ -27,13 +23,13 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-        /*tetris = (CardView) findViewById(R.id.tetris);
+        tetris = (CardView) findViewById(R.id.tetris);
         tetris.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openTetris();
             }
-        });*/
+        });
 
         spaceInvaders = (CardView) findViewById(R.id.spaceinvaders);
         spaceInvaders.setOnClickListener(new View.OnClickListener() {
@@ -73,10 +69,10 @@ public class MainMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*public void openTetris() {
-        Intent intent = new Intent(this, MainMenu.class);
+    public void openTetris() {
+        Intent intent = new Intent(this, TetrisActivity.class);
         startActivity(intent);
-    }*/
+    }
 
     public void openSpaceInvaders() {
         Intent intent = new Intent(this, SpaceInvadersActivity.class);
