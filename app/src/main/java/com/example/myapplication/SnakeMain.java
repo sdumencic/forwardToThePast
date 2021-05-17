@@ -62,11 +62,11 @@ public class SnakeMain extends AppCompatActivity {
     private void dialogScore() {
         int bestScore = 0;
         SharedPreferences sp = this.getSharedPreferences("gamesetting", Context.MODE_PRIVATE);
-        if(sp != null){
-            bestScore = sp.getInt("bestscore",0);
+        if (sp != null) {
+            bestScore = sp.getInt("bestscore", 0);
         }
 
-        SnakeMain.txt_best_score.setText(bestScore+"");
+        SnakeMain.txt_best_score.setText(bestScore + "");
         dialogScore = new Dialog(this);
         dialogScore.setContentView(R.layout.snake_dialog);
         txt_dialog_score = dialogScore.findViewById(R.id.txt_dialog_score);
