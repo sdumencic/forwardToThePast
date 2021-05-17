@@ -33,7 +33,7 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 openTetris();
             }
-        });
+        });*/
 
         spaceInvaders = (CardView) findViewById(R.id.spaceinvaders);
         spaceInvaders.setOnClickListener(new View.OnClickListener() {
@@ -41,7 +41,7 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 openSpaceInvaders();
             }
-        });*/
+        });
 
         breakout = (CardView) findViewById(R.id.breakout);
         breakout.setOnClickListener(new View.OnClickListener() {
@@ -76,12 +76,12 @@ public class MainMenu extends AppCompatActivity {
     /*public void openTetris() {
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
-    }
+    }*/
 
     public void openSpaceInvaders() {
-        Intent intent = new Intent(this, MainMenu.class);
+        Intent intent = new Intent(this, SpaceInvadersActivity.class);
         startActivity(intent);
-    }*/
+    }
 
     public void openBreakout() {
         Intent intent = new Intent(this, BreakoutActivity.class);
