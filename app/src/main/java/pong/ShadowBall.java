@@ -37,17 +37,4 @@ public class ShadowBall {
         y = screenY / 2 - ball.getHeight() / 2;
         x = screenX / 2 - ball.getWidth() / 2;
     }
-
-    public void shrink() {
-        this.ball = Bitmap.createScaledBitmap(ball, (int) (this.width / 1.1), (int) (this.height / 1.1), false);
-    }
-
-    public void move(Ball ball1) {
-        this.height = ball1.height;
-        this.width = ball1.width;
-        this.x = ball1.x;
-        this.y = ball1.y;
-        isVisible = true;
-        this.ball = Bitmap.createScaledBitmap(ball, this.width, this.height, false);
-    }
 }
