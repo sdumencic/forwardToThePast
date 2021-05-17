@@ -9,10 +9,7 @@ import com.example.myapplication.R;
 
 
 public class Invader {
-
     RectF rect;
-
-    Random generator = new Random();
 
     private Bitmap bitmap;
 
@@ -36,8 +33,9 @@ public class Invader {
     // If invader is shot, it's not visible
     boolean isVisible;
 
-    public Invader(Context context, int row, int column, int screenX, int screenY) {
+    Random generator = new Random();
 
+    public Invader(Context context, int row, int column, int screenX, int screenY) {
         rect = new RectF();
 
         length = screenX / 12;
@@ -47,7 +45,7 @@ public class Invader {
 
         int padding = screenX / 18;
 
-        // Calculate rectangle dimensions
+        // Calculate rectangle dimensions of the whole invaders army.
         x = column * (length + padding);
         y = row * (length + padding) + 100;
 
@@ -61,40 +59,45 @@ public class Invader {
         shipSpeed = 50;
     }
 
-    public void setInvisible(){
+    public void setInvisible() {
         isVisible = false;
     }
 
-    public boolean getVisibility(){
+    public boolean getVisibility() {
         return isVisible;
     }
 
-    public RectF getRect(){
+    public RectF getRect() {
         return rect;
     }
 
-    public Bitmap getBitmap(){
+    public Bitmap getBitmap() {
         return bitmap;
     }
 
-    public float getX(){
+    public float getX() {
         return x;
     }
 
-    public float getY(){
+    public float getY() {
         return y;
     }
 
-    public float getLength(){
+    public float getLength() {
         return length;
     }
 
-    public void update(long fps){
-        if(shipMoving == LEFT){
+    /**
+     * Update() updates current coordinates of the army.
+     *
+     * @param fps
+     */
+    public void update(long fps) {
+        if (shipMoving == LEFT) {
             x = x - shipSpeed / fps;
         }
 
-        if(shipMoving == RIGHT){
+        if (shipMoving == RIGHT) {
             x = x + shipSpeed / fps;
         }
 
@@ -102,13 +105,16 @@ public class Invader {
         rect.bottom = y + height;
         rect.left = x;
         rect.right = x + length;
-
     }
 
-    public void Swap(){
-        if(shipMoving == LEFT){
+    /**
+     * Swap() methods direct the army in another direction
+     * if they bumped at the screen end.
+     */
+    public void Swap() {
+        if (shipMoving == LEFT) {
             shipMoving = RIGHT;
-        }else{
+        } else {
             shipMoving = LEFT;
         }
 
@@ -117,25 +123,30 @@ public class Invader {
         shipSpeed = shipSpeed * 1.20f;
     }
 
-    public boolean shootTheTarget(float spaceShipX, float spaceShipLength){
-
+    /**
+     * shootTheTarget() detects spaceship movements.
+     *
+     * @param spaceShipX
+     * @param spaceShipLength
+     * @return true if the spaceship is on the target.
+     */
+    public boolean shootTheTarget(float spaceShipX, float spaceShipLength) {
         int randomNumber = -1;
 
-        if((spaceShipX + spaceShipLength > x &&
+        if ((spaceShipX + spaceShipLength > x &&
                 spaceShipX + spaceShipLength < x + length) || (spaceShipX > x && spaceShipX < x + length)) {
 
+            // Random number generator is added for more realistic behaviour.
             randomNumber = generator.nextInt(150);
-            if(randomNumber == 0) {
+            if (randomNumber == 0) {
                 return true;
             }
-
         }
 
         randomNumber = generator.nextInt(2000);
-        if(randomNumber == 0){
+        if (randomNumber == 0) {
             return true;
         }
-
         return false;
     }
 }

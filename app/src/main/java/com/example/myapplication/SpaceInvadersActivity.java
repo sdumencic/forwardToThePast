@@ -1,16 +1,14 @@
 package com.example.myapplication;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import space_invaders.Constants;
 import space_invaders.SpaceInvadersView;
-
 
 
 /**
@@ -23,7 +21,7 @@ public class SpaceInvadersActivity extends AppCompatActivity {
     SpaceInvadersView spaceInvadersView;
 
     /**
-     *Initialization of the game instance.
+     * onCreate() method initializes game instance.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +32,13 @@ public class SpaceInvadersActivity extends AppCompatActivity {
         Constants.SCREEN_HEIGHT = dm.heightPixels;
         Constants.SCREEN_WIDTH = dm.widthPixels;
 
-        // Initialize gameView and set it as the view
+        // Initialize game view and set it as the view if play button is clicked
         spaceInvadersView = new SpaceInvadersView(this, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         setContentView(R.layout.space_invaders_start_game);
     }
 
     /**
-     * This method executes when player starts the game.
+     * onResume() method executes when the player starts the game.
      */
     @Override
     protected void onResume() {
@@ -49,7 +47,7 @@ public class SpaceInvadersActivity extends AppCompatActivity {
     }
 
     /**
-     * This method executes when the player quits the game
+     * onPause() method executes when the player quits the game.
      */
     @Override
     protected void onPause() {
@@ -58,10 +56,14 @@ public class SpaceInvadersActivity extends AppCompatActivity {
     }
 
 
-    //This method detects screen touches
+    /**
+     * onTouchEvent() detects screen touches.
+     *
+     * @param motionEvent
+     * @return true if certain action has been detected.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
             // Player has touched the screen
@@ -77,10 +79,11 @@ public class SpaceInvadersActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * startSpaceInvaders() method is called when play button is clicked.
+     * @param view
+     */
     public void startSpaceInvaders(View view) {
         setContentView(spaceInvadersView);
-    }
-    public void closeSpaceInvaders(View view) {
-        this.finish();
     }
 }

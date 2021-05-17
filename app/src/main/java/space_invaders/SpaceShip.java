@@ -3,9 +3,7 @@ package space_invaders;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.graphics.RectF;
-
 import com.example.myapplication.R;
 
 public class SpaceShip {
@@ -18,7 +16,7 @@ public class SpaceShip {
     private float length;
     private float height;
 
-    //Dimensions of rectangle in which the spaceship will be drawn
+    // Dimensions of rectangle in which the spaceship will be drawn
     private float x;
     private float y;
 
@@ -29,7 +27,6 @@ public class SpaceShip {
     public final int LEFT = 1;
     public final int RIGHT = 2;
 
-    // This variable holds spaceship direction
     private int shipMoving = STOPPED;
 
 
@@ -40,11 +37,9 @@ public class SpaceShip {
         length = screenX / 3;
         height = screenY / 5;
 
-
         // Start ship rectangle in the center of the screen
         x = (float) (screenX / 3);
         y = screenY - height;
-
 
         // Initialize the bitmap
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.space_invaders_spaceship);
@@ -83,6 +78,11 @@ public class SpaceShip {
     }
 
 
+    /**
+     * Update() updates ship coordinates based on its speed and motion events.
+     *
+     * @param fps
+     */
     public void update(long fps) {
         if (shipMoving == LEFT) {
             x = x - shipSpeed / fps;
@@ -103,6 +103,5 @@ public class SpaceShip {
         rect.left = x;
         rect.right = x + length;
     }
-
 }
 

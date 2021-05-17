@@ -1,7 +1,7 @@
 package space_invaders;
 
 import android.content.Context;
-
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -9,21 +9,19 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
 import androidx.core.content.ContextCompat;
-
 import com.example.myapplication.R;
+import com.example.myapplication.SpaceInvadersActivity;
 
 
 /**
  * SpaceInvadersView class represents the view of the game.
- * It also holds the logic of the game.
+ * It also holds the game logic and initialized instances of other classes.
  */
 public class SpaceInvadersView extends SurfaceView implements Runnable {
     Context context;
@@ -34,6 +32,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
     private volatile boolean gameOn;
 
+    // Game is paused until the player touches the screen.
     private boolean paused = true;
 
     private Canvas canvas;
@@ -47,13 +46,10 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     private int screenX;
     private int screenY;
 
-    // Can be moved to update() method!!!
-    // Set here because of space invaders activity
     public boolean lost;
 
     private SpaceShip spaceShip;
     private Bullet laser;
-
 
     private Bullet[] invadersBullets = new Bullet[200];
     private int nextBullet;
@@ -67,19 +63,20 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
     // The player's shelters are built from bricks
     private DefenceBrick[] defence = new DefenceBrick[400];
-    private int numBricks;
+    private int remainingBricks;
 
 
     int score = 0;
     private int lives = 3;
 
-
     /**
-     * When we initialize (call new()) on gameView
-     * This special constructor method runs
+     * SpaceInvadersView() constructor is called everytime
+     * the new game instance is created.
+     * @param context
+     * @param x
+     * @param y
      */
     public SpaceInvadersView(Context context, int x, int y) {
-
         super(context);
 
         this.context = context;
@@ -87,21 +84,21 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
         screenHolder = getHolder();
         paint = new Paint();
 
+        // Get screen coordinates
         screenX = x;
         screenY = y;
 
-        prepareLevel();
+        play();
     }
 
 
     /**
      * Here will be initialized all of the game objects.
      */
-    private void prepareLevel() {
-        //The spaceship instances and methods
+    private void play() {
+        // Instance all of the game objects.
         spaceShip = new SpaceShip(context, screenX, screenY);
         laser = new Bullet(context, screenY);
-
 
         for (int i = 0; i < invadersBullets.length; i++) {
             invadersBullets[i] = new Bullet(context, screenY);
@@ -115,13 +112,12 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
             }
         }
 
-
-        numBricks = 0;
+        remainingBricks = 0;
         for (int shelterNumber = 0; shelterNumber < 4; shelterNumber++) {
             for (int column = 0; column < 10; column++) {
                 for (int row = 0; row < 4; row++) {
-                    defence[numBricks] = new DefenceBrick(row, column, shelterNumber, screenX, screenY);
-                    numBricks++;
+                    defence[remainingBricks] = new DefenceBrick(row, column, shelterNumber, screenX, screenY);
+                    remainingBricks++;
                 }
             }
         }
@@ -134,39 +130,36 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     @Override
     public void run() {
         while (gameOn) {
-
             long startFrameTime = System.currentTimeMillis();
 
             if (!paused) {
                 update();
             }
 
+            // Draw all of the object on screen.
             draw();
 
             frame = System.currentTimeMillis() - startFrameTime;
             if (frame >= 1) {
                 fps = 1000 / frame;
             }
-
-
         }
-
-
     }
 
     /**
-     * Update() updates game state after resume.
+     * Update() updates screen context and coordinates of all objects
+     * after every game action.
      */
     private void update() {
         boolean bumped = false;
 
         lost = false;
 
+        // Update spaceship coordinates
         spaceShip.update(fps);
 
-
         for (int i = 0; i < killed; i++) {
-
+            // Update invaders army and draw all the visible invaders.
             if (invaders[i].getVisibility()) {
                 invaders[i].update(fps);
 
@@ -187,22 +180,20 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                     }
                 }
 
+                // Turn the army in the other direction
                 if (invaders[i].getX() > screenX - invaders[i].getLength()
                         || invaders[i].getX() < 0) {
-
                     bumped = true;
-
                 }
             }
-
         }
 
-
-        //Update Spaceship laser
+        // Update laser position
         if (laser.getStatus()) {
             laser.update(fps);
         }
 
+        // Update bullet position
         for (int i = 0; i < invadersBullets.length; i++) {
             if (invadersBullets[i].getStatus()) {
                 invadersBullets[i].update(fps);
@@ -211,32 +202,23 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
 
         if (bumped) {
-
             for (int i = 0; i < killed; i++) {
                 invaders[i].Swap();
-                if (invaders[i].getY() > screenY - screenY / 8) {
-                    lost = true;
-                }
+
             }
-
         }
 
-
-        if (lost) {
-            prepareLevel();
-        }
-
-        if (laser.getImpactPointY() < 0) {
+        if (laser.getRange() < 0) {
             laser.setInactive();
         }
 
         for (int i = 0; i < invadersBullets.length; i++) {
-            if (invadersBullets[i].getImpactPointY() > screenY) {
+            if (invadersBullets[i].getRange() > screenY) {
                 invadersBullets[i].setInactive();
             }
         }
 
-
+        // Check if the laser managed to shoot the invader.
         if (laser.getStatus()) {
             for (int i = 0; i < killed; i++) {
                 if (invaders[i].getVisibility()) {
@@ -246,23 +228,22 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                         // Shoot and pause
                         laser.setInactive();
 
-
                         score = score + 10;
 
                         if (score == killed * 10) {
-                            paused = true;
-                            score = 0;
-                            lives = 3;
-                            prepareLevel();
+                            // Player has won the game, get back to start view.
+                            Intent intent = new Intent(context, SpaceInvadersActivity.class);
+                            context.startActivity(intent);
                         }
                     }
                 }
             }
         }
 
+        // Check if the bullets destroyed the bricks.
         for (int i = 0; i < invadersBullets.length; i++) {
             if (invadersBullets[i].getStatus()) {
-                for (int j = 0; j < numBricks; j++) {
+                for (int j = 0; j < remainingBricks; j++) {
                     if (defence[j].getVisibility()) {
                         if (RectF.intersects(invadersBullets[i].getRect(), defence[j].getRect())) {
                             invadersBullets[i].setInactive();
@@ -271,14 +252,14 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                     }
                 }
             }
-
         }
 
         if (laser.getStatus()) {
-            for (int i = 0; i < numBricks; i++) {
+            for (int i = 0; i < remainingBricks; i++) {
                 if (defence[i].getVisibility()) {
+
+                    // Laser has been fired at the spaceship defence wall.
                     if (RectF.intersects(laser.getRect(), defence[i].getRect())) {
-                        // A collision has occurred
                         laser.setInactive();
                         defence[i].setInvisible();
                     }
@@ -288,16 +269,17 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
         for (int i = 0; i < invadersBullets.length; i++) {
             if (invadersBullets[i].getStatus()) {
+
+                // Check if the bullets shot the ship.
                 if (RectF.intersects(spaceShip.getRect(), invadersBullets[i].getRect())) {
                     invadersBullets[i].setInactive();
                     lives--;
 
                     if (lives == 0) {
-                        paused = true;
-                        lives = 3;
-                        score = 0;
-                        prepareLevel();
-
+                        MediaPlayer laserSound = MediaPlayer.create(context, R.raw.space_invaders_end);
+                        laserSound.start();
+                        Intent intent = new Intent(context, SpaceInvadersActivity.class);
+                        context.startActivity(intent);
                     }
                 }
             }
@@ -305,14 +287,17 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
 
         for (int i = 0; i < killed; i++) {
-            for (int j = 0; j < numBricks; j++) {
+            for (int j = 0; j < remainingBricks; j++) {
                 if (invaders[i].getVisibility() && defence[i].getVisibility()) {
+
+                    // Army reached the brick wall.
+                    // Game is lost.
                     if (RectF.intersects(defence[j].getRect(), invaders[i].getRect())) {
                         invadersBullets[i].setInactive();
-                        paused = true;
-                        lives = 3;
-                        score = 0;
-                        prepareLevel();
+                        MediaPlayer laserSound = MediaPlayer.create(context, R.raw.space_invaders_end);
+                        laserSound.start();
+                        Intent intent = new Intent(context, SpaceInvadersActivity.class);
+                        context.startActivity(intent);
                     }
                 }
             }
@@ -352,7 +337,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
             // Bricks graphics
             paint.setColor(Color.argb(255, 103, 207, 252));
-            for (int i = 0; i < numBricks; i++) {
+            for (int i = 0; i < remainingBricks; i++) {
                 if (defence[i].getVisibility()) {
                     canvas.drawRect(defence[i].getRect(), paint);
                 }
@@ -388,10 +373,6 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
             paint.setTextSize(40);
             canvas.drawText(String.valueOf(score), Constants.SCREEN_WIDTH-290, Constants.SCREEN_HEIGHT/30, paint);
 
-
-
-
-
             screenHolder.unlockCanvasAndPost(canvas);
         }
     }
@@ -419,7 +400,6 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
                 }
 
-                //Fix!
                 // Spaceship bullet touch control
                 if (motionEvent.getY() < Constants.SCREEN_HEIGHT - Constants.SCREEN_HEIGHT / 8) {
                     // Calculate shooting start coordinates and add sound
@@ -439,16 +419,14 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                 }
 
                 break;
-
         }
-
         return true;
     }
 
 
     /**
      * If SpaceInvadersActivity is paused/stopped
-     * shutdown our thread.
+     * shutdown game thread.
      */
     public void pause() {
         gameOn = false;
@@ -457,11 +435,10 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
         } catch (InterruptedException e) {
             Log.e("Error:", "joining thread");
         }
-
     }
 
     /**
-     * If user resums the game, we call resume method.
+     * If user resums the game, create new game instance
      */
     public void resume() {
         gameOn = true;

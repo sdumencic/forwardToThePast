@@ -3,6 +3,69 @@
     android:layout_height="match_parent"
     android:background="@drawable/space_invaders_background">
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="5dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="60dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -10,46 +73,82 @@
         android:layout_centerInParent="true">
         <Button
             android:id="@+id/playbutton"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#80FF9800"
             android:onClick="startSpaceInvaders"
             android:text="Play"
-            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:paddingLeft="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
+            android:paddingRight="20dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="62dp"
+            android:background="@layout/space_invaders_button"
             />
-        <Button
-            android:id="@+id/gonebutton"
-            android:layout_width="200dp"
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#80FF9800"
-            android:onClick="closeSpaceInvaders"
-            android:text="Exit"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="62dp"
-            android:visibility="invisible"
-            />
-        <Button
-            android:id="@+id/closebutton"
-            android:layout_width="200dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="60dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#80FF9800"
-            android:onClick="closeSpaceInvaders"
-            android:text="Exit"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="62dp"
-            />
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="5dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/space_invaders_killed"
+                android:layout_marginLeft="50dp">
+            </ImageView>
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

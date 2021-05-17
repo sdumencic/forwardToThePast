@@ -4,36 +4,35 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
 import android.content.Context;
-import android.media.MediaPlayer;
-
 import com.example.myapplication.R;
 
 
 public class Bullet {
 
-    //rectangle object in which the bullet will be drawn and its dimensions
+    // Define rectangle object in which the bullet will be drawn.
     private float x;
     private float y;
 
     private RectF rect;
     private Bitmap bitmap;
 
-    //possible shooting directions
+    // possible shooting directions
     public final int UP = 0;
     public final int DOWN = 1;
 
+    // Bullet has no defined direction yet.
     int heading = -1;
 
     float speed = 700;
 
-
-    //height is relative to the screen resolution
+    // Invaders bullet dimensions
+    // Height is relative to the screen resolution.
     private int width = 1;
-    private int laser_width = Constants.SCREEN_WIDTH/30;
     private int height;
+
+    // Players bullet dimensions
+    private int laser_width = Constants.SCREEN_WIDTH/30;
     private int laser_height;
-
-
 
     private boolean isActive;
 
@@ -51,7 +50,6 @@ public class Bullet {
                 (int) (laser_width),
                 (int) (laser_height),
                 false);
-
     }
 
     public RectF getRect() {
@@ -78,8 +76,11 @@ public class Bullet {
         isActive = false;
     }
 
-    public float getImpactPointY() {
-
+    /**
+     * Get bullet current range by calling getRange() method.
+     * @return y coordinate
+     */
+    public float getRange() {
         if (heading == DOWN) {
             return y + height;
         } else {
@@ -87,6 +88,13 @@ public class Bullet {
         }
     }
 
+    /**
+     *
+     * @param startX
+     * @param startY
+     * @param direction
+     * @return boolean value whether the bullet has been fired.
+     */
     public boolean shoot(float startX, float startY, int direction) {
         if (!isActive) {
             x = startX;
@@ -95,10 +103,14 @@ public class Bullet {
             isActive = true;
             return true;
         }
-
         return false;
     }
 
+    /**
+     * Update() updates coordinates of rectangle
+     * in which the bullet object will be drawn.
+     * @param fps
+     */
     public void update(long fps) {
 
         if (heading == UP) {
@@ -107,11 +119,9 @@ public class Bullet {
             y = y + speed / fps;
         }
 
-        // Update rectangle coordinates
         rect.left = x;
         rect.right = x + width;
         rect.top = y;
         rect.bottom = y + height;
-
     }
 }
