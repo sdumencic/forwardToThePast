@@ -1,32 +1,31 @@
 package com.example.myapplication;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import pong.GameActivity;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_loading_screen);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_pong);
-
-
-
-        findViewById(R.id.play).setOnClickListener(new View.OnClickListener() {
+        button = (Button) findViewById(R.id.button1);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, GameActivity.class));
-                //setContentView(R.layout.pong_game);
+            public void onClick(View v) {
+                openActivityMenu();
             }
         });
     }
 
+    public void openActivityMenu() {
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
+    }
 }

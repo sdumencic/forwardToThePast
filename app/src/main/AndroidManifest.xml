@@ -22,6 +22,7 @@
         <activity android:name=".BreakoutActivity"></activity>
         <activity android:name="breakout.GameOver"></activity>
         <activity android:name=".SpaceInvadersActivity"></activity>
+        <activity android:name=".PongActivity"></activity>
     </application>
 
 </manifest>
