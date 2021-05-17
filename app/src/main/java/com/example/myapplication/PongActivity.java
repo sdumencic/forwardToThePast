@@ -18,12 +18,10 @@ public class PongActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pong);
 
 
-
         findViewById(R.id.play).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(PongActivity.this, GameActivity.class));
-                //setContentView(R.layout.pong_game);
             }
         });
     }
