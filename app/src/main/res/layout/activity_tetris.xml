@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mainLayout">
+
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TV2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:text="Score : 0"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/TV"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:fontFamily="monospace"/>
+
+        <Button
+            android:id="@+id/Pause"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="17.5dp"
+            android:layout_marginRight="17.5dp"
+            android:background="@drawable/ic_baseline_pause_circle_filled_24"
+            android:onClick="onPause" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/IV"
+            android:layout_below="@id/Pause"
+            android:background="@drawable/tetrisgray"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/IV"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/IV2"
+            android:background="@drawable/tetrisgray"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/IV2"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/IV3"
+            android:background="@drawable/tetrisgray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/ButtonSoftDrop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDropClick"
+                        android:textSize="30dp"
+                        android:src="@drawable/tetris_down"/>
+
+                    <ImageButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="↕"
+                        android:layout_weight="1"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="30dp"
+                        android:onClick="onDropClick"
+                        android:id="@+id/ButtonRotate180"
+                        android:src="@drawable/tetris_up_down"/>
+
+                    <ImageButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="↗"
+                        android:layout_weight="1"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="30dp"
+                        android:onClick="onDropClick"
+                        android:id="@+id/ButtonHold"
+                        android:src="@drawable/tetris_saved_block"/>
+
+                    <ImageButton
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="▼"
+                        android:layout_weight="1"
+                        android:layout_alignParentRight="true"
+                        android:textSize="30dp"
+                        android:onClick="onDropClick"
+                        android:id="@+id/ButtonHardDrop"
+                        android:src="@drawable/tetris_down2"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <ImageButton
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:text="←"
+                    android:textSize="30dp"
+                    android:onClick="onClick"
+                    android:id="@+id/ButtonLeft"
+                    android:src="@drawable/tetris_left"/>
+
+                <ImageButton
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:text="↶"
+                    android:textSize="30dp"
+                    android:onClick="onRotateClick"
+                    android:id="@+id/ButtonRotateLeft"
+                    android:src="@drawable/tetris_rotate_left"/>
+
+                <ImageButton
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:text="↷"
+                    android:textSize="30dp"
+                    android:onClick="onRotateClick"
+                    android:id="@+id/ButtonRotateRight"
+                    android:src="@drawable/tetris_rotate_right"/>
+
+                <ImageButton
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:text="→"
+                    android:textSize="30dp"
+                    android:onClick="onClick"
+                    android:id="@+id/ButtonRight"
+                    android:src="@drawable/tetris_right"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TV4"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_alignTop="@+id/IV3"
+            android:layout_marginTop="70dp"
+            android:text="Level : 0"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TV3"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_alignTop="@+id/IV3"
+            android:layout_marginTop="100dp"
+            android:text="Lines : 0"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/TV3"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/IV4"
+            android:background="@drawable/tetrisgray"/>
+
+        <ScrollView
+            android:layout_alignParentRight="true"
+            android:layout_height="100dp"
+            android:layout_below="@+id/IV4"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="2dp"
+            android:layout_width="66dp">
+
+            <TextView
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/TV5"
+                android:text="Points!"
+                android:visibility="visible"
+                android:fontFamily="monospace"/>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+</FrameLayout>

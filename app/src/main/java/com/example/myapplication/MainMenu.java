@@ -1,15 +1,11 @@
 package com.example.myapplication;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 public class MainMenu extends AppCompatActivity {
     private CardView snake, tetris, spaceInvaders, breakout, pong, exit;
@@ -33,7 +29,7 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-        /*tetris = (CardView) findViewById(R.id.tetris);
+        tetris = (CardView) findViewById(R.id.tetris);
         tetris.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +43,7 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 openSpaceInvaders();
             }
-        });*/
+        });
 
         breakout = (CardView) findViewById(R.id.breakout);
         breakout.setOnClickListener(new View.OnClickListener() {
@@ -57,13 +53,13 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-        /*pong = (CardView) findViewById(R.id.pong);
+        pong = (CardView) findViewById(R.id.pong);
         pong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openPong();
             }
-        });*/
+        });
 
         exit = (CardView) findViewById(R.id.exit);
         exit.setOnClickListener(new View.OnClickListener() {
@@ -79,25 +75,25 @@ public class MainMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*public void openTetris() {
-        Intent intent = new Intent(this, MainMenu.class);
+    public void openTetris() {
+        Intent intent = new Intent(this, TetrisActivity.class);
         startActivity(intent);
     }
 
     public void openSpaceInvaders() {
-        Intent intent = new Intent(this, MainMenu.class);
+        Intent intent = new Intent(this, SpaceInvadersActivity.class);
         startActivity(intent);
-    }*/
+    }
 
     public void openBreakout() {
         Intent intent = new Intent(this, BreakoutActivity.class);
         startActivity(intent);
     }
 
-    /*public void openPong() {
-        Intent intent = new Intent(this, MainMenu.class);
+    public void openPong() {
+        Intent intent = new Intent(this, PongActivity.class);
         startActivity(intent);
-    }*/
+    }
 
     public void exit() {
         this.finishAffinity();
