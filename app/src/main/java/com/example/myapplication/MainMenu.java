@@ -51,13 +51,13 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-        /*pong = (CardView) findViewById(R.id.pong);
+        pong = (CardView) findViewById(R.id.pong);
         pong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openPong();
             }
-        });*/
+        });
 
         exit = (CardView) findViewById(R.id.exit);
         exit.setOnClickListener(new View.OnClickListener() {
@@ -88,10 +88,10 @@ public class MainMenu extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*public void openPong() {
-        Intent intent = new Intent(this, MainMenu.class);
+    public void openPong() {
+        Intent intent = new Intent(this, PongActivity.class);
         startActivity(intent);
-    }*/
+    }
 
     public void exit() {
         this.finishAffinity();

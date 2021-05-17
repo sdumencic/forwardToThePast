@@ -17,10 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="pong.GameActivity"></activity>
         <activity android:name=".SnakeMain"></activity>
         <activity android:name=".BreakoutActivity"></activity>
         <activity android:name="breakout.GameOver"></activity>
         <activity android:name=".SpaceInvadersActivity"></activity>
+        <activity android:name=".PongActivity"></activity>
     </application>
 
 </manifest>
