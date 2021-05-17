@@ -15,7 +15,9 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.app.AlertDialog;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -35,7 +37,11 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     TextView TV, TV2, TV3, TV4, TV5;
     ImageView IV, IV2, IV3, IV4;
     ImageButton button, DASright, DASleft;
-    Point pc1 = new Point(); Point pc2 = new Point(); Point pc3 = new Point(); Point pc4 = new Point(); Point ptTouch = new Point(0, 0);
+    Point pc1 = new Point();
+    Point pc2 = new Point();
+    Point pc3 = new Point();
+    Point pc4 = new Point();
+    Point ptTouch = new Point(0, 0);
     MainView mainView;
 
     int[][] tetrisBoardColor = new int[10][30];
@@ -75,7 +81,8 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     public static int softDropSpeed = 10;
     public int random = 8, random2 = 8, random3 = 8, random4 = 8;
     public int rotationEffortTries = 0;
-    int lines = 0; int linesNeeded = 10;
+    int lines = 0;
+    int linesNeeded = 10;
     int level = 0;
     int linesClearedAtOnce = 0;
     int bag7number = 0;
@@ -90,7 +97,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     int centerX = 0;
     int centerY = 0;
     public static int rotationType = 0;
-    public static int randomType = 1; 
+    public static int randomType = 1;
     public static int mapNum = 0;
     long startTime = 0;
     long sprintTime = 0;
@@ -98,7 +105,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     long score = 0;
     public static long highscore = 0;
 
-    public void onGetRotation(Point pt1, Point pt2, Point pt3, Point pt4){
+    public void onGetRotation(Point pt1, Point pt2, Point pt3, Point pt4) {
         pc1.set(pt1.x, pt1.y);
         pc2.set(pt2.x, pt2.y);
         pc3.set(pt3.x, pt3.y);
@@ -116,7 +123,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         setContentView(R.layout.activity_tetris);
 
         mainView = new MainView(this);
-        FrameLayout frame = (FrameLayout)findViewById(R.id.mainLayout);
+        FrameLayout frame = (FrameLayout) findViewById(R.id.mainLayout);
         frame.addView(mainView, 0);
 
         mPref = getSharedPreferences("setup", MODE_PRIVATE);
@@ -142,41 +149,41 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         tetrisPieceImage[9] = BitmapFactory.decodeResource(getResources(), R.drawable.tetrisgray);
         tetrisGhost = BitmapFactory.decodeResource(getResources(), R.drawable.tetrisghost);
 
-        TV = (TextView)findViewById(R.id.TV);
-        TV2 = (TextView)findViewById(R.id.TV2);
-        TV3 = (TextView)findViewById(R.id.TV3);
-        TV4 = (TextView)findViewById(R.id.TV4);
-        TV5 = (TextView)findViewById(R.id.TV5);
-        IV = (ImageView)findViewById(R.id.IV);
-        IV2 = (ImageView)findViewById(R.id.IV2);
-        IV3 = (ImageView)findViewById(R.id.IV3);
-        IV4 = (ImageView)findViewById(R.id.IV4);
-        button = (ImageButton)findViewById(R.id.ButtonSoftDrop);
-        DASright = (ImageButton)findViewById(R.id.ButtonRight);
-        DASleft = (ImageButton)findViewById(R.id.ButtonLeft);
+        TV = (TextView) findViewById(R.id.TV);
+        TV2 = (TextView) findViewById(R.id.TV2);
+        TV3 = (TextView) findViewById(R.id.TV3);
+        TV4 = (TextView) findViewById(R.id.TV4);
+        TV5 = (TextView) findViewById(R.id.TV5);
+        IV = (ImageView) findViewById(R.id.IV);
+        IV2 = (ImageView) findViewById(R.id.IV2);
+        IV3 = (ImageView) findViewById(R.id.IV3);
+        IV4 = (ImageView) findViewById(R.id.IV4);
+        button = (ImageButton) findViewById(R.id.ButtonSoftDrop);
+        DASright = (ImageButton) findViewById(R.id.ButtonRight);
+        DASleft = (ImageButton) findViewById(R.id.ButtonLeft);
 
-        if(showPointsLog){
+        if (showPointsLog) {
             TV5.setVisibility(View.VISIBLE);
         } else {
             TV5.setVisibility(View.INVISIBLE);
         }
 
-        for(int i = 0; i < 10; i++){
-            for(int j = 0; j < 30; j++) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 30; j++) {
                 tetrisBoard[i][j] = false;
                 tetrisBoardLock[i][j] = false;
                 tetrisBoardColor[i][j] = 7;
             }
         }
 
-        for(int i = 0; i <= 6; i++){
+        for (int i = 0; i <= 6; i++) {
             bag7[i] = 8;
         }
 
         button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     softDrop = true;
                     timer.removeMessages(0);
                     timer.sendEmptyMessage(0);
@@ -191,7 +198,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         DASleft.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     moveHorizontalOnce(0);
                     DASL = true;
                     timer.removeMessages(4);
@@ -208,7 +215,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         DASright.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     moveHorizontalOnce(1);
                     DASR = true;
                     timer.removeMessages(4);
@@ -247,12 +254,12 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     }
 
     protected class MainView extends View {
-        public MainView(Context context){
+        public MainView(Context context) {
             super(context);
         }
 
-        public void onDraw(Canvas canvas){
-            if(notLose) {
+        public void onDraw(Canvas canvas) {
+            if (notLose) {
                 canvas.drawColor(Color.WHITE);
                 Paint pnt = new Paint();
                 drawScreen(canvas);
@@ -261,7 +268,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             }
         }
 
-        public void clearCanvas(Canvas canvas){
+        public void clearCanvas(Canvas canvas) {
             Paint clearPaint = new Paint();
             clearPaint.setARGB(255, 100, 100, 100);
             canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), clearPaint);
@@ -277,17 +284,17 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             return rtScreen;
         }
 
-        public void drawScreen(Canvas canvas){
+        public void drawScreen(Canvas canvas) {
             Rect screen = getScreenRect();
-            int height = (int)(screen.height() / 20);
+            int height = (int) (screen.height() / 20);
             int width = height;
             int startX = screen.left;
             int startY = screen.bottom;
-            for(int i = 0; i < 10; i++){
-                for(int j = 0; j < 20; j++){
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 20; j++) {
                     int posX = startX + i * width;
                     int posY = startY - j * height;
-                    if(tetrisBoardColor[i][j] == 10) {
+                    if (tetrisBoardColor[i][j] == 10) {
                         canvas.drawBitmap(tetrisGhost, null, new Rect(posX, posY, posX + width, posY + width), null);
                     } else {
                         canvas.drawBitmap(tetrisPieceImage[tetrisBoardColor[i][j]], null, new Rect(posX, posY, posX + width, posY + width), null);
@@ -298,7 +305,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     }
 
     void showBoard() {
-        if(notLose) {
+        if (notLose) {
             int point = 0;
             for (int i = 29; i >= 0; i--) {
                 for (int j = 0; j < 10; j++) {
@@ -323,18 +330,18 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    public void lose(){
+    public void lose() {
         notLose = false;
-        for(int i = 0; i <= 7; i++)
+        for (int i = 0; i <= 7; i++)
             timer.removeMessages(i);
 
-        if(score < 1000) {
+        if (score < 1000) {
             TV.setText("You lose! \nFinal Score:" + "\n" + score + " Points...");
-        } else if(score < 5000){
+        } else if (score < 5000) {
             TV.setText("You lose! \nFinal Score:" + "\n" + score + " Points");
-        } else if(score < 15000){
+        } else if (score < 15000) {
             TV.setText("You lose! \nFinal Score:" + "\n" + score + " Points!");
-        } else if(score < 35000){
+        } else if (score < 35000) {
             TV.setText("You lose! \nFinal Score:" + "\n" + score + " Points!!!");
         } else {
             TV.setText("You lose! \nFinal Score:" + "\nINCREDIBLE\n" + score + " POINTS!!!");
@@ -351,7 +358,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         TV.append("\nHighscore: " + highscore);
     }
 
-    public void savePreferences(){
+    public void savePreferences() {
         SharedPreferences.Editor editor = mPref.edit();
 
         String strvalue = Long.toString(highscore);
@@ -362,7 +369,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         toast.show();
     }
 
-    public void readPreferences(){
+    public void readPreferences() {
         try {
             String strvalue = mPref.getString("highscore", "0");
             highscore = Long.parseLong(strvalue);
@@ -383,15 +390,15 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
 
         try {
-            softDropSpeed = mPref.getInt("Soft Drop Type", 3); 
+            softDropSpeed = mPref.getInt("Soft Drop Type", 3);
         } catch (Exception PrefEmpty) {
             softDropSpeed = 10;
         }
     }
 
-    public void onPause(View v){
+    public void onPause(View v) {
         paused = true;
-        if(paused) {
+        if (paused) {
             timer.removeMessages(0);
             timer.removeMessages(1);
             timer.removeMessages(2);
@@ -401,20 +408,20 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             timer.removeMessages(6);
             timer.removeMessages(7);
             new AlertDialog.Builder(this).setTitle("PAUSED!").setMessage("This game is paused.").setIcon(R.drawable.ic_baseline_pause_circle_filled_24).setPositiveButton("Resume", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which){
+                public void onClick(DialogInterface dialog, int which) {
                     paused = false;
 
                     timer.sendEmptyMessageDelayed(0, dropSpeed / 2);
                 }
             })
                     .setNegativeButton("Restart", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which){
+                        public void onClick(DialogInterface dialog, int which) {
                             paused = false;
                             level = 0;
                             score = 0;
                             lines = 0;
-                            for(int i = 0; i < 10; i++){
-                                for(int j = 0; j < 30; j++) {
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 30; j++) {
                                     tetrisBoard[i][j] = false;
                                     tetrisBoardLock[i][j] = false;
                                     tetrisBoardColor[i][j] = 7;
@@ -444,7 +451,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             random3 = 8;
                             random4 = 8;
                             linesNeeded = 10;
-                            for(int i = 0; i <= 6; i++){
+                            for (int i = 0; i <= 6; i++) {
                                 bag7[i] = 8;
                             }
                             bag7number = 0;
@@ -456,13 +463,13 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                         }
                     })
                     .setNeutralButton("Exit", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which){
+                        public void onClick(DialogInterface dialog, int which) {
                             paused = false;
                             level = 0;
                             score = 0;
                             lines = 0;
-                            for(int i = 0; i < 10; i++){
-                                for(int j = 0; j < 30; j++) {
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 30; j++) {
                                     tetrisBoard[i][j] = false;
                                     tetrisBoardLock[i][j] = false;
                                     tetrisBoardColor[i][j] = 7;
@@ -492,7 +499,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             random2 = 8;
                             random3 = 8;
                             random4 = 8;
-                            for(int i = 0; i <= 6; i++){
+                            for (int i = 0; i <= 6; i++) {
                                 bag7[i] = 8;
                             }
                             bag7number = 0;
@@ -506,12 +513,12 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    public void blockPlace(int x, int y, int color){
+    public void blockPlace(int x, int y, int color) {
         tetrisBoardLock[x][y] = true;
         tetrisBoardColor[x][y] = color;
     }
 
-    public void place2x2(int x, int y, int color){
+    public void place2x2(int x, int y, int color) {
         blockPlace(x, y, color);
         blockPlace(x + 1, y, color);
         blockPlace(x + 1, y + 1, color);
@@ -521,23 +528,23 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     public void getRotation() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 30; j++) {
-                if(tetrisBoard[i][j]) {
+                if (tetrisBoard[i][j]) {
                     tetrisBoard[i][j] = false;
                     tetrisBoardColor[i][j] = 7;
                 }
             }
         }
-        SRS(pc1, pc2, pc3 ,pc4);
+        SRS(pc1, pc2, pc3, pc4);
     }
 
-    public void copyPoints(){
+    public void copyPoints() {
         pc1.set(Rotation.ppp1.x, Rotation.ppp1.y);
         pc2.set(Rotation.ppp2.x, Rotation.ppp2.y);
         pc3.set(Rotation.ppp3.x, Rotation.ppp3.y);
         pc4.set(Rotation.ppp4.x, Rotation.ppp4.y);
     }
 
-    public void translatePoints(int x, int y){
+    public void translatePoints(int x, int y) {
         pc1.set(pc1.x + x, pc1.y + y);
         pc2.set(pc2.x + x, pc2.y + y);
         pc3.set(pc3.x + x, pc3.y + y);
@@ -548,7 +555,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     public void SRS(Point a, Point b, Point c, Point d) {
         rotationEffortTries++;
         try {
-            if(tetrisBoardLock[a.x][a.y] || tetrisBoardLock[b.x][b.y] || tetrisBoardLock[c.x][c.y] || tetrisBoardLock[d.x][d.y]) {
+            if (tetrisBoardLock[a.x][a.y] || tetrisBoardLock[b.x][b.y] || tetrisBoardLock[c.x][c.y] || tetrisBoardLock[d.x][d.y]) {
                 tetrisBoard[500][500] = true;
             } else {
                 tetrisBoard[a.x][a.y] = true;
@@ -566,16 +573,16 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             return;
         } catch (Exception cannotRotate) {
 
-            if(rotationType == 0) {
+            if (rotationType == 0) {
                 SRS(Rotation.pp1, Rotation.pp2, Rotation.pp3, Rotation.pp4);
-                if(rotationRight){
+                if (rotationRight) {
                     rotation.rotateAmount -= 1;
-                    if(rotation.rotateAmount <= -1){
+                    if (rotation.rotateAmount <= -1) {
                         rotation.rotateAmount += 4;
                     }
                 } else {
                     rotation.rotateAmount += 1;
-                    if(rotation.rotateAmount >= 4){
+                    if (rotation.rotateAmount >= 4) {
                         rotation.rotateAmount -= 4;
                     }
                 }
@@ -664,12 +671,12 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                     } else {
                         SRS(Rotation.pp1, Rotation.pp2, Rotation.pp3, Rotation.pp4);
                     }
-                } else { 
+                } else {
                     if (rotationEffortTries >= 5) {
                         SRS(Rotation.pp1, Rotation.pp2, Rotation.pp3, Rotation.pp4);
                     } else {
                         int rotationAmount;
-                        if(rotationRight) {
+                        if (rotationRight) {
                             rotationAmount = rotation.rotateAmount - 1;
                             if (rotationAmount == -1) {
                                 rotationAmount += 4;
@@ -726,11 +733,11 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                     }
                                 } else {
                                     if (rotationEffortTries == 1) {
-                                        translatePoints	(-1, 0);
+                                        translatePoints(-1, 0);
                                     } else if (rotationEffortTries == 2) {
                                         translatePoints(-1, 1);
                                     } else if (rotationEffortTries == 3) {
-                                        translatePoints( 0, -2);
+                                        translatePoints(0, -2);
                                     } else {
                                         translatePoints(-1, -2);
                                     }
@@ -739,9 +746,9 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                 if (rotationEffortTries == 1) {
                                     translatePoints(-1, 0);
                                 } else if (rotationEffortTries == 2) {
-                                    translatePoints(-1,-1);
+                                    translatePoints(-1, -1);
                                 } else if (rotationEffortTries == 3) {
-                                    translatePoints( 0, 2);
+                                    translatePoints(0, 2);
                                 } else {
                                     translatePoints(-1, 2);
                                 }
@@ -753,21 +760,21 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                     if (rotationEffortTries == 1) {
                                         translatePoints(-2, 0);
                                     } else if (rotationEffortTries == 2) {
-                                        translatePoints( 1, 0);
+                                        translatePoints(1, 0);
                                     } else if (rotationEffortTries == 3) {
-                                        translatePoints(-2,-1);
+                                        translatePoints(-2, -1);
                                     } else {
-                                        translatePoints( 1, 2);
+                                        translatePoints(1, 2);
                                     }
                                 } else {
                                     if (rotationEffortTries == 1) {
                                         translatePoints(-1, 0);
                                     } else if (rotationEffortTries == 2) {
-                                        translatePoints( 2, 0);
+                                        translatePoints(2, 0);
                                     } else if (rotationEffortTries == 3) {
                                         translatePoints(-1, 2);
                                     } else {
-                                        translatePoints( 2,-1);
+                                        translatePoints(2, -1);
                                     }
                                 }
                             } else if (rotationAmount == 1) {
@@ -775,42 +782,42 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                     if (rotationEffortTries == 1) {
                                         translatePoints(-1, 0);
                                     } else if (rotationEffortTries == 2) {
-                                        translatePoints( 2, 0);
+                                        translatePoints(2, 0);
                                     } else if (rotationEffortTries == 3) {
                                         translatePoints(-1, 2);
                                     } else {
-                                        translatePoints( 2,-1);
+                                        translatePoints(2, -1);
                                     }
                                 } else {
                                     if (rotationEffortTries == 1) {
-                                        translatePoints( 2, 0);
+                                        translatePoints(2, 0);
                                     } else if (rotationEffortTries == 2) {
                                         translatePoints(-1, 0);
                                     } else if (rotationEffortTries == 3) {
-                                        translatePoints( 2, 1);
+                                        translatePoints(2, 1);
                                     } else {
-                                        translatePoints(-1,-2);
+                                        translatePoints(-1, -2);
                                     }
 
                                 }
                             } else if (rotationAmount == 2) {
                                 if (rotationRight) {
                                     if (rotationEffortTries == 1) {
-                                        translatePoints( 2, 0);
+                                        translatePoints(2, 0);
                                     } else if (rotationEffortTries == 2) {
                                         translatePoints(-1, 0);
                                     } else if (rotationEffortTries == 3) {
-                                        translatePoints( 2, 1);
+                                        translatePoints(2, 1);
                                     } else {
-                                        translatePoints(-1,-2);
+                                        translatePoints(-1, -2);
                                     }
                                 } else {
                                     if (rotationEffortTries == 1) {
-                                        translatePoints( 1, 0);
+                                        translatePoints(1, 0);
                                     } else if (rotationEffortTries == 2) {
                                         translatePoints(-2, 0);
                                     } else if (rotationEffortTries == 3) {
-                                        translatePoints( 1,-2);
+                                        translatePoints(1, -2);
                                     } else {
                                         translatePoints(-2, 1);
                                     }
@@ -818,11 +825,11 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             } else {
                                 if (rotationRight) {
                                     if (rotationEffortTries == 1) {
-                                        translatePoints( 1, 0);
+                                        translatePoints(1, 0);
                                     } else if (rotationEffortTries == 2) {
                                         translatePoints(-2, 0);
                                     } else if (rotationEffortTries == 3) {
-                                        translatePoints( 1,-2);
+                                        translatePoints(1, -2);
                                     } else {
                                         translatePoints(-2, 1);
                                     }
@@ -830,11 +837,11 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                     if (rotationEffortTries == 1) {
                                         translatePoints(-2, 0);
                                     } else if (rotationEffortTries == 2) {
-                                        translatePoints( 1, 0);
+                                        translatePoints(1, 0);
                                     } else if (rotationEffortTries == 3) {
-                                        translatePoints(-2,-1);
+                                        translatePoints(-2, -1);
                                     } else {
-                                        translatePoints( 1, 2);
+                                        translatePoints(1, 2);
                                     }
                                 }
                             }
@@ -846,9 +853,9 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    public void holdPiece(){
+    public void holdPiece() {
         Rotation.rotateAmount = 0;
-        if(timesHoldPieceUsed == 0 && !paused) {
+        if (timesHoldPieceUsed == 0 && !paused) {
             for (int i = 0; i < 30; i++) {
                 for (int j = 0; j < 10; j++) {
                     if (tetrisBoard[j][i]) {
@@ -892,8 +899,8 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    void check7bag(int rand){
-        if(rand == 4) {
+    void check7bag(int rand) {
+        if (rand == 4) {
             for (int i = bag7numberCheck; i >= 0; i--) {
                 if (bag7[i] == random4) {
                     random4 = getRandom(7, 0);
@@ -901,13 +908,13 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                 }
             }
             bag7[bag7number] = random4;
-        } else if(rand == 3){
+        } else if (rand == 3) {
             if (bag7[0] == random3 || bag7[1] == random3) {
                 random3 = getRandom(7, 0);
                 check7bag(3);
             }
             bag7[2] = random3;
-        } else if(rand == 2){
+        } else if (rand == 2) {
             if (bag7[0] == random2) {
                 random2 = getRandom(7, 0);
                 check7bag(2);
@@ -919,12 +926,12 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     void getPiece() {
         lockInAir = true;
         TSpin = false;
-        if(!dontWorryAboutIt) {
+        if (!dontWorryAboutIt) {
             random = random2;
             random2 = random3;
             random3 = random4;
             random4 = getRandom(7, 0);
-            if(randomType == 2) {
+            if (randomType == 2) {
                 bag7numberCheck++;
                 if (bag7numberCheck > 6)
                     bag7numberCheck = 6;
@@ -936,109 +943,109 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                     bag7number = 0;
                 }
                 check7bag(4);
-            } else if(randomType == 1){
-                if(random4 == random3){
+            } else if (randomType == 1) {
+                if (random4 == random3) {
                     random4 = getRandom(7, 0);
                 }
             }
         }
         dontWorryAboutIt = false;
-            if (random == 0) {
-                tetrisBoard[4][22 - 1] = true; // T
-                Rotation.point1.set(4, 22 - 1);
-                tetrisBoard[3][21 - 1] = true;
-                Rotation.point2.set(3, 21 - 1);
-                tetrisBoard[4][21 - 1] = true;
-                Rotation.point3.set(4, 21 - 1);                      //Center
-                tetrisBoard[5][21 - 1] = true;
-                Rotation.point4.set(5, 21 - 1);
-                tetrisBoardColor[4][22 - 1] = random;
-                tetrisBoardColor[3][21 - 1] = random;
-                tetrisBoardColor[4][21 - 1] = random;
-                tetrisBoardColor[5][21 - 1] = random;
-            } else if (random == 1) {
-                tetrisBoard[3][21 - 1] = true;
-                Rotation.point1.set(3, 21 - 1); // L 
-                tetrisBoard[4][21 - 1] = true;
-                Rotation.point2.set(4, 21 - 1);                        //Center
-                tetrisBoard[5][21 - 1] = true;
-                Rotation.point3.set(5, 21 - 1);
-                tetrisBoard[5][22 - 1] = true;
-                Rotation.point4.set(5, 22 - 1);
-                tetrisBoardColor[3][21 - 1] = random;
-                tetrisBoardColor[4][21 - 1] = random;
-                tetrisBoardColor[5][21 - 1] = random;
-                tetrisBoardColor[5][22 - 1] = random;
-            } else if (random == 2) {
-                tetrisBoard[3][21 - 1] = true;
-                Rotation.point1.set(3, 21 - 1); // J 
-                tetrisBoard[4][21 - 1] = true;
-                Rotation.point2.set(4, 21 - 1);                        //Center
-                tetrisBoard[5][21 - 1] = true;
-                Rotation.point3.set(5, 21 - 1);
-                tetrisBoard[3][22 - 1] = true;
-                Rotation.point4.set(3, 22 - 1);
-                tetrisBoardColor[3][21 - 1] = random;
-                tetrisBoardColor[4][21 - 1] = random;
-                tetrisBoardColor[5][21 - 1] = random;
-                tetrisBoardColor[3][22 - 1] = random;
-            } else if (random == 3) {
-                tetrisBoard[4][22 - 1] = true; // O 
-                tetrisBoard[5][22 - 1] = true;
-                tetrisBoard[4][21 - 1] = true;
-                tetrisBoard[5][21 - 1] = true;
-                tetrisBoardColor[4][22 - 1] = random;  // O 
-                tetrisBoardColor[5][22 - 1] = random;
-                tetrisBoardColor[4][21 - 1] = random;
-                tetrisBoardColor[5][21 - 1] = random;
-            } else if (random == 4) {
-                tetrisBoard[3][21 - 1] = true;
-                Rotation.point1.set(3, 21 - 1); // I 
-                tetrisBoard[4][21 - 1] = true;
-                Rotation.point2.set(3, 21 - 1);                        //Center
-                tetrisBoard[5][21 - 1] = true;
-                Rotation.point3.set(5, 21 - 1);
-                tetrisBoard[6][21 - 1] = true;
-                Rotation.point4.set(6, 21 - 1);
-                tetrisBoardColor[3][21 - 1] = random;
-                tetrisBoardColor[4][21 - 1] = random;
-                tetrisBoardColor[5][21 - 1] = random;
-                tetrisBoardColor[6][21 - 1] = random;
-            } else if (random == 5) {
-                tetrisBoard[3][22 - 1] = true;
-                Rotation.point1.set(3, 22 - 1); // Z
-                tetrisBoard[4][22 - 1] = true;
-                Rotation.point2.set(4, 22 - 1);                          //Center
-                tetrisBoard[4][21 - 1] = true; 
-                Rotation.point3.set(4, 21 - 1);
-                tetrisBoard[5][21 - 1] = true;
-                Rotation.point4.set(5, 21 - 1);
-                tetrisBoardColor[3][22 - 1] = random;
-                tetrisBoardColor[4][22 - 1] = random;
-                tetrisBoardColor[4][21 - 1] = random;
-                tetrisBoardColor[5][21 - 1] = random;
-            } else if (random == 6) {
-                tetrisBoard[5][22 - 1] = true;
-                Rotation.point1.set(5, 22 - 1); // S PIECE *
-                tetrisBoard[4][22 - 1] = true;
-                Rotation.point2.set(4, 22 - 1);                         //Center
-                tetrisBoard[4][21 - 1] = true;
-                Rotation.point3.set(4, 21 - 1);
-                tetrisBoard[3][21 - 1] = true;
-                Rotation.point4.set(3, 21 - 1);
-                tetrisBoardColor[5][22 - 1] = random;
-                tetrisBoardColor[4][22 - 1] = random;
-                tetrisBoardColor[4][21 - 1] = random;
-                tetrisBoardColor[3][21 - 1] = random;
-            }
+        if (random == 0) {
+            tetrisBoard[4][22 - 1] = true; // T
+            Rotation.point1.set(4, 22 - 1);
+            tetrisBoard[3][21 - 1] = true;
+            Rotation.point2.set(3, 21 - 1);
+            tetrisBoard[4][21 - 1] = true;
+            Rotation.point3.set(4, 21 - 1);                      //Center
+            tetrisBoard[5][21 - 1] = true;
+            Rotation.point4.set(5, 21 - 1);
+            tetrisBoardColor[4][22 - 1] = random;
+            tetrisBoardColor[3][21 - 1] = random;
+            tetrisBoardColor[4][21 - 1] = random;
+            tetrisBoardColor[5][21 - 1] = random;
+        } else if (random == 1) {
+            tetrisBoard[3][21 - 1] = true;
+            Rotation.point1.set(3, 21 - 1); // L
+            tetrisBoard[4][21 - 1] = true;
+            Rotation.point2.set(4, 21 - 1);                        //Center
+            tetrisBoard[5][21 - 1] = true;
+            Rotation.point3.set(5, 21 - 1);
+            tetrisBoard[5][22 - 1] = true;
+            Rotation.point4.set(5, 22 - 1);
+            tetrisBoardColor[3][21 - 1] = random;
+            tetrisBoardColor[4][21 - 1] = random;
+            tetrisBoardColor[5][21 - 1] = random;
+            tetrisBoardColor[5][22 - 1] = random;
+        } else if (random == 2) {
+            tetrisBoard[3][21 - 1] = true;
+            Rotation.point1.set(3, 21 - 1); // J
+            tetrisBoard[4][21 - 1] = true;
+            Rotation.point2.set(4, 21 - 1);                        //Center
+            tetrisBoard[5][21 - 1] = true;
+            Rotation.point3.set(5, 21 - 1);
+            tetrisBoard[3][22 - 1] = true;
+            Rotation.point4.set(3, 22 - 1);
+            tetrisBoardColor[3][21 - 1] = random;
+            tetrisBoardColor[4][21 - 1] = random;
+            tetrisBoardColor[5][21 - 1] = random;
+            tetrisBoardColor[3][22 - 1] = random;
+        } else if (random == 3) {
+            tetrisBoard[4][22 - 1] = true; // O
+            tetrisBoard[5][22 - 1] = true;
+            tetrisBoard[4][21 - 1] = true;
+            tetrisBoard[5][21 - 1] = true;
+            tetrisBoardColor[4][22 - 1] = random;  // O
+            tetrisBoardColor[5][22 - 1] = random;
+            tetrisBoardColor[4][21 - 1] = random;
+            tetrisBoardColor[5][21 - 1] = random;
+        } else if (random == 4) {
+            tetrisBoard[3][21 - 1] = true;
+            Rotation.point1.set(3, 21 - 1); // I
+            tetrisBoard[4][21 - 1] = true;
+            Rotation.point2.set(3, 21 - 1);                        //Center
+            tetrisBoard[5][21 - 1] = true;
+            Rotation.point3.set(5, 21 - 1);
+            tetrisBoard[6][21 - 1] = true;
+            Rotation.point4.set(6, 21 - 1);
+            tetrisBoardColor[3][21 - 1] = random;
+            tetrisBoardColor[4][21 - 1] = random;
+            tetrisBoardColor[5][21 - 1] = random;
+            tetrisBoardColor[6][21 - 1] = random;
+        } else if (random == 5) {
+            tetrisBoard[3][22 - 1] = true;
+            Rotation.point1.set(3, 22 - 1); // Z
+            tetrisBoard[4][22 - 1] = true;
+            Rotation.point2.set(4, 22 - 1);                          //Center
+            tetrisBoard[4][21 - 1] = true;
+            Rotation.point3.set(4, 21 - 1);
+            tetrisBoard[5][21 - 1] = true;
+            Rotation.point4.set(5, 21 - 1);
+            tetrisBoardColor[3][22 - 1] = random;
+            tetrisBoardColor[4][22 - 1] = random;
+            tetrisBoardColor[4][21 - 1] = random;
+            tetrisBoardColor[5][21 - 1] = random;
+        } else if (random == 6) {
+            tetrisBoard[5][22 - 1] = true;
+            Rotation.point1.set(5, 22 - 1); // S PIECE *
+            tetrisBoard[4][22 - 1] = true;
+            Rotation.point2.set(4, 22 - 1);                         //Center
+            tetrisBoard[4][21 - 1] = true;
+            Rotation.point3.set(4, 21 - 1);
+            tetrisBoard[3][21 - 1] = true;
+            Rotation.point4.set(3, 21 - 1);
+            tetrisBoardColor[5][22 - 1] = random;
+            tetrisBoardColor[4][22 - 1] = random;
+            tetrisBoardColor[4][21 - 1] = random;
+            tetrisBoardColor[3][21 - 1] = random;
+        }
 
-            nextPieceShow();
+        nextPieceShow();
         ghostPiece();
         showBoard();
         usePiece();
     }
 
-    public void nextPieceShow(){
+    public void nextPieceShow() {
         if (random2 == 0) {
             IV.setImageResource(R.drawable.block_purple);
         } else if (random2 == 1) {
@@ -1086,26 +1093,26 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    public boolean onTouchEvent(MotionEvent e){
+    public boolean onTouchEvent(MotionEvent e) {
         super.onTouchEvent(e);
         int dir = -1;
 
         switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN :
+            case MotionEvent.ACTION_DOWN:
                 softDrop = false;
                 swipeSoftDrop = false;
-                ptTouch.set((int)e.getX(), (int)e.getY());
+                ptTouch.set((int) e.getX(), (int) e.getY());
                 canMotionEventRotate = true;
                 break;
-            case MotionEvent.ACTION_MOVE :
-                if(!paused)
-                    dir = touchDir(ptTouch.x, ptTouch.y, (int)e.getX(), (int)e.getY());
+            case MotionEvent.ACTION_MOVE:
+                if (!paused)
+                    dir = touchDir(ptTouch.x, ptTouch.y, (int) e.getX(), (int) e.getY());
                 break;
-            case MotionEvent.ACTION_UP :
+            case MotionEvent.ACTION_UP:
                 softDrop = false;
                 swipeSoftDrop = false;
                 DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
-                if(canMotionEventRotate) {
+                if (canMotionEventRotate) {
                     if (Math.abs(ptTouch.x - (int) e.getX()) < 15 && Math.abs(ptTouch.y - (int) e.getY()) < 15 && ableToHardDrop && !softDrop && !paused) {
                         if (ptTouch.x > dm.widthPixels / 2) {
                             rotationRight = true;
@@ -1126,7 +1133,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
 
         if (dir >= 0 && !paused) {
-            if(dir <= 1) {
+            if (dir <= 1) {
                 softDrop = false;
                 swipeSoftDrop = false;
                 canMotionEventRotate = false;
@@ -1134,19 +1141,19 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             } else {
                 swipeSoftDrop = true;
                 canMotionEventRotate = false;
-                if(dir == 3) {
-                    if(ableToHardDrop) {
+                if (dir == 3) {
+                    if (ableToHardDrop) {
                         hardDropTest++;
                     } else {
                         hardDropTest = 0;
                     }
-                    if(hardDropTest > 2.5){
+                    if (hardDropTest > 2.5) {
                         ableToHardDrop = false;
                         hardDrop();
                     } else {
                         timer.sendEmptyMessageDelayed(5, 120);
                     }
-                    if(ableToHardDrop && swipeSoftDrop) {
+                    if (ableToHardDrop && swipeSoftDrop) {
                         softDrop = true;
                         swipeSoftDrop = false;
                         timer.removeMessages(0);
@@ -1158,22 +1165,21 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                     holdPiece();
                 }
             }
-            ptTouch.set((int)e.getX(), (int)e.getY());
+            ptTouch.set((int) e.getX(), (int) e.getY());
         }
         return true;
     }
 
-    int touchDir(int x1, int y1, int x2, int y2){
+    int touchDir(int x1, int y1, int x2, int y2) {
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
         int moveLength = dm.widthPixels / 10;
-        if( Math.abs(x2 - x1) > moveLength){
-            if( x2 < x1 )
+        if (Math.abs(x2 - x1) > moveLength) {
+            if (x2 < x1)
                 return 0;
             else
                 return 1;
-        }
-        else if( Math.abs(y2 - y1 ) > moveLength){
-            if(y2 < y1)
+        } else if (Math.abs(y2 - y1) > moveLength) {
+            if (y2 < y1)
                 return 2;
             else
                 return 3;
@@ -1181,11 +1187,11 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         return -1;
     }
 
-    public void moveHorizontal(int a){
+    public void moveHorizontal(int a) {
         TSpin = false;
         lockTries++;
         canLock = false;
-        if(ARR != 0) {
+        if (ARR != 0) {
             if (a == 0 && !paused) {
                 for (int i = 0; i < 10; i++) {
                     for (int j = 0; j < 30; j++) {
@@ -1239,7 +1245,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             }
         } else {
             if (a == 0 && !paused) {
-                for(;;) {
+                for (; ; ) {
                     for (int i = 0; i < 10; i++) {
                         for (int j = 0; j < 30; j++) {
                             if (tetrisBoard[i][j]) {
@@ -1296,75 +1302,75 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    public void moveHorizontalOnce(int a){
+    public void moveHorizontalOnce(int a) {
         TSpin = false;
         lockTries++;
         canLock = false;
-            if (a == 0 && !paused) {
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 0; j < 30; j++) {
-                        if (tetrisBoard[i][j]) {
-                            if (i == 0) {
+        if (a == 0 && !paused) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 30; j++) {
+                    if (tetrisBoard[i][j]) {
+                        if (i == 0) {
+                            return;
+                        } else {
+                            if (tetrisBoardLock[i - 1][j])
                                 return;
-                            } else {
-                                if (tetrisBoardLock[i - 1][j])
-                                    return;
-                            }
                         }
                     }
                 }
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 0; j < 30; j++) {
-                        if (tetrisBoard[i][j]) {
-                            tetrisBoard[i][j] = false;
-                            tetrisBoardColor[i - 1][j] = tetrisBoardColor[i][j];
-                            tetrisBoardColor[i][j] = 7;
-                            tetrisBoard[i - 1][j] = true;
-                        }
-                    }
-                }
-                ghostPiece();
-                showBoard();
-            } else if (a == 1 && !paused) {
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 0; j < 30; j++) {
-                        if (tetrisBoard[i][j]) {
-                            if (i == 9) {
-                                return;
-                            } else {
-                                if (tetrisBoardLock[i + 1][j])
-                                    return;
-                            }
-                        }
-                    }
-                }
-                for (int i = 9; i >= 0; i--) {
-                    for (int j = 0; j < 30; j++) {
-                        if (tetrisBoard[i][j]) {
-                            tetrisBoard[i][j] = false;
-                            tetrisBoardColor[i + 1][j] = tetrisBoardColor[i][j];
-                            tetrisBoardColor[i][j] = 7;
-                            tetrisBoard[i + 1][j] = true;
-                        }
-                    }
-                }
-                ghostPiece();
-                showBoard();
             }
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 30; j++) {
+                    if (tetrisBoard[i][j]) {
+                        tetrisBoard[i][j] = false;
+                        tetrisBoardColor[i - 1][j] = tetrisBoardColor[i][j];
+                        tetrisBoardColor[i][j] = 7;
+                        tetrisBoard[i - 1][j] = true;
+                    }
+                }
+            }
+            ghostPiece();
+            showBoard();
+        } else if (a == 1 && !paused) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 30; j++) {
+                    if (tetrisBoard[i][j]) {
+                        if (i == 9) {
+                            return;
+                        } else {
+                            if (tetrisBoardLock[i + 1][j])
+                                return;
+                        }
+                    }
+                }
+            }
+            for (int i = 9; i >= 0; i--) {
+                for (int j = 0; j < 30; j++) {
+                    if (tetrisBoard[i][j]) {
+                        tetrisBoard[i][j] = false;
+                        tetrisBoardColor[i + 1][j] = tetrisBoardColor[i][j];
+                        tetrisBoardColor[i][j] = 7;
+                        tetrisBoard[i + 1][j] = true;
+                    }
+                }
+            }
+            ghostPiece();
+            showBoard();
+        }
 
     }
 
-    public void onClick(View v){
-        switch( v.getId() ){
-            case R.id.ButtonLeft : {
-                if(!paused) {
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ButtonLeft: {
+                if (!paused) {
                     lockTries++;
                     canLock = false;
                 }
                 break;
             }
-            case R.id.ButtonRight : {
-                if(!paused) {
+            case R.id.ButtonRight: {
+                if (!paused) {
                     lockTries++;
                     canLock = false;
                 }
@@ -1373,8 +1379,8 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    public void onDropClick(View v){
-        if(!paused) {
+    public void onDropClick(View v) {
+        if (!paused) {
             switch (v.getId()) {
                 case R.id.ButtonSoftDrop: {
                     break;
@@ -1384,7 +1390,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                     break;
                 }
                 case R.id.ButtonRotate180: {
-                    if(rotationType != 0) {
+                    if (rotationType != 0) {
                         TSpin = true;
                         lockTries++;
                         canLock = false;
@@ -1407,7 +1413,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
 
     public void hardDrop() {
         TSpin = false;
-        if(!paused) {
+        if (!paused) {
             bigloop:
             for (; ; ) {
                 for (int i = 0; i <= 29; i++) {
@@ -1432,7 +1438,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             if (tetrisBoard[j][i]) {
 
                                 tetrisBoard[j][i - 1] = true;
-                                if(tetrisBoardColor[j][i] == 10) {
+                                if (tetrisBoardColor[j][i] == 10) {
                                     tetrisBoardColor[j][i] = 7;
                                 } else {
                                     tetrisBoardColor[j][i - 1] = tetrisBoardColor[j][i];
@@ -1447,8 +1453,8 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    public void onRotateClick(View v){
-        if(!paused) {
+    public void onRotateClick(View v) {
+        if (!paused) {
             switch (v.getId()) {
                 case R.id.ButtonRotateLeft: {
                     rotationRight = false;
@@ -1470,7 +1476,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    public void ghostPiece(){
+    public void ghostPiece() {
         try {
             for (int i = 0; i < 25; i++) {
                 for (int j = 0; j < 10; j++) {
@@ -1526,25 +1532,25 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
         }
     }
 
-    public void getCenter(){
+    public void getCenter() {
         double rounded = (rotation.point1.x + rotation.point2.x + rotation.point3.x + rotation.point4.x);
         double roundedX = rounded / 4;
         rounded = (rotation.point1.y + rotation.point2.y + rotation.point3.y + rotation.point4.y);
         double roundedY = rounded / 4;
 
-        if(roundedX % 1 > 0.5){
+        if (roundedX % 1 > 0.5) {
             roundedX += 1 - (roundedX % 1);
         } else {
             roundedX -= (roundedX % 1);
         }
-        if(roundedY % 1 > 0.5){
+        if (roundedY % 1 > 0.5) {
             roundedY += 1 - (roundedY % 1);
         } else {
             roundedY -= (roundedY % 1);
         }
 
-        centerX = (int)roundedX;
-        centerY = (int)roundedY;
+        centerX = (int) roundedX;
+        centerY = (int) roundedY;
     }
 
     public void checkLine() {
@@ -1565,7 +1571,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
 
                         lines += 1;
                         linesNeeded--;
-                            linesClearedAtOnce++;
+                        linesClearedAtOnce++;
                         for (int i = 0; i < 10; i++) {
                             tetrisBoardLock[i][j] = false;
                             tetrisBoardColor[i][j] = 7;
@@ -1868,7 +1874,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             TV3.setText("Lines : " + lines);
             TV2.setText("Score : " + score);
 
-        } else if (playMode.equals("Sprint")){
+        } else if (playMode.equals("Sprint")) {
 
             for (int runs = 0; runs < 3; runs++) {
                 for (int j = 0; j < 26; j++) {
@@ -1900,34 +1906,34 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             }
 
             TV3.setText("Lines : " + lines);
-            if(lines >= 40){/////////////////////////////////////////////////////////////////////////////////////SPRINT WIN CONDITION/////////////////////////////
+            if (lines >= 40) {/////////////////////////////////////////////////////////////////////////////////////SPRINT WIN CONDITION/////////////////////////////
                 lose();
             }
         }
     }
 
-    public int getRandom(int a, int b){
-        return (int)(Math.random() * a) + b;
+    public int getRandom(int a, int b) {
+        return (int) (Math.random() * a) + b;
     }
 
-    public void lockPiece(){
+    public void lockPiece() {
         timer.removeMessages(0);
         canRotate = false;
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 30; j++) {
-                if(tetrisBoard[i][j]) {
+                if (tetrisBoard[i][j]) {
                     tetrisBoard[i][j] = false;
                     tetrisBoardLock[i][j] = true;
                     tetrisBoardColor[i][j] = random;
                 }
             }
         }
-        for(int times = 4; times < 7; times++){
-            if(tetrisBoardLock[times][21] || tetrisBoard[times][21])
+        for (int times = 4; times < 7; times++) {
+            if (tetrisBoardLock[times][21] || tetrisBoard[times][21])
                 lose();
         }
         piecesSinceCombo++;
-        if(piecesSinceCombo > 1){
+        if (piecesSinceCombo > 1) {
             combo = 0;
         }
         timesHoldPieceUsed = 0;
@@ -1938,9 +1944,9 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     }
 
     Handler timer = new Handler() {
-        public void handleMessage(Message msg){
+        public void handleMessage(Message msg) {
 
-            if(!paused) {
+            if (!paused) {
 
                 bigloop:
                 switch (msg.what) {
@@ -1990,7 +1996,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                     }
                                 }
                             }
-                            if(lockInAir)
+                            if (lockInAir)
                                 lockTries = 0;
                             for (int i = 0; i <= 29; i++) {
                                 for (int j = 0; j < 10; j++) {
@@ -2067,7 +2073,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                 }
                             }
                         }
-                        if(lockInAir)
+                        if (lockInAir)
                             lockTries = 0;
                         for (int i = 0; i <= 29; i++) {
                             for (int j = 0; j < 10; j++) {
@@ -2099,8 +2105,8 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                         if (DASL && DASR) {
                         } else {
                             if (DASL) {
-                                if(ARR != 0) {
-                                    if(ARRRun) {
+                                if (ARR != 0) {
+                                    if (ARRRun) {
                                         moveHorizontal(0);
                                         timer.sendEmptyMessageDelayed(4, ARR);
                                         ARRRun = false;
@@ -2108,7 +2114,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                         timer.sendEmptyMessageDelayed(4, DAS);
                                     }
                                 } else {
-                                    if(ARRRun) {
+                                    if (ARRRun) {
                                         moveHorizontal(0);
                                         ARRRun = false;
                                     } else {
@@ -2117,8 +2123,8 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                 }
                             }
                             if (DASR) {
-                                if(ARR != 0) {
-                                    if(ARRRun) {
+                                if (ARR != 0) {
+                                    if (ARRRun) {
                                         moveHorizontal(1);
                                         timer.sendEmptyMessageDelayed(4, ARR);
                                         ARRRun = false;
@@ -2126,7 +2132,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                         timer.sendEmptyMessageDelayed(4, DAS);
                                     }
                                 } else {
-                                    if(ARRRun) {
+                                    if (ARRRun) {
                                         moveHorizontal(1);
                                         ARRRun = false;
                                     } else {
@@ -2148,11 +2154,11 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                     case 6: {
                         break;
                     }
-                    case 7 : {
-                        sprintTime = (long)(SystemClock.uptimeMillis() - (long)startTime);
-                        int ms = (int)(sprintTime % 1000);
-                        int s = (int)((sprintTime % 60000 )/ 1000);
-                        int m = (int)((sprintTime % 360000) / 60000);
+                    case 7: {
+                        sprintTime = (long) (SystemClock.uptimeMillis() - (long) startTime);
+                        int ms = (int) (sprintTime % 1000);
+                        int s = (int) ((sprintTime % 60000) / 1000);
+                        int m = (int) ((sprintTime % 360000) / 60000);
                         sprintTimeString = String.format("%02d : %02d : %03d", m, s, ms);
                         TV2.setText(sprintTimeString);
                         timer.sendEmptyMessageDelayed(7, sprintUpdate);
