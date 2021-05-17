@@ -9,15 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar">
-        <activity android:name="tetris.TetrisGame"/>
-        <activity android:name="tetris.Maps"/>
-        <activity android:name=".StartScreen">
+        
+        <activity android:name=".MainMenu"></activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="pong.GameActivity"></activity>
+        <activity android:name=".SnakeMain"></activity>
+        <activity android:name=".BreakoutActivity"></activity>
+        <activity android:name="breakout.GameOver"></activity>
+        <activity android:name=".SpaceInvadersActivity"></activity>
+        <activity android:name=".PongActivity"></activity>
+        <activity android:name="tetris.TetrisGame"></activity>
+        <activity android:name="tetris.Maps"></activity>
+        <activity android:name=".TetrisActivity"></activity>
     </application>
 
 </manifest>
