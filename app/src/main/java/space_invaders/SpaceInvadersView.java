@@ -105,7 +105,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
         }
 
         killed = 0;
-        for (int column = 0; column < 6; column++) {
+        for (int column = 0; column < 4 ; column++) {
             for (int row = 0; row < 5; row++) {
                 invaders[killed] = new Invader(context, row, column, screenX, screenY);
                 killed++;

@@ -8,7 +8,6 @@ import com.example.myapplication.R;
 
 
 public class Bullet {
-
     // Define rectangle object in which the bullet will be drawn.
     private float x;
     private float y;
@@ -46,6 +45,7 @@ public class Bullet {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.space_invaders_laser);
 
         // Synchronize the bitmap with the screen resolution
+        // Bitmap is used only for laser because bullets are plain rectangles
         bitmap = Bitmap.createScaledBitmap(bitmap,
                 (int) (laser_width),
                 (int) (laser_height),
