@@ -10,17 +10,15 @@ import static pong.GameView.screenRatioX;
 import static pong.GameView.screenRatioY;
 
 public class ShadowBall {
-    int x,y, width, height, speedX = 0, speedY = -10;
+    int x, y, width, height, speedX = 0, speedY = -10;
     boolean isVisible = false;
     Bitmap ball;
 
-    ShadowBall (int screenY, int screenX, Resources res){
+    ShadowBall(int screenY, int screenX, Resources res) {
         ball = BitmapFactory.decodeResource(res, R.drawable.ball);
 
         width = ball.getWidth();
         height = ball.getHeight();
-        //width /= 4;
-        //height /= 4;
 
         screenRatioY *= 10;
         screenRatioX *= 10;
@@ -31,20 +29,20 @@ public class ShadowBall {
         height /= 17;
         width /= 17;
 
-        screenRatioX/=10;
-        screenRatioY/=10;
+        screenRatioX /= 10;
+        screenRatioY /= 10;
 
 
         ball = Bitmap.createScaledBitmap(ball, width, height, false);
-        y = screenY/2 - ball.getHeight()/2;
-        x = screenX/2 - ball.getWidth()/2;
+        y = screenY / 2 - ball.getHeight() / 2;
+        x = screenX / 2 - ball.getWidth() / 2;
     }
 
-    public void shrink(){
-       this.ball = Bitmap.createScaledBitmap(ball, (int) (this.width/1.1), (int) (this.height/1.1), false);
+    public void shrink() {
+        this.ball = Bitmap.createScaledBitmap(ball, (int) (this.width / 1.1), (int) (this.height / 1.1), false);
     }
 
-    public void move(Ball ball1){
+    public void move(Ball ball1) {
         this.height = ball1.height;
         this.width = ball1.width;
         this.x = ball1.x;
@@ -52,8 +50,4 @@ public class ShadowBall {
         isVisible = true;
         this.ball = Bitmap.createScaledBitmap(ball, this.width, this.height, false);
     }
-
-
-
-
 }

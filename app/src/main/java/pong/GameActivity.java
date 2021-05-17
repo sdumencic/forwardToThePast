@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class GameActivity extends AppCompatActivity {
     private GameView gameView;
     public static ImageView close;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -22,10 +23,7 @@ public class GameActivity extends AppCompatActivity {
         gameView = new GameView(this, point.x, point.y);
 
         setContentView(gameView);
-
-
     }
-
 
 
     @Override
@@ -39,5 +37,4 @@ public class GameActivity extends AppCompatActivity {
         super.onResume();
         gameView.resume();
     }
-
 }
