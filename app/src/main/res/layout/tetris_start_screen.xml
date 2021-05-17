@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/tetris_background">
+
+    <Button
+        android:id="@+id/Start"
+        android:layout_width="271dp"
+        android:layout_height="130dp"
+        android:textSize="72dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:onClick="onStart"
+        android:text="Start Game!"
+        android:textAllCaps="false"
+        app:backgroundTint="#5E009393" />
+
+    <Button
+        android:layout_width="271dp"
+        android:layout_height="130dp"
+        android:textSize="72dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/Start"
+        android:layout_marginTop="15dp"
+        android:id="@+id/Exit"
+        android:text="Exit"
+        android:textAllCaps="false"
+        android:onClick="onExit"
+        app:backgroundTint="#5E009393"/>
+
+</RelativeLayout>
