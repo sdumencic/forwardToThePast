@@ -10,7 +10,7 @@ import tetris.TetrisGame;
 
 import tetris.Maps;
 
-public class StartScreen extends AppCompatActivity {
+public class TetrisActivity extends AppCompatActivity {
 
     TetrisGame parent;
     SharedPreferences mPref;
