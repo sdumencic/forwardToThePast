@@ -33,7 +33,7 @@ public class GameView extends View {
     private Food food1, food2, food3;
     private float mx, my;
     private Context context;
-    public static int sizeOfMap = 75 * Constants.SCREEN_WIDTH/1080;
+    public static int sizeOfMap = 75 * Constants.SCREEN_WIDTH / 1080;
     private Handler handler;
     private Runnable runnable;
     public static boolean isPlaying = false;
@@ -42,6 +42,16 @@ public class GameView extends View {
     private float volume;
     private boolean loadedSound;
     private SoundPool soundPool;
+
+    /**
+     * Definition of images
+     * Drawing grass
+     * Drawing food
+     * Sound effects
+     *
+     * @param context
+     * @param attrs
+     */
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -58,10 +68,13 @@ public class GameView extends View {
         bmFood1 = Bitmap.createScaledBitmap(bmFood1, sizeOfMap, sizeOfMap, true);
         bmFood2 = BitmapFactory.decodeResource(this.getResources(), R.drawable.snake_food2);
         bmFood2 = Bitmap.createScaledBitmap(bmFood2, sizeOfMap, sizeOfMap, true);
-        for(int i = 0; i < h; ++i) {
-            for(int j = 0; j < w; ++j) {
-                    grassList.add(new Grass(bmGrass2, j* bmGrass2.getWidth() + Constants.SCREEN_WIDTH / 2 - (w/2) * bmGrass2.getWidth(),
-                            i * bmGrass2.getHeight() + 40 * Constants.SCREEN_HEIGHT/1920, bmGrass2.getHeight(), bmGrass2.getHeight()));
+
+        /* Filling the background with grass */
+
+        for (int i = 0; i < h; ++i) {
+            for (int j = 0; j < w; ++j) {
+                grassList.add(new Grass(bmGrass2, j * bmGrass2.getWidth() + Constants.SCREEN_WIDTH / 2 - (w / 2) * bmGrass2.getWidth(),
+                        i * bmGrass2.getHeight() + 40 * Constants.SCREEN_HEIGHT / 1920, bmGrass2.getHeight(), bmGrass2.getHeight()));
             }
         }
 
@@ -78,7 +91,7 @@ public class GameView extends View {
             }
         };
 
-        if(Build.VERSION.SDK_INT>=21){
+        if (Build.VERSION.SDK_INT >= 21) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_GAME)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -86,50 +99,59 @@ public class GameView extends View {
             SoundPool.Builder builder = new SoundPool.Builder();
             builder.setAudioAttributes(audioAttributes).setMaxStreams(5);
             this.soundPool = builder.build();
-        }else{
+        } else {
             soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         }
+
         this.soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
                 loadedSound = true;
             }
         });
+
         soundEat = this.soundPool.load(context, R.raw.snake_eat, 1);
         soundDie = this.soundPool.load(context, R.raw.snake_hit, 1);
 
     }
 
+    /**
+     * User input
+     *
+     * @param event
+     * @return
+     */
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int e = event.getActionMasked();
 
-        switch(e) {
+        switch (e) {
             case MotionEvent.ACTION_MOVE: {
-                if(move == false) {
+                if (move == false) {
                     mx = event.getX();
                     my = event.getY();
                     move = true;
                 } else {
-                    if(mx - event.getX() > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveR()) {
+                    if (mx - event.getX() > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveR()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMoveL(true);
                         isPlaying = true;
                         SnakeMain.txt_swipe.setVisibility(INVISIBLE);
-                    } else if(event.getX() - mx > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveL()) {
+                    } else if (event.getX() - mx > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveL()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMoveR(true);
                         isPlaying = true;
                         SnakeMain.txt_swipe.setVisibility(INVISIBLE);
-                    } else if(my - event.getY() > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveD()) {
+                    } else if (my - event.getY() > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveD()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMoveU(true);
                         isPlaying = true;
                         SnakeMain.txt_swipe.setVisibility(INVISIBLE);
-                    } else if(event.getY() - my > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveU()) {
+                    } else if (event.getY() - my > 100 * Constants.SCREEN_WIDTH / 1080 && !snake.isMoveU()) {
                         mx = event.getX();
                         my = event.getY();
                         snake.setMoveD(true);
@@ -152,24 +174,32 @@ public class GameView extends View {
         return true;
     }
 
+    /**
+     * @param canvas Draws elements on the canvas.
+     */
+
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         canvas.drawColor(0x237500);
-        for(int i = 0; i < grassList.size(); ++i) {
+        for (int i = 0; i < grassList.size(); ++i) {
             canvas.drawBitmap(grassList.get(i).getBm(), grassList.get(i).getX(), grassList.get(i).getY(), null);
         }
 
-        if(isPlaying){
+        if (isPlaying) {
             snake.update();
-            if(snake.getListPartSnake().get(0).getX() < this.grassList.get(0).getX()
-                    ||snake.getListPartSnake().get(0).getY() < this.grassList.get(0).getY()
-                    ||snake.getListPartSnake().get(0).getY()+sizeOfMap>this.grassList.get(this.grassList.size()-1).getY() + sizeOfMap
-                    ||snake.getListPartSnake().get(0).getX()+sizeOfMap>this.grassList.get(this.grassList.size()-1).getX() + sizeOfMap){
+
+            /* If the snake hits the wall - game over */
+            if (snake.getListPartSnake().get(0).getX() < this.grassList.get(0).getX()
+                    || snake.getListPartSnake().get(0).getY() < this.grassList.get(0).getY()
+                    || snake.getListPartSnake().get(0).getY() + sizeOfMap > this.grassList.get(this.grassList.size() - 1).getY() + sizeOfMap
+                    || snake.getListPartSnake().get(0).getX() + sizeOfMap > this.grassList.get(this.grassList.size() - 1).getX() + sizeOfMap) {
                 gameOver();
             }
-            for (int i = 1; i < snake.getListPartSnake().size(); i++){
-                if (snake.getListPartSnake().get(0).getBody().intersect(snake.getListPartSnake().get(i).getBody())){
+
+            /* If the snake hits itself */
+            for (int i = 1; i < snake.getListPartSnake().size(); i++) {
+                if (snake.getListPartSnake().get(0).getBody().intersect(snake.getListPartSnake().get(i).getBody())) {
                     gameOver();
                 }
             }
@@ -179,42 +209,44 @@ public class GameView extends View {
         food1.draw(canvas);
         food2.draw(canvas);
         food3.draw(canvas);
-        if(snake.getListPartSnake().get(0).getBody().intersect(food1.getRectangle())) {
-            if(loadedSound){
-                int streamId = this.soundPool.play(this.soundEat, (float)0.5, (float)0.5, 1, 0, 1f);
+
+        /* If the snake eats, play sound, draw a new food, increase score*/
+        if (snake.getListPartSnake().get(0).getBody().intersect(food1.getRectangle())) {
+            if (loadedSound) {
+                int streamId = this.soundPool.play(this.soundEat, (float) 0.5, (float) 0.5, 1, 0, 1f);
             }
             randomFood();
             food1.reset(grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
             snake.addPart();
             score++;
-            SnakeMain.txt_score.setText(score+"");
-        } else if(snake.getListPartSnake().get(0).getBody().intersect(food2.getRectangle())) {
-            if(loadedSound){
-                int streamId = this.soundPool.play(this.soundEat, (float)0.5, (float)0.5, 1, 0, 1f);
+            SnakeMain.txt_score.setText(score + "");
+        } else if (snake.getListPartSnake().get(0).getBody().intersect(food2.getRectangle())) {
+            if (loadedSound) {
+                int streamId = this.soundPool.play(this.soundEat, (float) 0.5, (float) 0.5, 1, 0, 1f);
             }
             randomFood();
             food2.reset(grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
             snake.addPart();
             score++;
-            SnakeMain.txt_score.setText(score+"");
-        } else if(snake.getListPartSnake().get(0).getBody().intersect(food3.getRectangle())) {
-            if(loadedSound){
-                int streamId = this.soundPool.play(this.soundEat, (float)0.5, (float)0.5, 1, 0, 1f);
+            SnakeMain.txt_score.setText(score + "");
+        } else if (snake.getListPartSnake().get(0).getBody().intersect(food3.getRectangle())) {
+            if (loadedSound) {
+                int streamId = this.soundPool.play(this.soundEat, (float) 0.5, (float) 0.5, 1, 0, 1f);
             }
             randomFood();
             food3.reset(grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
             snake.addPart();
             score++;
-            SnakeMain.txt_score.setText(score+"");
+            SnakeMain.txt_score.setText(score + "");
         }
 
-        if(score > bestScore){
+        if (score > bestScore) {
             bestScore = score;
             SharedPreferences sp = context.getSharedPreferences("gamesetting", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             editor.putInt("bestscore", bestScore);
             editor.apply();
-            SnakeMain.txt_best_score.setText(bestScore+"");
+            SnakeMain.txt_best_score.setText(bestScore + "");
         }
 
         handler.postDelayed(runnable, 100);
@@ -223,24 +255,24 @@ public class GameView extends View {
     private void gameOver() {
         isPlaying = false;
         SnakeMain.dialogScore.show();
-        SnakeMain.txt_dialog_best_score.setText(bestScore+"");
-        SnakeMain.txt_dialog_score.setText(score+"");
-        if(loadedSound){
-            int streamId = this.soundPool.play(this.soundDie, (float)0.5, (float)0.5, 1, 0, 1f);
+        SnakeMain.txt_dialog_best_score.setText(bestScore + "");
+        SnakeMain.txt_dialog_score.setText(score + "");
+        if (loadedSound) {
+            int streamId = this.soundPool.play(this.soundDie, (float) 0.5, (float) 0.5, 1, 0, 1f);
         }
     }
 
     public int[] randomFood() {
         int xy[] = new int[2];
         Random x = new Random();
-        xy[0] = x.nextInt(grassList.size() -1);
+        xy[0] = x.nextInt(grassList.size() - 1);
         xy[1] = x.nextInt(grassList.size() - 1);
         Rect rectangle = new Rect(grassList.get(xy[0]).getX(), grassList.get(xy[1]).getY(), grassList.get(xy[0]).getX() + sizeOfMap, grassList.get(xy[1]).getY() + sizeOfMap);
         boolean check = true;
-        while(check) {
+        while (check) {
             check = false;
-            for(int i = 0; i < snake.getListPartSnake().size(); ++i) {
-                if(rectangle.intersect(snake.getListPartSnake().get(i).getBody())) {
+            for (int i = 0; i < snake.getListPartSnake().size(); ++i) {
+                if (rectangle.intersect(snake.getListPartSnake().get(i).getBody())) {
                     check = true;
                     xy[0] = x.nextInt(grassList.size() - 1);
                     xy[1] = x.nextInt(grassList.size() - 1);
@@ -262,12 +294,17 @@ public class GameView extends View {
         return foods[x];
     }
 
-    public void reset(){
-        for(int i = 0; i < h; i++){
-            for (int j = 0; j < w; j++){
-                grassList.add(new Grass(bmGrass2, j*bmGrass2.getWidth() + Constants.SCREEN_WIDTH/2 - (w/2)*bmGrass2.getWidth(), i*bmGrass2.getHeight()+50*Constants.SCREEN_HEIGHT/1920, bmGrass2.getWidth(), bmGrass2.getHeight()));
+    /**
+     * Resetting the game
+     */
+
+    public void reset() {
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                grassList.add(new Grass(bmGrass2, j * bmGrass2.getWidth() + Constants.SCREEN_WIDTH / 2 - (w / 2) * bmGrass2.getWidth(), i * bmGrass2.getHeight() + 50 * Constants.SCREEN_HEIGHT / 1920, bmGrass2.getWidth(), bmGrass2.getHeight()));
             }
         }
+
         snake = new Snake(bmSnake, grassList.get(126).getX(), grassList.get(126).getY(), 4);
         food1 = new Food(randomFoodImage(), grassList.get(randomFood()[0]).getX(), grassList.get(randomFood()[1]).getY());
         score = 0;
