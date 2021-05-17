@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
@@ -18,6 +19,7 @@ public class GameView extends SurfaceView implements Runnable{
     private Paint paint;
     private Paint paint2;
 
+    MediaPlayer mp3,mp4;
 
 
     private Paddle paddle;
@@ -52,7 +54,7 @@ public class GameView extends SurfaceView implements Runnable{
         //_________________________________________________________________________________________________!!!
 
         paddle = new Paddle(screenY, getResources(), screenX/2, screenY - 100);
-        paddleUp = new Paddle(screenY, getResources(), screenX/2, 0);
+        paddleUp = new Paddle(screenY, getResources(), screenX/2, +100);
         ball = new Ball(screenY, screenX, getResources());
 
         shadowBall1 = new ShadowBall(screenX + 1000, screenY + 1000, getResources());
@@ -65,6 +67,20 @@ public class GameView extends SurfaceView implements Runnable{
         paint2 = new Paint();
         paint2.setColor(Color.WHITE);
         paint2.setTextSize(80);
+
+        Context context1 = getContext();
+        mp3 = MediaPlayer.create(context1, R.raw.pong_ball);
+        mp4 = MediaPlayer.create(context1, R.raw.pong_ball);
+    }
+    public void startMp3(){
+        mp3.start();
+    }
+    public void stopMp3(){
+        mp3.stop();
+    }
+
+    public void startMp4(){
+        mp4.start();
     }
 
     @Override
@@ -97,6 +113,7 @@ public class GameView extends SurfaceView implements Runnable{
 
 
         if(ball.y + ball.height > paddle.y && ball.x + ball.width > paddle.x && ball.x < paddle.x + paddle.width && ball.y < screenY - ball.height){
+            startMp4();
             //ako udari u paddle
             float Vkut = (ball.x + ball.width/2) - paddle.x;
             float kut = Vkut / paddle.width;
@@ -128,7 +145,7 @@ public class GameView extends SurfaceView implements Runnable{
         }
 
         if(ball.y + ball.height/2< paddleUp.y + paddleUp.height && ball.x + ball.width > paddleUp.x && ball.x < paddleUp.x + paddleUp.width && ball.y < screenY - ball.height){
-
+            startMp3();
             //ako udari u paddle
             float Vkut = (ball.x + ball.width/2) - paddleUp.x;
             float kut = Vkut / paddleUp.width;
@@ -175,7 +192,9 @@ public class GameView extends SurfaceView implements Runnable{
                 }
             }
         }
-
+        if((ball.y > screenY /2 - 100) && (ball.y < screenY/2 +100)){
+            //stopMp3();
+        }
     }
 
     private void draw(){
