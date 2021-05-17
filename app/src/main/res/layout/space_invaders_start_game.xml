@@ -71,21 +71,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true">
+
         <Button
             android:id="@+id/playbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#80FF9800"
-            android:onClick="startSpaceInvaders"
-            android:text="Play"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="62dp"
             android:background="@layout/space_invaders_button"
-            />
+            android:backgroundTint="#CC0AA6FA"
+            android:onClick="startSpaceInvaders"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:text="Play"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="62dp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
