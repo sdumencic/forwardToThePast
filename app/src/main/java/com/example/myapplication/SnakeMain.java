@@ -83,6 +83,14 @@ public class SnakeMain extends AppCompatActivity {
             }
         });
 
+        RelativeLayout exit = dialogScore.findViewById(R.id.exit);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeGame();
+            }
+        });
+
         dialogScore.show();
     }
 
