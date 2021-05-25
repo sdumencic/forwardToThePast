@@ -113,6 +113,7 @@ public class GameView extends SurfaceView implements Runnable {
      * Collision detection
      * Ball movement
      * AI movement
+     * Ball trail animations
      */
 
     private void update() {
