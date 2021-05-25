@@ -13,112 +13,132 @@ public class Snake {
     private int x, y, length;
     private ArrayList<PartSnake> listPartSnake = new ArrayList<>();
 
+    /**
+     * Creating snake
+     *
+     * @param bm
+     * @param x
+     * @param y
+     * @param length
+     */
+
     public Snake(Bitmap bm, int x, int y, int length) {
         this.bm = bm;
         this.x = x;
         this.y = y;
         this.length = length;
-        bodyBottomLeft = Bitmap.createBitmap(bm, 0, 0, bm.getWidth()/14, GameView.sizeOfMap);
-        bodyBottomRight = Bitmap.createBitmap(bm, bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        bodyHorizontal = Bitmap.createBitmap(bm, 2 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        bodyTopLeft = Bitmap.createBitmap(bm, 3 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        bodyTopRight = Bitmap.createBitmap(bm, 4 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        bodyVertical = Bitmap.createBitmap(bm, 5 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        down = Bitmap.createBitmap(bm, 6 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        left = Bitmap.createBitmap(bm, 7 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        right = Bitmap.createBitmap(bm, 8 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        up = Bitmap.createBitmap(bm, 9 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        tailUp = Bitmap.createBitmap(bm, 10 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        tailRight = Bitmap.createBitmap(bm, 11 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        tailLeft = Bitmap.createBitmap(bm, 12 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
-        tailDown = Bitmap.createBitmap(bm, 13 * bm.getWidth()/14, 0, bm.getWidth()/14, bm.getWidth()/14);
+        bodyBottomLeft = Bitmap.createBitmap(bm, 0, 0, bm.getWidth() / 14, GameView.sizeOfMap);
+        bodyBottomRight = Bitmap.createBitmap(bm, bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        bodyHorizontal = Bitmap.createBitmap(bm, 2 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        bodyTopLeft = Bitmap.createBitmap(bm, 3 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        bodyTopRight = Bitmap.createBitmap(bm, 4 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        bodyVertical = Bitmap.createBitmap(bm, 5 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        down = Bitmap.createBitmap(bm, 6 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        left = Bitmap.createBitmap(bm, 7 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        right = Bitmap.createBitmap(bm, 8 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        up = Bitmap.createBitmap(bm, 9 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        tailUp = Bitmap.createBitmap(bm, 10 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        tailRight = Bitmap.createBitmap(bm, 11 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        tailLeft = Bitmap.createBitmap(bm, 12 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
+        tailDown = Bitmap.createBitmap(bm, 13 * bm.getWidth() / 14, 0, bm.getWidth() / 14, bm.getWidth() / 14);
 
         listPartSnake.add(new PartSnake(right, x, y));
-        for(int i = 1; i < length - 1; ++i) {
-            listPartSnake.add(new PartSnake(bodyHorizontal, listPartSnake.get(i-1).getX() - GameView.sizeOfMap, y));
+        for (int i = 1; i < length - 1; ++i) {
+            listPartSnake.add(new PartSnake(bodyHorizontal, listPartSnake.get(i - 1).getX() - GameView.sizeOfMap, y));
         }
-        listPartSnake.add(new PartSnake(tailRight, listPartSnake.get(length-2).getX() - GameView.sizeOfMap, listPartSnake.get(length-2).getY()));
+
+        listPartSnake.add(new PartSnake(tailRight, listPartSnake.get(length - 2).getX() - GameView.sizeOfMap, listPartSnake.get(length - 2).getY()));
         setMoveR(true);
     }
 
+    /**
+     * Drawing snake
+     *
+     * @param canvas
+     */
+
     public void drawSnake(Canvas canvas) {
-        for(int i = 0; i < length; ++i) {
+        for (int i = 0; i < length; ++i) {
             canvas.drawBitmap(listPartSnake.get(i).getBm(), listPartSnake.get(i).getX(), listPartSnake.get(i).getY(), null);
         }
     }
 
+    /**
+     * Updating snake position
+     */
+
     public void update() {
-        for(int i = length - 1; i > 0; i--) {
-            listPartSnake.get(i).setX(listPartSnake.get(i-1).getX());
-            listPartSnake.get(i).setY(listPartSnake.get(i-1).getY());
+        for (int i = length - 1; i > 0; i--) {
+            listPartSnake.get(i).setX(listPartSnake.get(i - 1).getX());
+            listPartSnake.get(i).setY(listPartSnake.get(i - 1).getY());
         }
 
-        if(moveR) {
+        if (moveR) {
             listPartSnake.get(0).setX(listPartSnake.get(0).getX() + GameView.sizeOfMap);
             listPartSnake.get(0).setBm(right);
-        } else if(moveL) {
+        } else if (moveL) {
             listPartSnake.get(0).setX(listPartSnake.get(0).getX() - GameView.sizeOfMap);
             listPartSnake.get(0).setBm(left);
-        } else if(moveU) {
+        } else if (moveU) {
             listPartSnake.get(0).setY(listPartSnake.get(0).getY() - GameView.sizeOfMap);
             listPartSnake.get(0).setBm(up);
-        } else if(moveD) {
+        } else if (moveD) {
             listPartSnake.get(0).setY(listPartSnake.get(0).getY() + GameView.sizeOfMap);
             listPartSnake.get(0).setBm(down);
         }
 
-        for(int i = 1; i < length - 1; ++i) {
-            if(listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i+1).getBody()) &&
-                listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i-1).getBody()) ||
-                listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i-1).getBody()) &&
-                listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i+1).getBody())) {
-                    listPartSnake.get(i).setBm(bodyBottomLeft);
-            } else if(listPartSnake.get(i).getRight().intersect(listPartSnake.get(i+1).getBody()) &&
-                    listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i-1).getBody()) ||
-                    listPartSnake.get(i).getRight().intersect(listPartSnake.get(i-1).getBody()) &&
-                            listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i+1).getBody())) {
+        for (int i = 1; i < length - 1; ++i) {
+            if (listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i + 1).getBody()) &&
+                    listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i - 1).getBody()) ||
+                    listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i - 1).getBody()) &&
+                            listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i + 1).getBody())) {
+                listPartSnake.get(i).setBm(bodyBottomLeft);
+            } else if (listPartSnake.get(i).getRight().intersect(listPartSnake.get(i + 1).getBody()) &&
+                    listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i - 1).getBody()) ||
+                    listPartSnake.get(i).getRight().intersect(listPartSnake.get(i - 1).getBody()) &&
+                            listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i + 1).getBody())) {
                 listPartSnake.get(i).setBm(bodyBottomRight);
-            } else if(listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i+1).getBody()) &&
-                    listPartSnake.get(i).getTop().intersect(listPartSnake.get(i-1).getBody()) ||
-                    listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i-1).getBody()) &&
-                            listPartSnake.get(i).getTop().intersect(listPartSnake.get(i+1).getBody())) {
+            } else if (listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i + 1).getBody()) &&
+                    listPartSnake.get(i).getTop().intersect(listPartSnake.get(i - 1).getBody()) ||
+                    listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i - 1).getBody()) &&
+                            listPartSnake.get(i).getTop().intersect(listPartSnake.get(i + 1).getBody())) {
                 listPartSnake.get(i).setBm(bodyTopLeft);
-            } else if(listPartSnake.get(i).getRight().intersect(listPartSnake.get(i+1).getBody()) &&
-                    listPartSnake.get(i).getTop().intersect(listPartSnake.get(i-1).getBody()) ||
-                    listPartSnake.get(i).getRight().intersect(listPartSnake.get(i-1).getBody()) &&
-                            listPartSnake.get(i).getTop().intersect(listPartSnake.get(i+1).getBody())) {
+            } else if (listPartSnake.get(i).getRight().intersect(listPartSnake.get(i + 1).getBody()) &&
+                    listPartSnake.get(i).getTop().intersect(listPartSnake.get(i - 1).getBody()) ||
+                    listPartSnake.get(i).getRight().intersect(listPartSnake.get(i - 1).getBody()) &&
+                            listPartSnake.get(i).getTop().intersect(listPartSnake.get(i + 1).getBody())) {
                 listPartSnake.get(i).setBm(bodyTopRight);
-            } else if(listPartSnake.get(i).getTop().intersect(listPartSnake.get(i+1).getBody()) &&
-                    listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i-1).getBody()) ||
-                    listPartSnake.get(i).getTop().intersect(listPartSnake.get(i-1).getBody()) &&
-                            listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i+1).getBody())) {
+            } else if (listPartSnake.get(i).getTop().intersect(listPartSnake.get(i + 1).getBody()) &&
+                    listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i - 1).getBody()) ||
+                    listPartSnake.get(i).getTop().intersect(listPartSnake.get(i - 1).getBody()) &&
+                            listPartSnake.get(i).getBottom().intersect(listPartSnake.get(i + 1).getBody())) {
                 listPartSnake.get(i).setBm(bodyVertical);
-            } else if(listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i+1).getBody()) &&
-                    listPartSnake.get(i).getRight().intersect(listPartSnake.get(i-1).getBody()) ||
-                    listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i-1).getBody()) &&
-                            listPartSnake.get(i).getRight().intersect(listPartSnake.get(i+1).getBody())) {
+            } else if (listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i + 1).getBody()) &&
+                    listPartSnake.get(i).getRight().intersect(listPartSnake.get(i - 1).getBody()) ||
+                    listPartSnake.get(i).getLeft().intersect(listPartSnake.get(i - 1).getBody()) &&
+                            listPartSnake.get(i).getRight().intersect(listPartSnake.get(i + 1).getBody())) {
                 listPartSnake.get(i).setBm(bodyHorizontal);
             } else {
-                if(moveR){
+                if (moveR) {
                     listPartSnake.get(i).setBm(bodyHorizontal);
-                }else if(moveD){
+                } else if (moveD) {
                     listPartSnake.get(i).setBm(bodyVertical);
-                }else if(moveU){
+                } else if (moveU) {
                     listPartSnake.get(i).setBm(bodyVertical);
-                }else{
+                } else {
                     listPartSnake.get(i).setBm(bodyHorizontal);
                 }
             }
         }
 
-        if(listPartSnake.get(length-1).getRight().intersect(listPartSnake.get(length-2).getBody())){
-            listPartSnake.get(length-1).setBm(tailRight);
-        }else if(listPartSnake.get(length-1).getLeft().intersect(listPartSnake.get(length-2).getBody())){
-            listPartSnake.get(length-1).setBm(tailLeft);
-        }else if(listPartSnake.get(length-1).getBottom().intersect(listPartSnake.get(length-2).getBody())){
-            listPartSnake.get(length-1).setBm(tailDown);
-        }else{
-            listPartSnake.get(length-1).setBm(tailUp);
+        if (listPartSnake.get(length - 1).getRight().intersect(listPartSnake.get(length - 2).getBody())) {
+            listPartSnake.get(length - 1).setBm(tailRight);
+        } else if (listPartSnake.get(length - 1).getLeft().intersect(listPartSnake.get(length - 2).getBody())) {
+            listPartSnake.get(length - 1).setBm(tailLeft);
+        } else if (listPartSnake.get(length - 1).getBottom().intersect(listPartSnake.get(length - 2).getBody())) {
+            listPartSnake.get(length - 1).setBm(tailDown);
+        } else {
+            listPartSnake.get(length - 1).setBm(tailUp);
         }
     }
 
@@ -317,16 +337,20 @@ public class Snake {
         this.moveL = false;
     }
 
+    /**
+     * Adding a new part
+     */
+
     public void addPart() {
         PartSnake p = this.listPartSnake.get(length - 1);
         this.length += 1;
-        if(p.getBm() == tailRight) {
+        if (p.getBm() == tailRight) {
             this.listPartSnake.add(new PartSnake(tailRight, p.getX() - GameView.sizeOfMap, p.getY()));
-        } else if(p.getBm() == tailLeft) {
+        } else if (p.getBm() == tailLeft) {
             this.listPartSnake.add(new PartSnake(tailLeft, p.getX() + GameView.sizeOfMap, p.getY()));
-        } else if(p.getBm() == tailUp) {
+        } else if (p.getBm() == tailUp) {
             this.listPartSnake.add(new PartSnake(tailUp, p.getX(), p.getY() + GameView.sizeOfMap));
-        } else if(p.getBm() == tailDown) {
+        } else if (p.getBm() == tailDown) {
             this.listPartSnake.add(new PartSnake(tailDown, p.getX(), p.getY() - GameView.sizeOfMap));
         }
     }
