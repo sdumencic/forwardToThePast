@@ -10,6 +10,7 @@ import static pong.GameView.screenRatioX;
 import static pong.GameView.screenRatioY;
 
 public class ShadowBall {
+    public static int quartet = 0;
     int x, y, width, height, speedX = 0, speedY = -10;
     boolean isVisible = false;
     Bitmap ball;
@@ -37,17 +38,28 @@ public class ShadowBall {
         y = screenY / 2 - ball.getHeight() / 2;
         x = screenX / 2 - ball.getWidth() / 2;
     }
+    public void fade(Ball ball) {
+        if (this.isVisible == false) {
+            this.y = ball.y;
+            this.x = ball.x;
+            this.isVisible = true;
+            this.width = ball.width;
+            this.height = ball.height;
+            this.ball = Bitmap.createScaledBitmap(ball.ball, (int) (ball.width / 1.2), (int) (ball.height / 1.2), false);
+        } else {
 
-    public void shrink() {
-        this.ball = Bitmap.createScaledBitmap(ball, (int) (this.width / 1.1), (int) (this.height / 1.1), false);
-    }
+            if (this.width <= 12 || this.width <= 12) {
+                x = 2000;
+                y = 2000;
+                this.isVisible = false;
+            } else {
+                height /= 1.1;
+                width /= 1.1;
+                x += 1;
+                y += 1;
+                this.ball = Bitmap.createScaledBitmap(ball.ball, width, height, false);
+            }
+        }
 
-    public void move(Ball ball1) {
-        this.height = ball1.height;
-        this.width = ball1.width;
-        this.x = ball1.x;
-        this.y = ball1.y;
-        isVisible = true;
-        this.ball = Bitmap.createScaledBitmap(ball, this.width, this.height, false);
     }
 }

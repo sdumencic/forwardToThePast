@@ -11,6 +11,13 @@ public class GameActivity extends AppCompatActivity {
     private GameView gameView;
     public static ImageView close;
 
+    /**
+     * Gets display size to properly scale Bitmaps
+     * Starts a game
+     *
+     * @param savedInstanceState
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -25,12 +32,19 @@ public class GameActivity extends AppCompatActivity {
         setContentView(gameView);
     }
 
+    /**
+     * Pausing the game
+     */
 
     @Override
     protected void onPause() {
         super.onPause();
         gameView.pause();
     }
+
+    /**
+     * Resuming the game
+     */
 
     @Override
     protected void onResume() {

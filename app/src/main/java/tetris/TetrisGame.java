@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.TetrisActivity;
 
 public class TetrisGame extends AppCompatActivity implements Rotation.eventListen {
 
@@ -56,9 +58,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     Bitmap tetrisGhost;
     public static String playMode = "Marathon";
     public static int sprintUpdate = 50;
-    long pausedSprintTimeStart = 0;
     String sprintTimeString = "";
-    public static String sprintHighscore = "";
 
     public Boolean lockInAir = false;
     public Boolean canRotate = true;
@@ -332,6 +332,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
 
     public void lose() {
         notLose = false;
+        TetrisActivity.soundEnd.start();
         for (int i = 0; i <= 7; i++)
             timer.removeMessages(i);
 
@@ -1026,7 +1027,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             tetrisBoardColor[5][21 - 1] = random;
         } else if (random == 6) {
             tetrisBoard[5][22 - 1] = true;
-            Rotation.point1.set(5, 22 - 1); // S PIECE *
+            Rotation.point1.set(5, 22 - 1); // S
             tetrisBoard[4][22 - 1] = true;
             Rotation.point2.set(4, 22 - 1);                         //Center
             tetrisBoard[4][21 - 1] = true;
@@ -1873,6 +1874,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             }
             TV3.setText("Lines : " + lines);
             TV2.setText("Score : " + score);
+            TetrisActivity.soundBreak.start();
 
         } else if (playMode.equals("Sprint")) {
 
@@ -1954,7 +1956,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                     case 0: {
 
                         if (!softDrop) {
-                            Log.d("Muffin", "Pie");
+                            //Log.d("Muffin", "Pie");
                             for (int i = 0; i <= 29; i++) {
                                 for (int j = 0; j < 10; j++) {
                                     if (!tetrisBoardLock[j][i]) {
@@ -2003,7 +2005,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                     if (!tetrisBoardLock[j][i]) {
                                         if (tetrisBoard[j][i]) {
 
-                                            Log.d("tag", "handleMessage-1 " + j + " / " + i);
+                                            //Log.d("tag", "handleMessage-1 " + j + " / " + i);
                                             tetrisBoard[j][i - 1] = true;
                                             tetrisBoardColor[j][i - 1] = random;
                                             tetrisBoard[j][i] = false;
@@ -2031,7 +2033,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                         break;
                     }
                     case 3: {
-                        Log.d("Muffin", "Pie");
+                        //Log.d("Muffin", "Pie");
                         for (int i = 0; i <= 29; i++) {
                             for (int j = 0; j < 10; j++) {
                                 if (!tetrisBoardLock[j][i]) {
@@ -2080,7 +2082,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                 if (!tetrisBoardLock[j][i]) {
                                     if (tetrisBoard[j][i]) {
 
-                                        Log.d("tag", "handleMessage-1 " + j + " / " + i);
+                                        //Log.d("tag", "handleMessage-1 " + j + " / " + i);
                                         tetrisBoard[j][i - 1] = true;
                                         tetrisBoardColor[j][i - 1] = random;
                                         tetrisBoard[j][i] = false;
