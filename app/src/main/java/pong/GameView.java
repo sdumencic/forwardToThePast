@@ -18,10 +18,12 @@ public class GameView extends SurfaceView implements Runnable {
     private int screenX, screenY;
     private Paint paint;
     private Paint paint2;
+    private Paint paint3;
     private Paddle paddle;
     private Paddle paddleUp;
     private Ball ball;
-    private ShadowBall shadowBall1;
+    private ShadowBall shadowBall1, shadowBall2, shadowBall3, shadowBall4, shadowBall5, shadowBall6, shadowBall7, shadowBall8;
+
 
     public static float screenRatioX, screenRatioY;
     private Background background1;
@@ -51,12 +53,22 @@ public class GameView extends SurfaceView implements Runnable {
         ball = new Ball(screenY, screenX, getResources());
 
         shadowBall1 = new ShadowBall(screenX + 1000, screenY + 1000, getResources());
+        shadowBall2 = new ShadowBall(screenX + 1000, screenY + 1000, getResources());
+        shadowBall3 = new ShadowBall(screenX + 1000, screenY + 1000, getResources());
+        shadowBall4 = new ShadowBall(screenX + 1000, screenY + 1000, getResources());
+        shadowBall5 = new ShadowBall(screenX + 1000, screenY + 1000, getResources());
+        shadowBall6 = new ShadowBall(screenX + 1000, screenY + 1000, getResources());
+        shadowBall7 = new ShadowBall(screenX + 1000, screenY + 1000, getResources());
+        shadowBall8 = new ShadowBall(screenX + 1000, screenY + 1000, getResources());
 
 
         paint = new Paint();
         paint2 = new Paint();
         paint2.setColor(Color.WHITE);
         paint2.setTextSize(80);
+
+        paint3 = new Paint();
+        paint3.setAlpha(100);
 
         Context context1 = getContext();
         mp3 = MediaPlayer.create(context1, R.raw.pong_ball);
@@ -102,6 +114,54 @@ public class GameView extends SurfaceView implements Runnable {
      */
 
     private void update() {
+        if(ShadowBall.quartet >= 0){
+            shadowBall1.fade(ball);
+            if(ShadowBall.quartet==0 && shadowBall1.height <= ball.height / 1.2){
+                ShadowBall.quartet++;
+            }
+        }
+        if(ShadowBall.quartet >= 1){
+            shadowBall2.fade(ball);
+            if(ShadowBall.quartet==1 && shadowBall2.height <= ball.height / 1.2){
+                ShadowBall.quartet++;
+            }
+        }
+        if(ShadowBall.quartet >= 2){
+            shadowBall3.fade(ball);
+            if(ShadowBall.quartet==2 && shadowBall3.height <= ball.height / 1.2){
+                ShadowBall.quartet++;
+            }
+        }
+        if(ShadowBall.quartet >= 3){
+            shadowBall4.fade(ball);
+            if(ShadowBall.quartet==3 && shadowBall4.height <= ball.height / 1.2){
+                ShadowBall.quartet++;
+            }
+        }
+        if(ShadowBall.quartet >= 4){
+            shadowBall5.fade(ball);
+            if(ShadowBall.quartet==4 && shadowBall5.height <= ball.height / 1.2){
+                ShadowBall.quartet++;
+            }
+        }
+        if(ShadowBall.quartet >= 5){
+            shadowBall6.fade(ball);
+            if(ShadowBall.quartet==5 && shadowBall6.height <= ball.height / 1.2){
+                ShadowBall.quartet++;
+            }
+        }
+        if(ShadowBall.quartet >= 6){
+            shadowBall7.fade(ball);
+            if(ShadowBall.quartet==6 && shadowBall7.height <= ball.height / 1.2){
+                ShadowBall.quartet++;
+            }
+        }
+        if(ShadowBall.quartet >= 7){
+            shadowBall8.fade(ball);
+            if(ShadowBall.quartet==7 && shadowBall8.height <= ball.height / 1.2){
+                ShadowBall.quartet++;
+            }
+        }
 
         if (ball.x < 0) {
             ball.speedX *= -1;
@@ -198,7 +258,14 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawBitmap(paddle.paddle, paddle.x, paddle.y, paint);
             canvas.drawBitmap(paddleUp.paddle, paddleUp.x, paddleUp.y, paint);
             canvas.drawBitmap(ball.ball, ball.x, ball.y, paint);
-            canvas.drawBitmap(shadowBall1.ball, shadowBall1.x, shadowBall1.y, paint);
+            canvas.drawBitmap(shadowBall1.ball, shadowBall1.x, shadowBall1.y, paint3);
+            canvas.drawBitmap(shadowBall2.ball, shadowBall2.x, shadowBall2.y, paint3);
+            canvas.drawBitmap(shadowBall3.ball, shadowBall3.x, shadowBall3.y, paint3);
+            canvas.drawBitmap(shadowBall4.ball, shadowBall4.x, shadowBall4.y, paint3);
+            canvas.drawBitmap(shadowBall5.ball, shadowBall5.x, shadowBall5.y, paint3);
+            canvas.drawBitmap(shadowBall6.ball, shadowBall6.x, shadowBall6.y, paint3);
+            canvas.drawBitmap(shadowBall7.ball, shadowBall7.x, shadowBall7.y, paint3);
+            canvas.drawBitmap(shadowBall8.ball, shadowBall8.x, shadowBall8.y, paint3);
             canvas.drawText(String.valueOf(paddle.score), 0, screenY / 2 + 75, paint2);
             canvas.save();
             canvas.rotate(180f, screenX / 2, screenY / 2);

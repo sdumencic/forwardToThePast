@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".SnakeMain">
 
     <snake.GameView
         android:id="@+id/gameview"
@@ -31,7 +31,7 @@
                 android:orientation="horizontal"
                 android:layout_centerInParent="true">
                 <ImageView
-                    android:src="@drawable/snake_food3"
+                    android:src="@drawable/score"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:scaleType="fitXY"/>
@@ -91,5 +91,15 @@
         android:text="Swipe to start"
         android:textSize="30dp"
         android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
 </RelativeLayout>

@@ -10,6 +10,12 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
     private Button button;
 
+    /**
+     * Shows play button that opens the menu
+     *
+     * @param savedInstanceState
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
