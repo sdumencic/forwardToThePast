@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import android.media.MediaPlayer;
 
 import android.view.View;
 
@@ -16,6 +17,8 @@ public class TetrisActivity extends AppCompatActivity {
 
     TetrisGame parent;
     SharedPreferences mPref;
+    public static MediaPlayer soundEnd;
+    public static MediaPlayer soundBreak;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class TetrisActivity extends AppCompatActivity {
     }
 
     public void onStart(View v) {
+        soundEnd = MediaPlayer.create(this, R.raw.tetris_end);
+        soundBreak = MediaPlayer.create(this, R.raw.tetris1);
         Intent intent = new Intent(this, TetrisGame.class);
         startActivity(intent);
     }
