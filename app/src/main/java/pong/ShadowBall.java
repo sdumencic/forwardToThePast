@@ -38,6 +38,12 @@ public class ShadowBall {
         y = screenY / 2 - ball.getHeight() / 2;
         x = screenX / 2 - ball.getWidth() / 2;
     }
+
+    /***
+     * Trail from the ball
+     * @param ball
+     */
+
     public void fade(Ball ball) {
         if (this.isVisible == false) {
             this.y = ball.y;
