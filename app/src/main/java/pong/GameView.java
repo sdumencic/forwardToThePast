@@ -25,6 +25,7 @@ public class GameView extends SurfaceView implements Runnable {
     private ShadowBall shadowBall1, shadowBall2, shadowBall3, shadowBall4, shadowBall5, shadowBall6, shadowBall7, shadowBall8;
 
 
+
     public static float screenRatioX, screenRatioY;
     private Background background1;
     private boolean isBotPlaying = true;
@@ -36,6 +37,7 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     public GameView(Context context, int screenX, int screenY) {
+
         super(context);
         this.screenX = screenX;
         this.screenY = screenY;
@@ -43,7 +45,7 @@ public class GameView extends SurfaceView implements Runnable {
         screenRatioY = 1080f / screenY;
 
         background1 = new Background(screenX, screenY, getResources());
-
+        ShadowBall.quartet = 0;
 
         bg_crta = BitmapFactory.decodeResource(getResources(), R.drawable.bg_crta);
 
@@ -258,6 +260,7 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawBitmap(paddle.paddle, paddle.x, paddle.y, paint);
             canvas.drawBitmap(paddleUp.paddle, paddleUp.x, paddleUp.y, paint);
             canvas.drawBitmap(ball.ball, ball.x, ball.y, paint);
+
             canvas.drawBitmap(shadowBall1.ball, shadowBall1.x, shadowBall1.y, paint3);
             canvas.drawBitmap(shadowBall2.ball, shadowBall2.x, shadowBall2.y, paint3);
             canvas.drawBitmap(shadowBall3.ball, shadowBall3.x, shadowBall3.y, paint3);
@@ -266,6 +269,7 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawBitmap(shadowBall6.ball, shadowBall6.x, shadowBall6.y, paint3);
             canvas.drawBitmap(shadowBall7.ball, shadowBall7.x, shadowBall7.y, paint3);
             canvas.drawBitmap(shadowBall8.ball, shadowBall8.x, shadowBall8.y, paint3);
+
             canvas.drawText(String.valueOf(paddle.score), 0, screenY / 2 + 75, paint2);
             canvas.save();
             canvas.rotate(180f, screenX / 2, screenY / 2);
