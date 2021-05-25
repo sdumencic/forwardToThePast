@@ -10,16 +10,14 @@ import static pong.GameView.screenRatioX;
 import static pong.GameView.screenRatioY;
 
 public class Ball {
-    int x,y, width, height, speedX = 0, speedY = -15;
+    int x, y, width, height, speedX = 0, speedY = -15;
     Bitmap ball;
 
-    Ball (int screenY, int screenX, Resources res){
+    Ball(int screenY, int screenX, Resources res) {
         ball = BitmapFactory.decodeResource(res, R.drawable.ball);
 
         width = ball.getWidth();
         height = ball.getHeight();
-        //width /= 4;
-        //height /= 4;
 
         screenRatioY *= 10;
         screenRatioX *= 10;
@@ -30,14 +28,12 @@ public class Ball {
         height /= 15;
         width /= 15;
 
-        screenRatioX/=10;
-        screenRatioY/=10;
+        screenRatioX /= 10;
+        screenRatioY /= 10;
 
 
         ball = Bitmap.createScaledBitmap(ball, width, height, false);
-        y = screenY/2 - ball.getHeight()/2;
-        x = screenX/2 - ball.getWidth()/2;
+        y = screenY / 2 - ball.getHeight() / 2;
+        x = screenX / 2 - ball.getWidth() / 2;
     }
-
-
 }
