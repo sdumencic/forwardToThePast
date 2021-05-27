@@ -1,12 +1,14 @@
 package com.example.myapplication;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-
+import android.widget.Button;
+import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
-
 import space_invaders.Constants;
 import space_invaders.SpaceInvadersView;
 
@@ -19,6 +21,8 @@ import space_invaders.SpaceInvadersView;
 
 public class SpaceInvadersActivity extends AppCompatActivity {
     SpaceInvadersView spaceInvadersView;
+    private Button closeButton;
+    private ImageButton soundButton;
 
     /**
      * onCreate() method initializes game instance.
@@ -35,7 +39,28 @@ public class SpaceInvadersActivity extends AppCompatActivity {
         // Initialize game view and set it as the view if play button is clicked
         spaceInvadersView = new SpaceInvadersView(this, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         setContentView(R.layout.space_invaders_start_game);
+
+        closeButton = (Button) findViewById(R.id.closebutton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                closeSpaceInvaders();
+            }
+        });
+
+        soundButton = (ImageButton) findViewById(R.id.soundbutton);
+        soundButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                spaceInvadersView.sound = !spaceInvadersView.sound;
+                if (spaceInvadersView.sound) {
+                    soundButton.setBackgroundResource(R.drawable.space_invaders_sound_on);
+                } else {
+                    soundButton.setBackgroundResource(R.drawable.space_invaders_sound_off);
+                }
+            }
+        });
+
     }
+
 
     /**
      * onResume() method executes when the player starts the game.
@@ -86,4 +111,11 @@ public class SpaceInvadersActivity extends AppCompatActivity {
     public void startSpaceInvaders(View view) {
         setContentView(spaceInvadersView);
     }
+
+    public void closeSpaceInvaders() {
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
+    }
+
+
 }
