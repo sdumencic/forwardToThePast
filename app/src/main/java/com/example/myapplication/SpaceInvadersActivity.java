@@ -113,8 +113,7 @@ public class SpaceInvadersActivity extends AppCompatActivity {
     }
 
     public void closeSpaceInvaders() {
-        Intent intent = new Intent(this, MainMenu.class);
-        startActivity(intent);
+        finish();
     }
 
 
