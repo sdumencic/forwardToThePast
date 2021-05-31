@@ -1410,6 +1410,8 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                 }
             }
         }
+
+        TetrisActivity.soundBreak.start();
     }
 
     public void hardDrop() {
@@ -1754,6 +1756,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                         B2B = true;
                     }
                 }
+
             } else if (TSpin) {
                 if (linesClearedAtOnce == 1) {
                     if (B2B) {
@@ -1839,6 +1842,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                     }
                 }
                 B2B = true;
+
             } else {
                 if (linesClearedAtOnce == 1) {
                     score += 100 * (level + 1) + combo * 50;
@@ -1874,43 +1878,6 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             }
             TV3.setText("Lines : " + lines);
             TV2.setText("Score : " + score);
-            TetrisActivity.soundBreak.start();
-
-        } else if (playMode.equals("Sprint")) {
-
-            for (int runs = 0; runs < 3; runs++) {
-                for (int j = 0; j < 26; j++) {
-                    bigif:
-                    if (tetrisBoardLock[0][j]) {
-                        for (int i = 0; i < 10; i++) {
-                            if (tetrisBoardLock[i][j]) {
-                            } else {
-                                break bigif;
-                            }
-                        }
-                        lines += 1;
-                        for (int i = 0; i < 10; i++) {
-                            tetrisBoardLock[i][j] = false;
-                            tetrisBoardColor[i][j] = 7;
-                        }
-                        for (int i = 0; i < 10; i++) {
-                            for (int k = j; k < 30; k++) {
-                                if (tetrisBoardLock[i][k]) {
-                                    tetrisBoardLock[i][k] = false;
-                                    tetrisBoardLock[i][k - 1] = true;
-                                    tetrisBoardColor[i][k - 1] = tetrisBoardColor[i][k];
-                                    tetrisBoardColor[i][k] = 7;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            TV3.setText("Lines : " + lines);
-            if (lines >= 40) {/////////////////////////////////////////////////////////////////////////////////////SPRINT WIN CONDITION/////////////////////////////
-                lose();
-            }
         }
     }
 
