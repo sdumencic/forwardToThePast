@@ -1,5 +1,6 @@
 package space_invaders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -17,7 +19,6 @@ import android.view.SurfaceView;
 import androidx.core.content.ContextCompat;
 import com.example.myapplication.R;
 import com.example.myapplication.SpaceInvadersActivity;
-
 
 /**
  * SpaceInvadersView class represents the view of the game.
@@ -34,6 +35,9 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
     // Game is paused until the player touches the screen.
     private boolean paused = true;
+
+    //toggle sound
+    public boolean sound = true;
 
     private Canvas canvas;
     private Paint paint;
@@ -93,7 +97,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
 
     /**
-     * Here will be initialized all of the game objects.
+     * Play() initializes all of the game objects.
      */
     private void play() {
         // Instance all of the game objects.
@@ -166,12 +170,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                 if (invaders[i].shootTheTarget(spaceShip.getX(),
                         spaceShip.getLength())) {
 
-                    if (invadersBullets[nextBullet].shoot(invaders[i].getX()
-                                    + invaders[i].getLength() / 2,
-                            invaders[i].getY(), laser.DOWN)) {
-
-                        MediaPlayer invaderShootSound = MediaPlayer.create(context, R.raw.space_invaders_enemy);
-                        invaderShootSound.start();
+                    if (invadersBullets[nextBullet].shoot(invaders[i].getX() + invaders[i].getLength() / 2, invaders[i].getY(), laser.DOWN)) {
                         nextBullet++;
 
                         if (nextBullet == maxInvaderBullets) {
@@ -232,8 +231,11 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
                         if (score == killed * 10) {
                             // Player has won the game, get back to start view.
-                            Intent intent = new Intent(context, SpaceInvadersActivity.class);
-                            context.startActivity(intent);
+                            if (sound) {
+                                MediaPlayer endSound = MediaPlayer.create(context, R.raw.space_invaders_end);
+                                endSound.start();
+                            }
+                            gameOver();
                         }
                     }
                 }
@@ -276,10 +278,11 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                     lives--;
 
                     if (lives == 0) {
-                        MediaPlayer laserSound = MediaPlayer.create(context, R.raw.space_invaders_end);
-                        laserSound.start();
-                        Intent intent = new Intent(context, SpaceInvadersActivity.class);
-                        context.startActivity(intent);
+                        if (sound) {
+                            MediaPlayer endSound = MediaPlayer.create(context, R.raw.space_invaders_end);
+                            endSound.start();
+                        }
+                        gameOver();
                     }
                 }
             }
@@ -294,10 +297,11 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                     // Game is lost.
                     if (RectF.intersects(defence[j].getRect(), invaders[i].getRect())) {
                         invadersBullets[i].setInactive();
-                        MediaPlayer laserSound = MediaPlayer.create(context, R.raw.space_invaders_end);
-                        laserSound.start();
-                        Intent intent = new Intent(context, SpaceInvadersActivity.class);
-                        context.startActivity(intent);
+                        if (sound) {
+                            MediaPlayer endSound = MediaPlayer.create(context, R.raw.space_invaders_end);
+                            endSound.start();
+                        }
+                        gameOver();
                     }
                 }
             }
@@ -379,6 +383,9 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
 
     // Overridden method from java SurfaceView
+    // Tap beyond defence blocks to fire the laser bullet.
+    // Tap or hold finger on the bottom left side of the screen to move the ship left.
+    // Tap or hold finger on the bottom right side of the screen to move the ship right.
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
@@ -404,9 +411,12 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                 if (motionEvent.getY() < Constants.SCREEN_HEIGHT - Constants.SCREEN_HEIGHT / 8) {
                     // Calculate shooting start coordinates and add sound
                     if (laser.shoot(spaceShip.getX() +
-                            spaceShip.getLength() / 2 - Constants.SCREEN_WIDTH / 60, Constants.SCREEN_HEIGHT - spaceShip.getHeight(), laser.UP)) {
-                        MediaPlayer laserSound = MediaPlayer.create(context, R.raw.space_invaders_shoot);
-                        laserSound.start();
+                            spaceShip.getLength() / 2 - Constants.SCREEN_WIDTH / 60, Constants.SCREEN_HEIGHT - spaceShip.getHeight() -
+                            spaceShip.getHeight()/4, laser.UP)) {
+                        if (sound) {
+                            MediaPlayer laserSound = MediaPlayer.create(context, R.raw.space_invaders_shoot);
+                            laserSound.start();
+                        }
                     }
                 }
                 break;
@@ -425,7 +435,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
 
     /**
-     * If SpaceInvadersActivity is paused/stopped
+     * If SpaceInvadersActivity is paused/stopped,
      * shutdown game thread.
      */
     public void pause() {
@@ -444,5 +454,11 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
         gameOn = true;
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void gameOver() {
+        Intent intent = new Intent(context, SpaceInvadersActivity.class);
+        context.startActivity(intent);
+        ((Activity) context).finish();
     }
 }

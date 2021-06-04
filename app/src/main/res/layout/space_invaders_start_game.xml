@@ -14,7 +14,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/space_invaders_killed"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="0dp">
             </ImageView>
             <ImageView
                 android:layout_width="50dp"
@@ -43,7 +43,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/space_invaders_killed"
-                android:layout_marginLeft="60dp">
+                android:layout_marginLeft="45dp">
             </ImageView>
             <ImageView
                 android:layout_width="50dp"
@@ -71,21 +71,52 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true">
-
         <Button
             android:id="@+id/playbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="64dp"
             android:background="@layout/space_invaders_button"
             android:backgroundTint="#CC0AA6FA"
             android:onClick="startSpaceInvaders"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:layout_marginBottom="20dp"
             android:text="Play"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="62dp" />
+            android:textSize="40dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+            <ImageButton
+                android:id="@+id/soundbutton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/space_invaders_sound_on"
+                android:alpha="0.8"></ImageButton>
+            <Button
+                android:id="@+id/closebutton"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="15dp"
+                android:background="@layout/space_invaders_button"
+                android:backgroundTint="#CC566FAA"
+                android:paddingLeft="0dp"
+                android:paddingTop="0dp"
+                android:paddingRight="0dp"
+                android:paddingBottom="0dp"
+                android:text="Quit"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="22dp"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -100,7 +131,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/space_invaders_killed"
-                android:layout_marginLeft="60dp">
+                android:layout_marginLeft="45dp">
             </ImageView>
             <ImageView
                 android:layout_width="50dp"
@@ -129,7 +160,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/space_invaders_killed"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="0dp">
             </ImageView>
             <ImageView
                 android:layout_width="50dp"
