@@ -24,5 +24,12 @@ public class PongActivity extends AppCompatActivity {
                 startActivity(new Intent(PongActivity.this, GameActivity.class));
             }
         });
+
+        findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }

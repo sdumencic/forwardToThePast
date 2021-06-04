@@ -3,13 +3,11 @@ package pong;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
     private GameView gameView;
-    public static ImageView close;
 
     /**
      * Gets display size to properly scale Bitmaps
