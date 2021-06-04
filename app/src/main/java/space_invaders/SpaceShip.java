@@ -13,12 +13,12 @@ public class SpaceShip {
     private Bitmap bitmap;
 
     // Spaceship dimensions
-    private float length;
-    private float height;
+    public float length;
+    public float height;
 
     // Dimensions of rectangle in which the spaceship will be drawn
-    private float x;
-    private float y;
+    public float x;
+    public float y;
 
     private float shipSpeed;
 
