@@ -8,15 +8,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
 import androidx.core.content.ContextCompat;
+
 import com.example.myapplication.R;
 import com.example.myapplication.SpaceInvadersActivity;
 
@@ -76,6 +80,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     /**
      * SpaceInvadersView() constructor is called everytime
      * the new game instance is created.
+     *
      * @param context
      * @param x
      * @param y
@@ -109,7 +114,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
         }
 
         killed = 0;
-        for (int column = 0; column < 4 ; column++) {
+        for (int column = 0; column < 4; column++) {
             for (int row = 0; row < 5; row++) {
                 invaders[killed] = new Invader(context, row, column, screenX, screenY);
                 killed++;
@@ -360,22 +365,22 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
             }
 
             paint.setColor(Color.argb(130, 0, 51, 102));
-            canvas.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT/20, paint);
+            canvas.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT / 20, paint);
 
 
             Drawable remaining_lives = ContextCompat.getDrawable(context, R.drawable.space_invaders_lives);
-            remaining_lives.setBounds(Constants.SCREEN_WIDTH-180, 10, Constants.SCREEN_WIDTH-100, Constants.SCREEN_HEIGHT/20-10);
+            remaining_lives.setBounds(Constants.SCREEN_WIDTH - 180, 10, Constants.SCREEN_WIDTH - 100, Constants.SCREEN_HEIGHT / 20 - 10);
             remaining_lives.draw(canvas);
             paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(40);
-            canvas.drawText(String.valueOf(lives), Constants.SCREEN_WIDTH-90, Constants.SCREEN_HEIGHT/30, paint);
+            canvas.drawText(String.valueOf(lives), Constants.SCREEN_WIDTH - 90, Constants.SCREEN_HEIGHT / 30, paint);
 
             Drawable coins = ContextCompat.getDrawable(context, R.drawable.space_invaders_killed);
-            coins.setBounds(Constants.SCREEN_WIDTH-375, 10, Constants.SCREEN_WIDTH-300, Constants.SCREEN_HEIGHT/20-10);
+            coins.setBounds(Constants.SCREEN_WIDTH - 375, 10, Constants.SCREEN_WIDTH - 300, Constants.SCREEN_HEIGHT / 20 - 10);
             coins.draw(canvas);
             paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(40);
-            canvas.drawText(String.valueOf(score), Constants.SCREEN_WIDTH-290, Constants.SCREEN_HEIGHT/30, paint);
+            canvas.drawText(String.valueOf(score), Constants.SCREEN_WIDTH - 290, Constants.SCREEN_HEIGHT / 30, paint);
 
             screenHolder.unlockCanvasAndPost(canvas);
         }
@@ -387,49 +392,36 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     // Tap or hold finger on the bottom left side of the screen to move the ship left.
     // Tap or hold finger on the bottom right side of the screen to move the ship right.
     @Override
-    public boolean onTouchEvent(MotionEvent motionEvent) {
+    public boolean onTouchEvent(MotionEvent event) {
 
-        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-
+        if (event.getAction() > 0) {
             // Player has touched the screen
-            case MotionEvent.ACTION_DOWN:
-
-                paused = false;
-
-                // Detects motions in the lower part of the screen where the spaceship is
-                // LEFT and RIGHT controls
-                if (motionEvent.getY() > Constants.SCREEN_HEIGHT - Constants.SCREEN_HEIGHT / 8) {
-                    if (motionEvent.getX() > Constants.SCREEN_WIDTH / 2) {
-                        spaceShip.setMovementState(spaceShip.RIGHT);
-                    } else {
-                        spaceShip.setMovementState(spaceShip.LEFT);
-                    }
-
-                }
-
-                // Spaceship bullet touch control
-                if (motionEvent.getY() < Constants.SCREEN_HEIGHT - Constants.SCREEN_HEIGHT / 8) {
-                    // Calculate shooting start coordinates and add sound
-                    if (laser.shoot(spaceShip.getX() +
-                            spaceShip.getLength() / 2 - Constants.SCREEN_WIDTH / 60, Constants.SCREEN_HEIGHT - spaceShip.getHeight() -
-                            spaceShip.getHeight()/4, laser.UP)) {
-                        if (sound) {
-                            MediaPlayer laserSound = MediaPlayer.create(context, R.raw.space_invaders_shoot);
-                            laserSound.start();
-                        }
-                    }
-                }
-                break;
-
-            // Player has removed finger from screen
-            case MotionEvent.ACTION_UP:
-
-                if (motionEvent.getY() > screenY - screenY / 10) {
-                    spaceShip.setMovementState(spaceShip.STOPPED);
-                }
-
-                break;
+            paused = false;
         }
+
+        // Detects motions in the lower part of the screen where the spaceship is
+        // LEFT and RIGHT controls
+        if (event.getY() > screenY / 2) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_MOVE:
+                    spaceShip.x = (int) event.getX() - spaceShip.length / 2;
+                    break;
+            }
+        }
+
+        // Spaceship bullet touch control
+        if (event.getY() < Constants.SCREEN_HEIGHT - Constants.SCREEN_HEIGHT / 8) {
+            // Calculate shooting start coordinates and add sound
+            if (laser.shoot(spaceShip.getX() +
+                    spaceShip.getLength() / 2 - Constants.SCREEN_WIDTH / 60, Constants.SCREEN_HEIGHT - spaceShip.getHeight() -
+                    spaceShip.getHeight() / 4, laser.UP)) {
+                if (sound) {
+                    MediaPlayer laserSound = MediaPlayer.create(context, R.raw.space_invaders_shoot);
+                    laserSound.start();
+                }
+            }
+        }
+
         return true;
     }
 
