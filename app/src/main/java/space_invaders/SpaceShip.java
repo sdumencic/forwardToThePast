@@ -34,8 +34,8 @@ public class SpaceShip {
 
         //Initializes blank rectangle for spaceship object and scale dimensions
         rect = new RectF();
-        length = screenX / 3;
-        height = screenY / 5;
+        length = screenX / 5;
+        height = screenY / 7;
 
         // Start ship rectangle in the center of the screen
         x = (float) (screenX / 3);

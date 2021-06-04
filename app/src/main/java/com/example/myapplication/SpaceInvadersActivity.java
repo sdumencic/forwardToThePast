@@ -52,9 +52,9 @@ public class SpaceInvadersActivity extends AppCompatActivity {
             public void onClick(View v) {
                 spaceInvadersView.sound = !spaceInvadersView.sound;
                 if (spaceInvadersView.sound) {
-                    soundButton.setBackgroundResource(R.drawable.space_invaders_sound_on);
+                    soundButton.setBackgroundResource(R.drawable.sound);
                 } else {
-                    soundButton.setBackgroundResource(R.drawable.space_invaders_sound_off);
+                    soundButton.setBackgroundResource(R.drawable.soundoff);
                 }
             }
         });
