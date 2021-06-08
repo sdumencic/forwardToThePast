@@ -333,20 +333,11 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
     public void lose() {
         notLose = false;
         TetrisActivity.soundEnd.start();
-        for (int i = 0; i <= 7; i++)
+        for (int i = 0; i <= 7; i++) {
             timer.removeMessages(i);
-
-        if (score < 1000) {
-            TV.setText("You lose! \nFinal Score:" + "\n" + score + " Points...");
-        } else if (score < 5000) {
-            TV.setText("You lose! \nFinal Score:" + "\n" + score + " Points");
-        } else if (score < 15000) {
-            TV.setText("You lose! \nFinal Score:" + "\n" + score + " Points!");
-        } else if (score < 35000) {
-            TV.setText("You lose! \nFinal Score:" + "\n" + score + " Points!!!");
-        } else {
-            TV.setText("You lose! \nFinal Score:" + "\nINCREDIBLE\n" + score + " POINTS!!!");
         }
+
+        TV.setText("Final Score:" + " " + score + " Points");
 
         readPreferences();
         mainView.invalidate();
@@ -432,9 +423,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             IV4.setImageResource(R.drawable.tetrisgray);
                             TV.setText("");
                             TV2.setText("Score : 0");
-                            TV3.setText("Level : 0");
                             TV4.setText("Lines : 0");
-                            TV5.setText("Points!");
                             canRotate = true;
                             notLose = true;
                             dontWorryAboutIt = true;
@@ -480,9 +469,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             IV4.setImageResource(R.drawable.tetrisgray);
                             TV.setText("");
                             TV2.setText("Score : 0");
-                            TV3.setText("Level : 0");
                             TV4.setText("Lines : 0");
-                            TV5.setText("Points!");
                             canRotate = true;
                             notLose = true;
                             dontWorryAboutIt = true;
@@ -1600,7 +1587,6 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
             if (linesNeeded <= 0) {
                 level++;
                 linesNeeded += 10;
-                TV4.setText("Level : " + level);
             }
 
             Boolean PC = true;
@@ -1620,17 +1606,14 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                     score += 100 * (level + 1) + combo * 50 + 4000 * (level + 1);
                     piecesSinceCombo = 0;
                     combo++;
-                    TV5.append("Perfect\nClear!!");
                 } else if (linesClearedAtOnce == 2) {
                     score += 300 * (level + 1) + combo * 50 + 4000 * (level + 1);
                     piecesSinceCombo = 0;
                     combo++;
-                    TV5.append("Perfect\nClear!!");
                 } else if (linesClearedAtOnce == 3) {
                     score += 500 * (level + 1) + combo * 50 + 4000 * (level + 1);
                     piecesSinceCombo = 0;
                     combo++;
-                    TV5.append("Perfect\nClear!!");
                 } else if (linesClearedAtOnce == 4) {
                     if (B2B)
                         score += 1200 * (level + 1) + combo * 50 + 4000 * (level + 1);
@@ -1638,7 +1621,6 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                         score += 800 * (level + 1) + combo * 50 + 4000 * (level + 1);
                     piecesSinceCombo = 0;
                     combo++;
-                    TV5.append("Perfect\nClear!!");
                     B2B = true;
                 }
                 if (TSpin) {
@@ -1648,24 +1630,20 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                 score += 1200 * (level + 1) + combo * 50;
                                 piecesSinceCombo = 0;
                                 combo++;
-                                TV5.append("T-S S\n");
                             } else {
                                 score += 300 * (level + 1) + combo * 50;
                                 piecesSinceCombo = 0;
                                 combo++;
-                                TV5.append("T-SM S\n");
                             }
                         } else {
                             if (tSpinTopCorners == 1) {
                                 score += 800 * (level + 1) + combo * 50;
                                 piecesSinceCombo = 0;
                                 combo++;
-                                TV5.append("T-S S\n");
                             } else {
                                 score += 200 * (level + 1) + combo * 50;
                                 piecesSinceCombo = 0;
                                 combo++;
-                                TV5.append("T-SM S\n");
                             }
                         }
                     } else if (linesClearedAtOnce == 2) {
@@ -1674,24 +1652,20 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                 score += 1800 * (level + 1) + combo * 50;
                                 piecesSinceCombo = 0;
                                 combo++;
-                                TV5.append("T-S D\n");
                             } else {
                                 score += 600 * (level + 1) + combo * 50;
                                 piecesSinceCombo = 0;
                                 combo++;
-                                TV5.append("T-SM D\n");
                             }
                         } else {
                             if (tSpinTopCorners == 1) {
                                 score += 1200 * (level + 1) + combo * 50;
                                 piecesSinceCombo = 0;
                                 combo++;
-                                TV5.append("T-S D\n");
                             } else {
                                 score += 400 * (level + 1) + combo * 50;
                                 piecesSinceCombo = 0;
                                 combo++;
-                                TV5.append("T-SM D\n");
                             }
                         }
                     } else if (linesClearedAtOnce == 3) {
@@ -1699,29 +1673,23 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             score += 2400 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-S T\n");
                         } else {
                             score += 1600 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-S T\n");
                         }
                     } else if (linesClearedAtOnce == 0) {
                         if (B2B) {
                             if (tSpinTopCorners == 1) {
                                 score += 600 * (level + 1) + combo * 50;
-                                TV5.append("T-S\n");
                             } else {
                                 score += 150 * (level + 1) + combo * 50;
-                                TV5.append("T-SM\n");
                             }
                         } else {
                             if (tSpinTopCorners == 1) {
                                 score += 400 * (level + 1) + combo * 50;
-                                TV5.append("T-S\n");
                             } else {
                                 score += 100 * (level + 1) + combo * 50;
-                                TV5.append("T-SM\n");
                             }
                         }
                     }
@@ -1731,19 +1699,16 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                         score += 100 * (level + 1) + combo * 50;
                         piecesSinceCombo = 0;
                         combo++;
-                        TV5.append("Single\n");
                         B2B = false;
                     } else if (linesClearedAtOnce == 2) {
                         score += 300 * (level + 1) + combo * 50;
                         piecesSinceCombo = 0;
                         combo++;
-                        TV5.append("Double\n");
                         B2B = false;
                     } else if (linesClearedAtOnce == 3) {
                         score += 500 * (level + 1) + combo * 50;
                         piecesSinceCombo = 0;
                         combo++;
-                        TV5.append("Triple\n");
                         B2B = false;
                     } else if (linesClearedAtOnce == 4) {
                         if (B2B)
@@ -1752,7 +1717,6 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             score += 800 * (level + 1) + combo * 50;
                         piecesSinceCombo = 0;
                         combo++;
-                        TV5.append("Tetris\n");
                         B2B = true;
                     }
                 }
@@ -1764,24 +1728,20 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             score += 1200 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-S S\n");
                         } else {
                             score += 300 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-SM S\n");
                         }
                     } else {
                         if (tSpinTopCorners == 1) {
                             score += 800 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-S S\n");
                         } else {
                             score += 200 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-SM S\n");
                         }
                     }
                 } else if (linesClearedAtOnce == 2) {
@@ -1790,24 +1750,20 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                             score += 1800 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-S D\n");
                         } else {
                             score += 600 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-SM D\n");
                         }
                     } else {
                         if (tSpinTopCorners == 1) {
                             score += 1200 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-S D\n");
                         } else {
                             score += 400 * (level + 1) + combo * 50;
                             piecesSinceCombo = 0;
                             combo++;
-                            TV5.append("T-SM D\n");
                         }
                     }
                 } else if (linesClearedAtOnce == 3) {
@@ -1815,29 +1771,23 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                         score += 2400 * (level + 1) + combo * 50;
                         piecesSinceCombo = 0;
                         combo++;
-                        TV5.append("T-S T\n");
                     } else {
                         score += 1600 * (level + 1) + combo * 50;
                         piecesSinceCombo = 0;
                         combo++;
-                        TV5.append("T-S T\n");
                     }
                 } else if (linesClearedAtOnce == 0) {
                     if (B2B) {
                         if (tSpinTopCorners == 1) {
                             score += 600 * (level + 1) + combo * 50;
-                            TV5.append("T-S\n");
                         } else {
                             score += 150 * (level + 1) + combo * 50;
-                            TV5.append("T-SM\n");
                         }
                     } else {
                         if (tSpinTopCorners == 1) {
                             score += 400 * (level + 1) + combo * 50;
-                            TV5.append("T-S\n");
                         } else {
                             score += 100 * (level + 1) + combo * 50;
-                            TV5.append("T-SM\n");
                         }
                     }
                 }
@@ -1848,19 +1798,16 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                     score += 100 * (level + 1) + combo * 50;
                     piecesSinceCombo = 0;
                     combo++;
-                    TV5.append("Single\n");
                     B2B = false;
                 } else if (linesClearedAtOnce == 2) {
                     score += 300 * (level + 1) + combo * 50;
                     piecesSinceCombo = 0;
                     combo++;
-                    TV5.append("Double\n");
                     B2B = false;
                 } else if (linesClearedAtOnce == 3) {
                     score += 500 * (level + 1) + combo * 50;
                     piecesSinceCombo = 0;
                     combo++;
-                    TV5.append("Triple\n");
                     B2B = false;
                 } else if (linesClearedAtOnce == 4) {
                     if (B2B)
@@ -1869,13 +1816,10 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                         score += 800 * (level + 1) + combo * 50;
                     piecesSinceCombo = 0;
                     combo++;
-                    TV5.append("Tetris\n");
                     B2B = true;
                 }
             }
-            if (combo > 1) {
-                TV5.append((combo - 1) + " Com\n");
-            }
+
             TV3.setText("Lines : " + lines);
             TV2.setText("Score : " + score);
         }
@@ -2110,7 +2054,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                                 }
                             }
                         }
-                        //ARRRun = true;
+
                         break;
                     }
                     case 5: {
@@ -2120,19 +2064,7 @@ public class TetrisGame extends AppCompatActivity implements Rotation.eventListe
                         }
                         break;
                     }
-                    case 6: {
-                        break;
-                    }
-                    case 7: {
-                        sprintTime = (long) (SystemClock.uptimeMillis() - (long) startTime);
-                        int ms = (int) (sprintTime % 1000);
-                        int s = (int) ((sprintTime % 60000) / 1000);
-                        int m = (int) ((sprintTime % 360000) / 60000);
-                        sprintTimeString = String.format("%02d : %02d : %03d", m, s, ms);
-                        TV2.setText(sprintTimeString);
-                        timer.sendEmptyMessageDelayed(7, sprintUpdate);
-                    }
-                }   //End of the switch  statement
+                }
             }
         }
 

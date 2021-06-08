@@ -25,8 +25,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:id="@+id/TV"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:fontFamily="monospace"/>
+            style="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
         <Button
             android:id="@+id/Pause"
@@ -90,15 +89,16 @@
                         android:layout_weight="1"
                         android:onClick="onDropClick"
                         android:textSize="30dp"
+                        android:backgroundTint="#009688"
                         android:src="@drawable/tetris_down"/>
 
                     <ImageButton
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="↕"
                         android:layout_weight="1"
                         android:layout_centerHorizontal="true"
                         android:textSize="30dp"
+                        android:backgroundTint="#009688"
                         android:onClick="onDropClick"
                         android:id="@+id/ButtonRotate180"
                         android:src="@drawable/tetris_up_down"/>
@@ -106,10 +106,10 @@
                     <ImageButton
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="↗"
                         android:layout_weight="1"
                         android:layout_centerHorizontal="true"
                         android:textSize="30dp"
+                        android:backgroundTint="#009688"
                         android:onClick="onDropClick"
                         android:id="@+id/ButtonHold"
                         android:src="@drawable/tetris_saved_block"/>
@@ -117,10 +117,10 @@
                     <ImageButton
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="▼"
                         android:layout_weight="1"
                         android:layout_alignParentRight="true"
                         android:textSize="30dp"
+                        android:backgroundTint="#009688"
                         android:onClick="onDropClick"
                         android:id="@+id/ButtonHardDrop"
                         android:src="@drawable/tetris_down2"/>
@@ -138,8 +138,8 @@
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="3"
-                    android:text="←"
                     android:textSize="30dp"
+                    android:backgroundTint="#009688"
                     android:onClick="onClick"
                     android:id="@+id/ButtonLeft"
                     android:src="@drawable/tetris_left"/>
@@ -148,8 +148,8 @@
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="2"
-                    android:text="↶"
                     android:textSize="30dp"
+                    android:backgroundTint="#009688"
                     android:onClick="onRotateClick"
                     android:id="@+id/ButtonRotateLeft"
                     android:src="@drawable/tetris_rotate_left"/>
@@ -158,8 +158,8 @@
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="2"
-                    android:text="↷"
                     android:textSize="30dp"
+                    android:backgroundTint="#009688"
                     android:onClick="onRotateClick"
                     android:id="@+id/ButtonRotateRight"
                     android:src="@drawable/tetris_rotate_right"/>
@@ -168,8 +168,8 @@
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="3"
-                    android:text="→"
                     android:textSize="30dp"
+                    android:backgroundTint="#009688"
                     android:onClick="onClick"
                     android:id="@+id/ButtonRight"
                     android:src="@drawable/tetris_right"/>
@@ -185,8 +185,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_alignTop="@+id/IV3"
-            android:layout_marginTop="70dp"
-            android:text="Level : 0"/>
+            android:layout_marginTop="70dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -221,9 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/TV5"
-                android:text="Points!"
-                android:visibility="visible"
-                android:fontFamily="monospace"/>
+                android:visibility="visible"/>
 
         </ScrollView>
 
