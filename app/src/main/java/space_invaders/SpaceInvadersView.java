@@ -449,8 +449,6 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     }
 
     public void gameOver() {
-        Intent intent = new Intent(context, SpaceInvadersActivity.class);
-        context.startActivity(intent);
         ((Activity) context).finish();
     }
 }
