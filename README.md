@@ -34,7 +34,7 @@ This mobile application contains 5 arcade games made in Android Studio.
 <img src="images/snake2.PNG" alt="snake" width="300">
 
 ### Breakout
-<img src="images/breakout2.PNG" alt="breakout" width="300">
+<img src="images/breakout.PNG" alt="breakout" width="300">
 
 ### Pong
 <img src="images/pong.PNG" alt="pong" width="300">
